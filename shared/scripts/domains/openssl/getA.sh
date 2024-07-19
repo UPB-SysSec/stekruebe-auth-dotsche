@@ -1,0 +1,1 @@
+clear; echo -e "GET / HTTP/2.0\r\nHost: siteA.org\r\n\r\n" | openssl s_client -connect siteA.org:443 -CAfile shared/cert/keys/ca_s.crt -quiet
