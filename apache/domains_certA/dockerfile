@@ -1,0 +1,18 @@
+FROM httpd:2.4
+
+# ------ COPY SITE CONTENT ------
+COPY site-content /srv
+
+# ------ COPY CONFIGURATION ------
+RUN rm -f /usr/local/apache2/conf/httpd.conf
+COPY apache/domains_certA/config/httpd.conf /usr/local/apache2/conf
+COPY apache/domains_certA/config/httpd-vhosts.conf /usr/local/apache2/conf/extra
+
+# ------ COPY KEYS ------
+RUN mkdir /keys
+COPY ./shared/cert/keys /keys
+
+# prepare logging
+RUN mkdir /logs
+RUN chmod 775 /logs
+RUN chown www-data:www-data /logs
