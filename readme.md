@@ -1,12 +1,15 @@
-## running
+## Setup
+- expects docker, openSSL(optional) and curl(optional)
+- expects TLS-Attacker
+```sh
+cd attacker
+git clone https://github.com/tls-attacker/TLS-Attacker.git
+cd TLS-Attacker
+mvn clean install -DskipTests=true
+```
 
-use `rebuild_run.bat` or `rebuild_run.sh` to build and run the docker container.
-NOTE: the container will use ports 443 and 444
 
-## testing
+## Running
+run `python3 main.py` 
+(needs permission to build and start docker containers)
 
-use the given bash files to test the behavior for sites *A* and *B*
-
-- `getA.sh` - site A should return *200 OK*
-- `getB.sh` - site B should return *403 Forbidden*
-- `getBcert.sh` - site B should return *200 OK* because a valid client cert was sent
