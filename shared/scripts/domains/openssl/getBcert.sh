@@ -1,1 +1,0 @@
-clear; echo -e "GET / HTTP/1.1\r\nHost: siteB.org\r\n\r\n" | openssl s_client -connect siteB.org:443 -CAfile shared/cert/keys/ca_s.crt -cert shared/cert/keys/clientB.pem -state -showcerts -quiet
