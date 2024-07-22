@@ -5,7 +5,7 @@ _setupsFolder = Path("./setups/")
 
 class Curl:
     @staticmethod
-    def request(target:str, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1")->tuple[str, str, int]:
+    def request(target:str, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1", name="default")->tuple[str, str, int]:
         """
         target
         certPath - the path to the client cert (.pem file; crt+key)
@@ -37,7 +37,7 @@ class Curl:
         return out, err, exitVal
 
     @staticmethod
-    def requestWithCert(target:str, certPath:Path, keyPath:Path, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1")->tuple[str, str, int]:
+    def requestWithCert(target:str, certPath:Path, keyPath:Path, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1", name="default")->tuple[str, str, int]:
         """
         target
         certPath - the path to the client cert (.pem file; crt+key)

@@ -1,0 +1,138 @@
+
+# OutboundConnection
+  - alias: client
+  - ip: 127.0.0.1
+  - port: 435
+  - hostname: siteA.site.org
+  - timeout: 1000
+  - firstTimeout: 1000
+  - connectionTimeout: 8000
+  - transportHandlerType: TCP
+
+# Send
+  - _messages_
+    - **ClientHello**
+      - type: 1
+      - length: 850
+      - extensions
+        - ECPointFormat
+          - extensionContent: 01 00
+          - extensionLength: 2
+          - extensionType: 00 0B
+          - pointFormats: 00
+          - pointFormatsLength: 1
+        - EllipticCurves
+          - extensionContent: 00 48 00 0F 00 10 00...
+          - extensionLength: 74
+          - extensionType: 00 0A
+          - supportedGroups: 00 0F 00 10 00 11 00...
+          - supportedGroupsLength: 72
+        - SignatureAndHashAlgorithmsExtension
+          - extensionContent: 00 2E 02 02 03 02 04...
+          - extensionLength: 48
+          - extensionType: 00 0D
+          - signatureAndHashAlgorithms: 02 02 03 02 04 02 05...
+          - signatureAndHashAlgorithmsLength: 46
+        - RenegotiationInfoExtension
+          - extensionContent: 00
+          - extensionLength: 1
+          - extensionType: FF 01
+          - renegotiationInfo
+          - renegotiationInfoLength: 0
+      - extensionsLength: 141
+      - protocolVersion: 03 03
+      - unixTime: DA BA 3F 82
+      - random: DA BA 3F 82 60 B4 20...
+      - sessionIdLength: 0
+      - sessionId
+      - compressionLength: 1
+      - cipherSuiteLength: 668
+      - cipherSuites: 00 0A 00 2F 00 01 00...
+      - compressions: 00
+  - _httpMessages_: None
+# ReceiveTill
+  - _messages_
+    - **ServerHello**
+      - type: 2
+      - length: 45
+      - extensions
+        - RenegotiationInfoExtension
+          - extensionContent: 00
+          - extensionLength: 1
+          - extensionType: FF 01
+          - renegotiationInfo
+          - renegotiationInfoLength: 0
+      - extensionsLength: 5
+      - protocolVersion: 03 03
+      - unixTime: 8B 0B 82 C5
+      - random: 8B 0B 82 C5 07 40 58...
+      - sessionIdLength: 0
+      - sessionId
+      - selectedCipherSuite: 00 2F
+      - selectedCompressionMethod: 0
+      - autoSetHelloRetryModeInKeyShare: true
+    - **Certificate**
+      - type: 11
+      - length: 1274
+      - certificatesListLength: 1271
+      - certificatesListBytes: 00 04 F4 30 82 04 F0...
+    - **ServerHelloDone**
+      - type: 14
+      - length: 0
+  - _httpMessages_: None
+  - ServerHelloDone: None
+# SendDynamicClientKeyExchange
+  - _messages_
+    - **RSAClientKeyExchange**
+      - type: 16
+      - length: 514
+      - publicKeyLength: 512
+      - publicKey: 9E 23 37 A1 59 99 6E...
+      - computations
+        - clientServerRandom: DA BA 3F 82 60 B4 20...
+        - premasterSecret: 03 03 B3 7F 81 E7 14...
+        - padding: 03 25 F4 1D 3E BA F8...
+        - plainPaddedPremasterSecret: 00 02 03 25 F4 1D 3E...
+        - premasterSecretProtocolVersion: 03 03
+  - _httpMessages_: None
+# Send
+  - _messages_
+    - **ChangeCipherSpec**
+      - ccsProtocolType: 01
+    - **Finished**
+      - type: 20
+      - length: 12
+      - verifyData: 06 8C 69 FE 1D 2B B6...
+  - _httpMessages_: None
+# ReceiveTill
+  - _messages_
+    - **ChangeCipherSpec**
+      - ccsProtocolType: 01
+    - **Finished**
+      - type: 20
+      - length: 12
+      - verifyData: 3D D5 89 62 91 60 52...
+  - _httpMessages_: None
+  - Finished: None
+# Send
+  - _messages_
+    - **Application**
+      - data: 54 65 73 74
+  - _httpMessages_
+    - **HttpMessage**
+      - header
+        - HostHeader: None
+        - HttpHeaderConnection: keep-alive
+        - HttpHeaderAccept: text/html,applicatio...
+        - HttpHeaderAccept-Encoding: identity
+        - HttpHeaderAccept-Language: de-DE,de;q=0.8,en-US...
+        - HttpHeaderUpgrade-Insecure-Requests: 1
+        - HttpHeaderUser-Agent: Mozilla/5.0 (X11; Li...
+# Receive
+  - _messages_: None
+  - _httpMessages_
+    - **HttpMessage**
+      - header: None
+  - expectedMessages
+    - Application: None
+  - expectedHttpMessages: None

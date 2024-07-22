@@ -4,7 +4,10 @@ from lib.tls_attacker import TLS_Attacker
 from lib.openssl import OpenSSL #note this is not OpenSSL (builtin)
 from lib.setups import SETUPS
 
-REBUILD = True
+request = TLS_Attacker.request
+requestWithCert = TLS_Attacker.requestWithCert
+
+REBUILD = False
 RESTART = True
 
 from multiprocessing import Pool
@@ -23,8 +26,8 @@ from pathlib import Path
 paths = []
 servers = [
     Path("apache"),
-    Path("caddy"),
-    Path("nginx")
+    #Path("caddy"),
+    #Path("nginx")
 ]
 
 
@@ -32,7 +35,7 @@ def testSetup(setup, server, port):
     # build container
     path = Path(server).joinpath(setup.name)
     name = Docker.nameFromPath(path)
-    print(f"{bcolors.OKBLUE}# testing {name}{bcolors.ENDC}")
+    print(f"{bcolors.OKBLUE}# testing {name} on port {port}{bcolors.ENDC}")
     #pprint(setup)
 
     if not Docker.imageExists(name) or REBUILD:
@@ -49,18 +52,20 @@ def testSetup(setup, server, port):
 
     # get a correct
     if setup.aCert=="":
-        out, err, code = TLS_Attacker.request(
+        out, err, code = request(
             target = Path(setup.aLocation), 
             caPath = Path(setup.caPath),
-            port=port
+            port=port,
+            name=f"{name}"
         )
     else:
-        out, err, code = TLS_Attacker.requestWithCert(
+        out, err, code = requestWithCert(
             target = setup.aLocation,
             certPath = Path(f"{setup.aCert}.crt"),
             keyPath = Path(f"{setup.aCert}.key"),
             caPath = Path(setup.caPath),
-            port=port
+            port=port,
+            name=f"{name}_cert"
         )
     if err!="":
         print(f"{bcolors.FAIL}# ERROR: {err}{bcolors.ENDC}")
@@ -69,24 +74,27 @@ def testSetup(setup, server, port):
 
     # get b correct
     if setup.bCert=="":
-        out2, err2, code2 = TLS_Attacker.request(
+        out2, err2, code2 = request(
             target = Path(setup.bLocation), 
             caPath = Path(setup.caPath),
-            port=port
+            port=port,
+            name=f"{name}"
         )
     else:
-        out2, err2, code2 = TLS_Attacker.requestWithCert(
+        out2, err2, code2 = requestWithCert(
             target = setup.bLocation,
             certPath = Path(f"{setup.bCert}.crt"),
             keyPath = Path(f"{setup.bCert}.key"),
             caPath = Path(setup.caPath),
-            port=port
+            port=port,
+            name=f"{name}_cert"
         )
     if err2!="":
         print(f"{bcolors.FAIL}# ERROR: {err2}{bcolors.ENDC}")
     else:
         print(f"{bcolors.OKGREEN}+ SUCCESS: {code2}{bcolors.ENDC}")
-
+    print(f"output: {out}")
+    print(f"output2: {out2}")
     Docker.stop(name)
     return [name, code, code2]
 

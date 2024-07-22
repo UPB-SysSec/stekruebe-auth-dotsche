@@ -3,9 +3,22 @@ from pathlib import Path
 
 _setupsFolder = Path("./setups/")
 
+"""
+- workflow_trace_type is from
+[
+    FULL,   HANDSHAKE,   DYNAMIC_HANDSHAKE,   DYNAMIC_HELLO, 
+    HELLO,   SHORT_HELLO,   RESUMPTION,   FULL_RESUMPTION, 
+    CLIENT_RENEGOTIATION_WITHOUT_RESUMPTION,   CLIENT_RENEGOTIATION, 
+    SERVER_RENEGOTIATION,   DYNAMIC_CLIENT_RENEGOTIATION_WITHOUT_RESUMPTION, 
+    HTTPS,   DYNAMIC_HTTPS,   SSL2_HELLO,   SIMPLE_MITM_PROXY, 
+    SIMPLE_FORWARDING_MITM_PROXY,   TLS13_PSK,   FULL_TLS13_PSK, 
+    ZERO_RTT,   FULL_ZERO_RTT,   FALSE_START,   RSA_SYNC_PROXY
+]
+"""
+
 class TLS_Attacker:
     @staticmethod
-    def request(target:str, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1")->tuple[str, str, int]:
+    def request(target:str, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1", name="default")->tuple[str, str, int]:
         """
         target
         certPath - the path to the client cert (.pem file; crt+key)
@@ -18,11 +31,13 @@ class TLS_Attacker:
                 '-jar',
                 './attacker/TLS-Attacker/apps/TLS-Client.jar',
                 '-connect',
-                f'{ip}:{port}',
+                f'https://{ip}:{port}',
                 '-server_name',
                 f'{target}',
                 '-workflow_output',
-                f'tmp/{target}.xml'
+                f'tmp/{name}_{target}.xml',
+                '-workflow_trace_type',
+                'DYNAMIC_HTTPS'
             ],
             stdout=PIPE,
             stderr=PIPE,
@@ -37,7 +52,7 @@ class TLS_Attacker:
         return out, err, exitVal
 
     @staticmethod
-    def requestWithCert(target:str, certPath:Path, keyPath:Path, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1")->tuple[str, str, int]:
+    def requestWithCert(target:str, certPath:Path, keyPath:Path, caPath:Path=Path("shared/cert/keys/ca_s.crt"), port:int=443, ip:str="127.0.0.1", name="default")->tuple[str, str, int]:
         """
         target
         certPath - the path to the client cert (.pem file; crt+key)
@@ -52,7 +67,7 @@ class TLS_Attacker:
                 '-jar',
                 './attacker/TLS-Attacker/apps/TLS-Client.jar',
                 '-connect',
-                f'{ip}:{port}',
+                f'https://{ip}:{port}',
                 '-server_name',
                 f'{target}',
                 '-cert',
@@ -60,7 +75,9 @@ class TLS_Attacker:
                 '-key',
                 f'{keyPath.as_posix()}',
                 '-workflow_output',
-                f'tmp/{target}.xml'
+                f'tmp/{name}_{target}.xml',
+                '-workflow_trace_type',
+                'DYNAMIC_HTTPS'
             ],
             stdout=PIPE,
             stderr=PIPE,
