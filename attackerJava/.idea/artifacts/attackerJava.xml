@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="attackerJava">
+    <output-path>$PROJECT_DIR$/out/artifacts/attackerJava</output-path>
+    <root id="root">
+      <element id="library" level="project" name="de.rub.nds.tls.attacker.core" />
+      <element id="archive" name="archive.jar">
+        <element id="module-output" name="attackerJava" />
+        <element id="dir-copy" path="$PROJECT_DIR$/src/main/resources" />
+      </element>
+    </root>
+  </artifact>
+</component>
