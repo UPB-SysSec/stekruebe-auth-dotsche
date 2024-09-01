@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -34,7 +35,7 @@ public class TestManager {
     };
 
     /**
-     * Fills TestManager.setups with the docker setups in the given folder.
+     * Fills 'TestManager.setups' with the docker setups in the given folder.
      * Will only look in subfolders named 'apache', 'caddy' or 'nginx'.
      * @param setupsFolder the folder to search for setups
      */
@@ -50,8 +51,72 @@ public class TestManager {
                 for (File setup : elem.listFiles()) {
                     if (!setup.isDirectory()) {continue;}
                     if (setup.getName().startsWith(".")) {continue;}
-                    setups.add(new TestSetupInstance(port, this.tests, setup.toPath()));
-                    port++; //next test should get next port
+                    switch (setup.getName()) {
+                        case "domains":
+                            setups.add(new TestSetupInstance(
+                                    port,
+                                    this.tests,
+                                    setup.toPath(),
+                                    "siteA.org",
+                                    "siteB.org",
+                                    false
+                                )
+                            );
+                            port++; //next test should get next port
+                            break;
+                        case "domains_certA":
+                            setups.add(new TestSetupInstance(
+                                            port,
+                                            this.tests,
+                                            setup.toPath(),
+                                            "siteA.org",
+                                            "siteB.org",
+                                            true
+                                    )
+                            );
+                            port++; //next test should get next port
+                            break;
+                        case "subdomains":
+                            setups.add(new TestSetupInstance(
+                                            port,
+                                            this.tests,
+                                            setup.toPath(),
+                                            "siteA.site.org",
+                                            "siteB.site.org",
+                                            false
+                                    )
+                            );
+                            port++; //next test should get next port
+                            break;
+                        case "subdomains_certA":
+                            setups.add(new TestSetupInstance(
+                                            port,
+                                            this.tests,
+                                            setup.toPath(),
+                                            "siteA.site.org",
+                                            "siteB.site.org",
+                                            true
+                                    )
+                            );
+                            port++; //next test should get next port
+                            break;
+                        case "open":
+                            //noinspection DuplicateBranchesInSwitch
+                            setups.add(new TestSetupInstance(
+                                            port,
+                                            this.tests,
+                                            setup.toPath(),
+                                            "siteA.org",
+                                            "siteB.org",
+                                            false
+                                    )
+                            );
+                            port++; //next test should get next port
+                            break;
+                        default:
+                            LOGGER.warn("unknown configuration in {}: {}", elem, setup.getName());
+                            break;
+                    }
                 }
 
             }
@@ -63,13 +128,17 @@ public class TestManager {
      * starts the test runs for all TestSetupInstances
      */
     public void run() {
-        for (TestSetupInstance setup : this.setups) { // #TODO this could be parallelized
+        for (TestSetupInstance setup : this.setups) {
             setup.runTests();
         }
     }
+
+    /**
+     * same as run, but in parrallel ;)
+     */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(5);
-        for (TestSetupInstance setup : this.setups) { // #TODO this could be parallelized
+        ExecutorService executor = Executors.newFixedThreadPool(6 );
+        for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }
         executor.shutdown();

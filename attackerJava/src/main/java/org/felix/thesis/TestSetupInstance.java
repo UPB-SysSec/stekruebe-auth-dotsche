@@ -15,30 +15,52 @@ import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Locale;
 
+import org.felix.thesis.sessionTickets.SessionTicketUtil;
+import org.felix.thesis.sessionTickets.Ticket;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 public class TestSetupInstance {
     private final int port;
     private final List<TestCase> tests;
+    private final Path basePath;
     private final Path dockerFilePath;
+    private final String siteADomain;
+    private final String siteBDomain;
+    private final Path siteACert;
+    private final Path siteBCert;
+
     public String name;
     private final Logger LOGGER;
 
     private TestSetupResult result;
 
     /**
-     *
+     * siteAdomain, siteBdomain, siteAcert(optional), siteBcert(optional)
      * @param port the port to run the docker container on
      * @param tests the list of TestCases
      * @param dockerFileFolder the folder containing the dockerFile
      */
-    public TestSetupInstance(int port, List<TestCase> tests, Path dockerFileFolder) {
+    public TestSetupInstance(int port, List<TestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteBUsesCert) {
         this.port = port;
         this.tests = tests;
-        this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
+        this.basePath = dockerFileFolder;
+        this.dockerFilePath = Paths.get(this.basePath.toString(), "dockerfile");
+        this.siteADomain = siteADomain;
+        this.siteBDomain = siteBDomain;
+        this.siteACert = Path.of("../setups/shared/cert/keys/clientA.pem");
+        this.siteBCert = Path.of("../setups/shared/cert/keys/clientB.pem");
+
         this.name = this._getName();
         this.LOGGER = LogManager.getLogger(this.name);
     }
@@ -59,7 +81,7 @@ public class TestSetupInstance {
         result = new TestSetupResult(this.name);
 
         /* ------ Build Docker Container ------ */
-        if (true) {
+        if (false) {
             // build docker containers
             LOGGER.info("building container");
             //Path p = Path.of("../setups/nginx/domains/dockerfile");
@@ -110,22 +132,24 @@ public class TestSetupInstance {
 
         for (TestCase test : this.tests) { // #TODO this could be parallelized
             TestCaseResult testRes = new TestCaseResult(test.getName());
-            State state = test.getState(this.port);
 
+            // do first request
+            State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert);
             try {
                 // ---- RUN THE WORKFLOW ----
-                DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(state);
+                DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
                 executor.executeWorkflow();
                 executor.closeConnection();
-
-
-                // ---- GET RESULTS ----
-                WorkflowTrace wt = state.getWorkflowTrace();
-                ApplicationMessage lm = wt.getLastReceivedMessage(ApplicationMessage.class);
             } catch (Exception e) {
                 testRes.exception = e;
                 testRes.passed = false;
             }
+
+            // get session ticket from request
+            Ticket ticket = SessionTicketUtil.getSessionTickets(stateA).get(0);
+            State stateB = test.getStateB(this.port, this.siteBDomain, this.siteBCert, ticket);
+
+            // do second request (with the ticket from the first session)
             result.results.add(testRes); // save testResult in setupResults
             if (!testRes.passed) {result.allSuccessful = false;}
         }
@@ -135,6 +159,8 @@ public class TestSetupInstance {
         //DockerWrapper.remove(this.name);
     }
 
+    private executor()
+
     /**
      * getter for the results
      * @return the results
@@ -143,6 +169,10 @@ public class TestSetupInstance {
         return this.result;
     }
 
+    /**
+     * builds a human-readable name from the config paths
+     * @return the new name
+     */
     private String _getName() {
         String[] parts = this.dockerFilePath.toString().toLowerCase(Locale.ENGLISH).split("/");
         String server = parts[2];

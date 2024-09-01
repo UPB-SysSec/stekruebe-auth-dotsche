@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact name="attackerJava">
+  <artifact build-on-make="true" name="attackerJava">
     <output-path>$PROJECT_DIR$/out/artifacts/attackerJava</output-path>
     <root id="root">
       <element id="library" level="project" name="de.rub.nds.tls.attacker.core" />

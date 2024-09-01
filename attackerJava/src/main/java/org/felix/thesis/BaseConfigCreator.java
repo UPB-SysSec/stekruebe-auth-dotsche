@@ -5,7 +5,6 @@ import de.rub.nds.tlsattacker.core.connection.OutboundConnection;
 import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import de.rub.nds.tlsattacker.core.exceptions.ConfigurationException;
 import de.rub.nds.tlsattacker.core.layer.constant.LayerConfiguration;
-import de.rub.nds.tlsattacker.core.protocol.message.extension.sni.ServerNamePair;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import de.rub.nds.tlsattacker.core.workflow.factory.WorkflowConfigurationFactory;
 import de.rub.nds.tlsattacker.core.workflow.factory.WorkflowTraceType;
@@ -15,23 +14,18 @@ import java.util.List;
 
 public class BaseConfigCreator {
     public static Config getConfig() {
-        String siteName = "SiteA.org";
         Config config = new Config();
         config.setWorkflowTraceType(WorkflowTraceType.HTTPS);
 
         // use TLS1.3 and HTTPS
+        config.setHighestProtocolVersion(ProtocolVersion.TLS13);
         config.setSupportedVersions(ProtocolVersion.TLS13);
         config.setDefaultSelectedProtocolVersion(ProtocolVersion.TLS13);
+        config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
         config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
+        config.setAddPSKKeyExchangeModesExtension(true);
 
-        // add SNI extension
-        config.setAddServerNameIndicationExtension(true);
-        ServerNamePair sn = new ServerNamePair(
-                (byte) 0,
-                siteName.getBytes(StandardCharsets.US_ASCII)
-        );
-        config.setDefaultSniHostnames(List.of(sn));
-
+        //configSelector.repairConfig(tlsConfig); //try this, #TODO add config selector
 
         // use session tickets
         config.setAddSessionTicketTLSExtension(true);

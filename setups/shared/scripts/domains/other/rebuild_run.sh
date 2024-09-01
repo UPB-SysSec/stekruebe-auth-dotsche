@@ -24,4 +24,4 @@ sudo docker rmi $NAME
 #ls -l $DIR/cert
 set -e
 sudo docker build -t $NAME -f $DIR/dockerfile .
-sudo docker run -it --rm -d -p 1443-1450:443-450 --name $NAME $NAME
+sudo docker run -it --rm -p 443-450:443-450 --name $NAME $NAME

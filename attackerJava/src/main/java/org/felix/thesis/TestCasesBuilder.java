@@ -19,6 +19,12 @@ public class TestCasesBuilder {
 
 
     private static TestCase buildBaseTest() {
-        return new TestCase();
+        return new TestCase("baseTest");
     }
+    /*
+    * TODO add tests with:
+    * - request to siteA, then siteB
+    * - reuse of certificate
+    * -
+    * */
 }
