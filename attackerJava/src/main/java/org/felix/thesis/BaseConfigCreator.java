@@ -15,15 +15,15 @@ import java.util.List;
 public class BaseConfigCreator {
     public static Config getConfig() {
         Config config = new Config();
-        config.setWorkflowTraceType(WorkflowTraceType.HTTPS);
+        //config.setWorkflowTraceType(WorkflowTraceType.HTTPS);
 
         // use TLS1.3 and HTTPS
-        config.setHighestProtocolVersion(ProtocolVersion.TLS13);
-        config.setSupportedVersions(ProtocolVersion.TLS13);
-        config.setDefaultSelectedProtocolVersion(ProtocolVersion.TLS13);
+        //config.setHighestProtocolVersion(ProtocolVersion.TLS13);
+        //config.setSupportedVersions(ProtocolVersion.TLS13);
+        //config.setDefaultSelectedProtocolVersion(ProtocolVersion.TLS13);
         config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
         config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
-        config.setAddPSKKeyExchangeModesExtension(true);
+        //config.setAddPSKKeyExchangeModesExtension(true);
 
         //configSelector.repairConfig(tlsConfig); //try this, #TODO add config selector
 

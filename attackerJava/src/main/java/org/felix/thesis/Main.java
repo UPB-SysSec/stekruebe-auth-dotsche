@@ -19,8 +19,8 @@ public class Main {
         TestManager tm = new TestManager(TestCasesBuilder.getTestCases(), path);
 
         LOGGER.info("running");
-        //tm.run();
-        tm.runParallel();
+        tm.run();
+//        tm.runParallel();
 
         LOGGER.info("Results:");
         List<TestSetupResult> results = tm.getResults();

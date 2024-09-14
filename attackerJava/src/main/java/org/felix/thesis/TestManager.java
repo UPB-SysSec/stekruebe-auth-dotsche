@@ -2,17 +2,17 @@ package org.felix.thesis;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.felix.thesis.testCases.BaseTestCase;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-/*
+/**
 Goal: run all tests
 Steps:
     1. get Test list
@@ -21,13 +21,12 @@ Steps:
     4. collect TestResults
     5. print testResults
 */
-
 public class TestManager {
     private static final Logger LOGGER = LogManager.getLogger();
-    List<TestCase> tests;
+    List<BaseTestCase> tests;
     List<TestSetupInstance> setups;
 
-    public TestManager(List<TestCase> tests, Path setupsPath){
+    public TestManager(List<BaseTestCase> tests, Path setupsPath){
         this.tests = tests;
 
         // read in setupsFolder
@@ -134,10 +133,10 @@ public class TestManager {
     }
 
     /**
-     * same as run, but in parrallel ;)
+     * same as run, but in parallel ;)
      */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(6 );
+        ExecutorService executor = Executors.newFixedThreadPool(4);
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }

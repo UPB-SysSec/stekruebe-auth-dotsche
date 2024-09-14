@@ -8,17 +8,12 @@ Steps:
 
 */
 
-import de.rub.nds.tlsattacker.core.protocol.message.ApplicationMessage;
+import de.rub.nds.tlsattacker.core.protocol.message.*;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.DefaultWorkflowExecutor;
-import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -26,13 +21,11 @@ import java.util.Locale;
 
 import org.felix.thesis.sessionTickets.SessionTicketUtil;
 import org.felix.thesis.sessionTickets.Ticket;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.felix.thesis.testCases.BaseTestCase;
 
 public class TestSetupInstance {
     private final int port;
-    private final List<TestCase> tests;
+    private final List<BaseTestCase> tests;
     private final Path basePath;
     private final Path dockerFilePath;
     private final String siteADomain;
@@ -51,7 +44,7 @@ public class TestSetupInstance {
      * @param tests the list of TestCases
      * @param dockerFileFolder the folder containing the dockerFile
      */
-    public TestSetupInstance(int port, List<TestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteBUsesCert) {
+    public TestSetupInstance(int port, List<BaseTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteBUsesCert) {
         this.port = port;
         this.tests = tests;
         this.basePath = dockerFileFolder;
@@ -124,42 +117,82 @@ public class TestSetupInstance {
                 }
                 return; //cannot continue if run fails
             } else {
+                try {
+                    Thread.sleep(100l); //wait for the server to start
+                } catch (InterruptedException ignore) {}
                 LOGGER.info("> running successful");
             }
         }
 
         LOGGER.info("> running tests");
-
-        for (TestCase test : this.tests) { // #TODO this could be parallelized
-            TestCaseResult testRes = new TestCaseResult(test.getName());
-
-            // do first request
-            State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert);
-            try {
-                // ---- RUN THE WORKFLOW ----
-                DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
-                executor.executeWorkflow();
-                executor.closeConnection();
-            } catch (Exception e) {
-                testRes.exception = e;
-                testRes.passed = false;
-            }
-
-            // get session ticket from request
-            Ticket ticket = SessionTicketUtil.getSessionTickets(stateA).get(0);
-            State stateB = test.getStateB(this.port, this.siteBDomain, this.siteBCert, ticket);
-
-            // do second request (with the ticket from the first session)
-            result.results.add(testRes); // save testResult in setupResults
-            if (!testRes.passed) {result.allSuccessful = false;}
+        for (BaseTestCase test : this.tests) {
+            runTest(test);
         }
+
         LOGGER.info("stopping container");
         DockerWrapper.stop(this.name);
         //LOGGER.info("removing container");
         //DockerWrapper.remove(this.name);
     }
 
-    private executor()
+
+    public void runTest(BaseTestCase test) {
+        LOGGER.info("running test: {}", test.getName());
+        TestCaseResult testRes = new TestCaseResult(test.getName());
+
+        // do first request
+        State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert);
+        try {
+            // ---- RUN THE WORKFLOW ----
+            DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
+            executor.executeWorkflow();
+            executor.closeConnection();
+        } catch (Exception e) {
+            testRes.requestAException = e;
+        }
+        testRes.requestAExecutedAsPlanned = stateA.getWorkflowTrace().executedAsPlanned();
+        testRes.requestAException = stateA.getExecutionException();
+        testRes.requestAAlert = stateA.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
+        testRes.requestATrace = stateA.getWorkflowTrace();
+        //testRes.requestAStatusCode = #TODO
+
+        // get session ticket from request
+        Ticket ticket = null;
+        try {
+            ticket = SessionTicketUtil.getSessionTickets(stateA).get(0);
+        } catch (IndexOutOfBoundsException e) {
+            testRes.requestAHadTicket = false;
+        }
+
+        if (ticket != null) { //only if we have a ticket
+            State stateB = test.getStateB(this.port, this.siteBDomain, this.siteBCert, ticket);
+            try {
+                // ---- RUN THE WORKFLOW ----
+                DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateB);
+                executor.executeWorkflow();
+                executor.closeConnection();
+            } catch (Exception e) {
+                testRes.requestBException = e;
+                testRes.passed = false;
+            }
+            testRes.requestBExecutedAsPlanned = stateB.getWorkflowTrace().executedAsPlanned();
+            testRes.passed &= testRes.requestBExecutedAsPlanned;
+            testRes.requestBException = stateB.getExecutionException();
+            testRes.requestBAlert = stateB.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
+            testRes.requestBTrace = stateB.getWorkflowTrace();
+            //testRes.requestBStatusCode = stateB... #TODO
+        } else {
+            testRes.passed = false;
+        }
+
+        // do second request (with the ticket from the first session)
+        result.results.add(testRes); // save testResult in setupResults
+        if (!testRes.passed) {result.allSuccessful = false;}
+    }
+
+    private void executor() {
+
+    }
 
     /**
      * getter for the results

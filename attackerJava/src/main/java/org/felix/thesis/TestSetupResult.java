@@ -23,28 +23,43 @@ public class TestSetupResult {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("TSR[");
-        sb.append("\n\tName: ").append(this.setupName);
+        sb.append("\n\u001b[m⎡‾‾‾‾‾‾‾‾[").append(this.setupName).append("]‾‾‾‾‾‾‾‾⎤");
+
         if (this.dockerBuildSuccessful) {
-            sb.append("\n\tbuild successful");
+            sb.append("\n⎢ => build: successful");
         } else {
-            sb.append("\n\tbuild unsuccessful:");
-            sb.append("\n\t stdOut: ").append(this.dockerBuildResult.stdOut);
-            sb.append("\n\t stdErr: ").append(this.dockerBuildResult.stdErr);
+            sb.append("\u001b[0;31m"); //in red
+            sb.append("\n⎢ => build: unsuccessful:");
+            sb.append("\n⎢  -> stdOut: ").append(this.dockerBuildResult.stdOut);
+            sb.append("\n⎢  -> stdErr: ").append(this.dockerBuildResult.stdErr);
+            sb.append("\u001b[m"); //reset color
         }
+
         if (this.dockerRunSuccessful) {
-            sb.append("\n\trun successful");
+            sb.append("\n⎢ => run: successful");
         } else {
-            sb.append("\n\trun unsuccessful:");
-            sb.append("\n\t stdOut: ").append(this.dockerRunResult.stdOut);
-            sb.append("\n\t stdErr: ").append(this.dockerRunResult.stdErr);
+            sb.append("\u001b[0;31m"); //in red
+            sb.append("\n⎢ => run: unsuccessful:");
+            sb.append("\n⎢  -> stdOut: ").append(this.dockerRunResult.stdOut);
+            sb.append("\n⎢  -> stdErr: ").append(this.dockerRunResult.stdErr);
+            sb.append("\u001b[m"); //reset color
         }
-        sb.append("\n\tTestSuccess: ").append(this.allSuccessful);
-        sb.append("\n  Subtests:");
+
+        if (this.allSuccessful) {
+            sb.append("\u001b[0;32m"); //in green
+            sb.append("\n⎢ => tests: successful");
+            sb.append("\u001b[m"); //reset color
+        } else {
+            sb.append("\u001b[0;31m"); //in red
+            sb.append("\n⎢ => tests: FAILED");
+            sb.append("\u001b[m"); //reset color
+        }
+        sb.append("\n⎢ Subtests:");
         for (TestCaseResult caseRes : this.results) {
             sb.append("\n").append(caseRes);
         }
-        sb.append("\n]");
+        sb.append("\n");
+        //sb.append("\n⎣_______________________⎦");
         return sb.toString();
     }
 }
