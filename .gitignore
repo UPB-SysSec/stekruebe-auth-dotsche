@@ -1,5 +1,5 @@
 **/__pycache__
-attacker/TLS-Attacker
+attacker/*
 caddy_*64.exe
 attackerJava/out
 

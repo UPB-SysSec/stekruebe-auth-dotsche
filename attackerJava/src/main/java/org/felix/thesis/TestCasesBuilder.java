@@ -9,12 +9,13 @@ public class TestCasesBuilder {
     public static List<BaseTestCase> getTestCases() {
         ArrayList<BaseTestCase> tests = new ArrayList<>();
         // base tests
-//        tests.add(new BaseTestCase("baseTest"));
-//        tests.add(new BaseCertATestCase("certATest"));
-//        tests.add(new BothCertsTestCase("bothCerts"));
-        tests.add(new ConnectATwiceTestCase("connectATwice"));
-        tests.add(new ReconnectToATestCase("reconnectOnA"));
-//        tests.add(new ReconnectToACertTestCase("reconnectOnACert"));
+        tests.add(new BaseTestCase("BaseTestCase"));
+        tests.add(new BaseCertATestCase("BaseCertATestCase"));
+        tests.add(new BothCertsTestCase("BothCertsTestCase"));
+        tests.add(new ConnectATwiceTestCase("ConnectATwiceTestCase"));
+        tests.add(new ConnectATwiceCertTestCase("ConnectATwiceCertTestCase"));
+        tests.add(new ReconnectToATestCase("ReconnectToATestCase"));
+        tests.add(new ReconnectToACertTestCase("ReconnectToACertTestCase"));
         return tests;
     }
 }

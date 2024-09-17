@@ -6,21 +6,24 @@ import de.rub.nds.tlsattacker.core.protocol.message.AlertMessage;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 
 public class TestCaseResult {
-    public TestCaseResult(String name) {
+    public TestCaseResult(String name, boolean expectedToFail) {
         this.testName = name;
+        this.expectedToFail = expectedToFail; //invert
     }
+
     String testName;
-    boolean passed = true;
+    boolean ranWithoutIssue = true;
+    boolean expectedToFail;
 
     int requestAStatusCode = 0;
-    Boolean requestAExecutedAsPlanned = false;
+    Boolean requestAExecutedWithoutIssue = false;
     Boolean requestAHadTicket = true;
     Throwable requestAException;
     AlertMessage requestAAlert;
     WorkflowTrace requestATrace;
 
     int requestBStatusCode = 0;
-    Boolean requestBExecutedAsPlanned = false;
+    Boolean requestBExecutedWithoutIssue = false;
     Throwable requestBException;
     AlertMessage requestBAlert;
     WorkflowTrace requestBTrace;
@@ -47,15 +50,15 @@ public class TestCaseResult {
                     .append("]: ")
                     .append(AlertDescription.getAlertDescription((Byte) this.requestAAlert.getDescription().getValue()).name());
         }
-        if (this.requestAExecutedAsPlanned) {
-            sb.append("\n⎢ ⎣ => request A was executed as planned");
+        if (this.requestAExecutedWithoutIssue) {
+            sb.append("\n⎢ ⎣ => request A was executed without issue");
         } else {
-            sb.append("\n⎢ ⎣ => request A was NOT executed as planned");
+            sb.append("\n⎢ ⎣ => request A encountered an issue");
         }
         if (!this.requestAHadTicket) sb.append("\u001b[m"); //reset color
 
         if (this.requestAHadTicket) {
-            if (!this.requestBExecutedAsPlanned) sb.append("\u001b[0;33m"); //in yellow
+            if (!this.requestBExecutedWithoutIssue) sb.append("\u001b[0;33m"); //in yellow
             sb.append("\n⎢ ⎡Request B:");
             if (this.requestBStatusCode != 0) {
                 sb.append("\n⎢ ⎢ status Code: ").append(requestBStatusCode);
@@ -69,14 +72,18 @@ public class TestCaseResult {
                         .append("]: ")
                         .append(AlertDescription.getAlertDescription((Byte) this.requestBAlert.getDescription().getValue()).name());
             }
-            if (this.requestBExecutedAsPlanned) {
-                sb.append("\n⎢ ⎣ => request B was executed as planned");
+            if (this.requestBExecutedWithoutIssue) {
+                sb.append("\n⎢ ⎣ => request B was executed without issue");
             } else {
-                sb.append("\n⎢ ⎣ => request B was NOT executed as planned");
+                sb.append("\n⎢ ⎣ => request B encountered an issue");
             }
-            if (!this.requestBExecutedAsPlanned) sb.append("\u001b[m"); //reset color
+            if (!this.requestBExecutedWithoutIssue) sb.append("\u001b[m"); //reset color
         }
-        sb.append("\n⎣passed: ").append(this.passed);
+        sb.append("\n⎢did the server complain: ").append(!this.ranWithoutIssue);
+        boolean expectedThisResult = this.ranWithoutIssue != this.expectedToFail;
+        if (!expectedThisResult) sb.append("\u001b[0;31m"); //in red
+        sb.append("\n⎣was that expected?:      ").append(expectedThisResult);
+        sb.append("\u001b[m"); //reset color
         return sb.toString();
     }
 }

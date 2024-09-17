@@ -1,14 +1,13 @@
 package org.felix.thesis.testCases;
 
+import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
+import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.sessionTickets.Ticket;
 
 import java.nio.file.Path;
 
-public class ReconnectToACertTestCase extends BaseCertATestCase{
-    String siteADomain;
-    Path siteAClientCert;
-
+public class ReconnectToACertTestCase extends ReconnectToATestCase{
     /**
      * 1. connects to site A (with client cert A) and requests a session Ticket
      * </br>
@@ -18,19 +17,29 @@ public class ReconnectToACertTestCase extends BaseCertATestCase{
      */
     public ReconnectToACertTestCase(String name) {
         super(name);
+        this.sendsCorrectCertToA = true;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        this.siteAClientCert = siteAClientCert;
-        this.siteADomain = siteADomain; //save for 2nd request
+        State state = super.getStateA(port, siteADomain, siteAClientCert);
 
-        //#TODO add cert to A
+        Config config = state.getConfig();
+        WorkflowTrace wf = state.getWorkflowTrace();
 
-        return super.getStateA(port, siteADomain, siteAClientCert);
+        config = this.applyCert(config, siteAClientCert);
+
+        return new State(config, wf);
     }
 
     public State getStateB(int port, String siteBDomain, Path siteBCert, Ticket ticket) {
-        return super.getStateB(port, this.siteADomain, this.siteAClientCert, ticket);
-    }
+        // just use the ticket from siteA to connect to siteA again
+        State state = super.getStateB(port, savedSiteADomain, savedSiteAClientCert, ticket);
 
+        Config config = state.getConfig();
+        WorkflowTrace wf = state.getWorkflowTrace();
+
+        config = this.applyCert(config, savedSiteAClientCert);
+
+        return new State(config, wf);
+    }
 }

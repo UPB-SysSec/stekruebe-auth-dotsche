@@ -1,16 +1,13 @@
 package org.felix.thesis.testCases;
 
-import de.rub.nds.tlsattacker.core.config.Config;
-import de.rub.nds.tlsattacker.core.constants.ClientAuthenticationType;
 import de.rub.nds.tlsattacker.core.state.State;
-import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.sessionTickets.Ticket;
 
 import java.nio.file.Path;
 
 public class ReconnectToATestCase extends BaseTestCase{
-    String siteADomain;
-    Path siteAClientCert;
+    String savedSiteADomain;
+    Path savedSiteAClientCert;
 
     /**
      * 1. connects to site A and requests a session Ticket
@@ -21,15 +18,22 @@ public class ReconnectToATestCase extends BaseTestCase{
      */
     public ReconnectToATestCase(String name) {
         super(name);
+        this.doesSomethingIllegal = false; //reconnecting to siteA with a ticket for siteA is not illegal
+    }
+
+    public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
+        return this.doesSomethingIllegal
+                || siteANeedsClientCert && !this.sendsCorrectCertToA;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        this.siteAClientCert = siteAClientCert;
-        this.siteADomain = siteADomain; //save for 2nd request
+        this.savedSiteAClientCert = siteAClientCert;
+        this.savedSiteADomain = siteADomain; //save for 2nd request
         return super.getStateA(port, siteADomain, siteAClientCert);
     }
 
     public State getStateB(int port, String siteBDomain, Path siteBCert, Ticket ticket) {
-        return super.getStateB(port, this.siteADomain, this.siteAClientCert, ticket);
+        // just use the ticket from siteA to connect to siteA again
+        return super.getStateB(port, savedSiteADomain, savedSiteAClientCert, ticket);
     }
 }

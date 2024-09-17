@@ -94,9 +94,6 @@ public class DockerWrapper {
         return result;
     }
 
-    public static DockerResult run(String imageName, String containerName) {
-        return run(imageName, containerName, false, 443);
-    }
     public static DockerResult run(String imageName, String containerName, boolean restart, int port) {
 
         if (isRunning(containerName)) {
@@ -132,6 +129,7 @@ public class DockerWrapper {
             result = _exec(
                     String.format("docker kill %s", containerName)
             );
+            return new DockerResult(); //ignore result of kill. we sometimes try to kill containers that aren't alive anymore
         } catch (IOException e) {
             result = new DockerResult(e, "IOException during kill");
         } catch (InterruptedException e) {

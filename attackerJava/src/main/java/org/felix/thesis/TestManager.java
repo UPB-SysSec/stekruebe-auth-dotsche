@@ -31,7 +31,7 @@ public class TestManager {
 
         // read in setupsFolder
         this._collectSetups(setupsPath.toFile());
-    };
+    }
 
     /**
      * Fills 'TestManager.setups' with the docker setups in the given folder.
@@ -58,57 +58,61 @@ public class TestManager {
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
-                                    false
+                                    false,
+                                    true
                                 )
                             );
                             port++; //next test should get next port
                             break;
                         case "domains_certA":
                             setups.add(new TestSetupInstance(
-                                            port,
-                                            this.tests,
-                                            setup.toPath(),
-                                            "siteA.org",
-                                            "siteB.org",
-                                            true
-                                    )
+                                    port,
+                                    this.tests,
+                                    setup.toPath(),
+                                    "siteA.org",
+                                    "siteB.org",
+                                    true,
+                                    true
+                                )
                             );
                             port++; //next test should get next port
                             break;
                         case "subdomains":
                             setups.add(new TestSetupInstance(
-                                            port,
-                                            this.tests,
-                                            setup.toPath(),
-                                            "siteA.site.org",
-                                            "siteB.site.org",
-                                            false
-                                    )
+                                    port,
+                                    this.tests,
+                                    setup.toPath(),
+                                    "siteA.site.org",
+                                    "siteB.site.org",
+                                    false,
+                                    true
+                                )
                             );
                             port++; //next test should get next port
                             break;
                         case "subdomains_certA":
                             setups.add(new TestSetupInstance(
-                                            port,
-                                            this.tests,
-                                            setup.toPath(),
-                                            "siteA.site.org",
-                                            "siteB.site.org",
-                                            true
-                                    )
+                                    port,
+                                    this.tests,
+                                    setup.toPath(),
+                                    "siteA.site.org",
+                                    "siteB.site.org",
+                                    true,
+                                    true
+                                )
                             );
                             port++; //next test should get next port
                             break;
                         case "open":
-                            //noinspection DuplicateBranchesInSwitch
                             setups.add(new TestSetupInstance(
-                                            port,
-                                            this.tests,
-                                            setup.toPath(),
-                                            "siteA.org",
-                                            "siteB.org",
-                                            false
-                                    )
+                                    port,
+                                    this.tests,
+                                    setup.toPath(),
+                                    "siteA.org",
+                                    "siteB.org",
+                                    false,
+                                    false
+                                )
                             );
                             port++; //next test should get next port
                             break;

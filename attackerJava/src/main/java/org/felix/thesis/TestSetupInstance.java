@@ -36,15 +36,18 @@ public class TestSetupInstance {
     public String name;
     private final Logger LOGGER;
 
+    private final boolean siteAUsesClientCert;
+    private final boolean siteBUsesClientCert;
+
     private TestSetupResult result;
 
     /**
-     * siteAdomain, siteBdomain, siteAcert(optional), siteBcert(optional)
+     * siteADomain, siteBDomain, siteACert(optional), siteBCert(optional)
      * @param port the port to run the docker container on
      * @param tests the list of TestCases
      * @param dockerFileFolder the folder containing the dockerFile
      */
-    public TestSetupInstance(int port, List<BaseTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteBUsesCert) {
+    public TestSetupInstance(int port, List<BaseTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
         this.port = port;
         this.tests = tests;
         this.basePath = dockerFileFolder;
@@ -53,6 +56,9 @@ public class TestSetupInstance {
         this.siteBDomain = siteBDomain;
         this.siteACert = Path.of("../setups/shared/cert/keys/clientA.pem");
         this.siteBCert = Path.of("../setups/shared/cert/keys/clientB.pem");
+
+        this.siteAUsesClientCert = siteAUsesClientCert;
+        this.siteBUsesClientCert = siteBUsesClientCert;
 
         this.name = this._getName();
         this.LOGGER = LogManager.getLogger(this.name);
@@ -118,7 +124,7 @@ public class TestSetupInstance {
                 return; //cannot continue if run fails
             } else {
                 try {
-                    Thread.sleep(100l); //wait for the server to start
+                    Thread.sleep(100L); //wait for the server to start
                 } catch (InterruptedException ignore) {}
                 LOGGER.info("> running successful");
             }
@@ -137,8 +143,9 @@ public class TestSetupInstance {
 
 
     public void runTest(BaseTestCase test) {
-        LOGGER.info("running test: {}", test.getName());
-        TestCaseResult testRes = new TestCaseResult(test.getName());
+        boolean expectedToFail = test.getExpectedToFail(siteAUsesClientCert, siteBUsesClientCert);
+        LOGGER.info("running test: '{}' on '{}', expected to fail: '{}'", test.getName(), name, expectedToFail);
+        TestCaseResult testRes = new TestCaseResult(test.getName(), expectedToFail);
 
         // do first request
         State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert);
@@ -150,7 +157,7 @@ public class TestSetupInstance {
         } catch (Exception e) {
             testRes.requestAException = e;
         }
-        testRes.requestAExecutedAsPlanned = stateA.getWorkflowTrace().executedAsPlanned();
+        testRes.requestAExecutedWithoutIssue = stateA.getWorkflowTrace().executedAsPlanned();
         testRes.requestAException = stateA.getExecutionException();
         testRes.requestAAlert = stateA.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
         testRes.requestATrace = stateA.getWorkflowTrace();
@@ -173,25 +180,21 @@ public class TestSetupInstance {
                 executor.closeConnection();
             } catch (Exception e) {
                 testRes.requestBException = e;
-                testRes.passed = false;
+                testRes.ranWithoutIssue = false;
             }
-            testRes.requestBExecutedAsPlanned = stateB.getWorkflowTrace().executedAsPlanned();
-            testRes.passed &= testRes.requestBExecutedAsPlanned;
+            testRes.requestBExecutedWithoutIssue = stateB.getWorkflowTrace().executedAsPlanned();
+            testRes.ranWithoutIssue &= testRes.requestBExecutedWithoutIssue;
             testRes.requestBException = stateB.getExecutionException();
             testRes.requestBAlert = stateB.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
             testRes.requestBTrace = stateB.getWorkflowTrace();
             //testRes.requestBStatusCode = stateB... #TODO
         } else {
-            testRes.passed = false;
+            testRes.ranWithoutIssue = false;
         }
 
         // do second request (with the ticket from the first session)
         result.results.add(testRes); // save testResult in setupResults
-        if (!testRes.passed) {result.allSuccessful = false;}
-    }
-
-    private void executor() {
-
+        if (testRes.ranWithoutIssue==testRes.expectedToFail) {result.allSuccessful = false;}
     }
 
     /**
