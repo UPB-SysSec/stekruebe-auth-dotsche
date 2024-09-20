@@ -42,15 +42,19 @@ public class TestManager {
         assert setupsFolder.isDirectory();
         int port = 11443;
         var setups = new ArrayList<TestSetupInstance>();
-        List<String> folderNames = List.of("apache", "caddy", "nginx");
+
+        List<String> folderNames = List.of("apache", "caddy", "nginx"); //the subfolders to search for setups in
+        boolean disableCertA = true; //flag to disable the inclusion of CertA setups
 
         for (File elem : setupsFolder.listFiles()) {
             if (!elem.isDirectory()) {continue;}
             if (folderNames.contains(elem.getName())) {
                 for (File setup : elem.listFiles()) {
                     if (!setup.isDirectory()) {continue;}
-                    if (setup.getName().startsWith(".")) {continue;}
-                    switch (setup.getName()) {
+                    String name = setup.getName();
+                    if (name.startsWith(".")) {continue;}
+                    if (name.endsWith("certA") && disableCertA) {continue;}
+                    switch (name) {
                         case "domains":
                             setups.add(new TestSetupInstance(
                                     port,

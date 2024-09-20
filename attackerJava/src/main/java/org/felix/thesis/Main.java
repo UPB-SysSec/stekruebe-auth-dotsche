@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger();
-
     /**
      * add de.rub.nds.tls.attacker:tls-core:5.3.0 to dependencies
      * NOT de.rub.nds.tlsAttacker:TLS-Core:3.4.0 or similar !
@@ -19,8 +18,8 @@ public class Main {
         TestManager tm = new TestManager(TestCasesBuilder.getTestCases(), path);
 
         LOGGER.info("running");
-        tm.run();
-//        tm.runParallel();
+//        tm.run();
+        tm.runParallel();
 
         LOGGER.info("Results:");
         List<TestSetupResult> results = tm.getResults();

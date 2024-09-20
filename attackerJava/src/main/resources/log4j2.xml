@@ -20,7 +20,7 @@
         </Logger>
 
         <Logger name="de.rub.nds.tlsattacker.core.protocol.handler"     level="INFO"/>
-        <Logger name="de.rub.nds.tlsattacker.core.protocol.message"     level="INFO"/>
+        <Logger name="de.rub.nds.tlsattacker.core.protocol.message"     level="DEBUG"/>
         <Logger name="de.rub.nds.tlsattacker.core.protocol.parser"      level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.protocol.preparator"  level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.protocol.serializer"  level="INFO"/>
@@ -31,8 +31,8 @@
         <Logger name="de.rub.nds.tlsattacker.core.record.parser"        level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.record.preparator"    level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.record.serializer"    level="INFO"/>
-        <Logger name="de.rub.nds.tlsattacker.core.workflow"             level="INFO"/>
-        <Logger name="de.rub.nds.tlsattacker.core.workflow.action"      level="INFO"/>
+        <Logger name="de.rub.nds.tlsattacker.core.workflow"             level="DEBUG"/>
+        <Logger name="de.rub.nds.tlsattacker.core.workflow.action"      level="DEBUG"/>
         <Logger name="de.rub.nds.tlsattacker.core.config"               level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.state"                level="INFO"/>
         <Logger name="de.rub.nds.tlsattacker.core.constants"            level="INFO"/>

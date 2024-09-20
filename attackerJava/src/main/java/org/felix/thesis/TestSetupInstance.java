@@ -14,6 +14,7 @@ import de.rub.nds.tlsattacker.core.workflow.DefaultWorkflowExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -157,7 +158,7 @@ public class TestSetupInstance {
         } catch (Exception e) {
             testRes.requestAException = e;
         }
-        testRes.requestAExecutedWithoutIssue = stateA.getWorkflowTrace().executedAsPlanned();
+        testRes.requestAWorkflowExecutedAsPlanned = stateA.getWorkflowTrace().executedAsPlanned();
         testRes.requestAException = stateA.getExecutionException();
         testRes.requestAAlert = stateA.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
         testRes.requestATrace = stateA.getWorkflowTrace();
@@ -172,6 +173,7 @@ public class TestSetupInstance {
         }
 
         if (ticket != null) { //only if we have a ticket
+            // do second request (with the ticket from the first session)
             State stateB = test.getStateB(this.port, this.siteBDomain, this.siteBCert, ticket);
             try {
                 // ---- RUN THE WORKFLOW ----
@@ -180,21 +182,23 @@ public class TestSetupInstance {
                 executor.closeConnection();
             } catch (Exception e) {
                 testRes.requestBException = e;
-                testRes.ranWithoutIssue = false;
             }
-            testRes.requestBExecutedWithoutIssue = stateB.getWorkflowTrace().executedAsPlanned();
-            testRes.ranWithoutIssue &= testRes.requestBExecutedWithoutIssue;
+            testRes.requestBWorkflowExecutedAsPlanned = stateB.getWorkflowTrace().executedAsPlanned();
+            testRes.receivedDataFromB &= testRes.requestBWorkflowExecutedAsPlanned;
             testRes.requestBException = stateB.getExecutionException();
+            ApplicationMessage appDataB = stateB.getWorkflowTrace().getFirstReceivedMessage(ApplicationMessage.class);
+            if (appDataB!=null) {
+                testRes.requestBApplicationData = appDataB;
+                testRes.receivedDataFromB = true;
+                testRes.requestBHttpStatusCode = getHTTPCode(appDataB.getData().getValue());
+            }
             testRes.requestBAlert = stateB.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
             testRes.requestBTrace = stateB.getWorkflowTrace();
             //testRes.requestBStatusCode = stateB... #TODO
-        } else {
-            testRes.ranWithoutIssue = false;
         }
 
-        // do second request (with the ticket from the first session)
         result.results.add(testRes); // save testResult in setupResults
-        if (testRes.ranWithoutIssue==testRes.expectedToFail) {result.allSuccessful = false;}
+        if (testRes.receivedDataFromB ==testRes.expectedToFail) {result.allSuccessful = false;}
     }
 
     /**
@@ -214,5 +218,20 @@ public class TestSetupInstance {
         String server = parts[2];
         String setup = parts[3];
         return server+"_"+setup;
+    }
+
+    private int getHTTPCode(byte[] appData) {
+        String text = new String(appData, StandardCharsets.UTF_8);
+        try {
+            if (!text.startsWith("HTTP/1.1 ")) {
+                return -1;
+            } else {
+                String code = text.split(" ")[1];
+                return Integer.parseInt(code);
+            }
+        }catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            LOGGER.warn("unable to parse HTTP code from '{}'", text.substring(0, Math.min(20, text.length())));
+            return -1;
+        }
     }
 }

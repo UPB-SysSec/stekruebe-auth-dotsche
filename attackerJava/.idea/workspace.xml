@@ -10,50 +10,25 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f7cf924-cbd0-47dc-a36a-c3c321512037" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupsBuilder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/ArrayUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/FoundSecret.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/SessionSecret.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/SessionTicketUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/Ticket.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/TicketHolder.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/TicketTls12.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/sessionTickets/TicketTls13.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/code.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/attackerJava.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/attackerJava.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/attackerJava/archive.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/attackerJava/archive.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/BaseConfigCreator.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/BaseConfigCreator.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestCasesBuilder.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestCasesBuilder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestManager.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestManager.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestSetupInstance.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/attackerJava/org/felix/thesis/TestSetupInstance.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseWorkflowCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseConfigCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseConfigCreator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCaseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCaseResult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCasesBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCasesBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupInstance.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseCertATestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseCertATestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseTestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BothCertsTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BothCertsTestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToACertTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToACertTestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/log4j2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/log4j2.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/.paths/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/.paths/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/.paths_certA/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/.paths_certA/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/domains/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/domains/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/domains_certA/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/domains_certA/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/open/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/open/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/shared/scripts/domains/other/rebuild_run.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/shared/scripts/domains/other/rebuild_run.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tmp/apache_domains_cert_siteB.org.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tmp/apache_domains_cert_siteB.org.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tmp/apache_domains_certa_cert_siteA.org.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tmp/apache_domains_certa_cert_siteA.org.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tmp/apache_domains_certa_cert_siteB.org.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tmp/apache_domains_certa_cert_siteB.org.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../tmp/apache_domains_siteA.org.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../tmp/apache_domains_siteA.org.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/domains/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/domains/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/domains_certA/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/domains_certA/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/open/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/open/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/config/Caddyfile" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,6 +52,9 @@
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 6
 }</component>
@@ -88,24 +66,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.main.executor": "Run",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/felix/Documents/sync/Uni/Bachelorarbeit/thesis-code/attackerJava/src/main/resources",
-    "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.26678932",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.main.executor&quot;: &quot;Coverage&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/felix/.m2/repository/de/rub/nds/tls/attacker/tls-core/6.0.3-SNAPSHOT/tls-core-6.0.3-SNAPSHOT.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26678932&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.IDE.editor.colors&quot;
   }
-}]]></component>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.felix.thesis.testCases" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="JarApplication" />
+      </set>
+    </option>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="Application" factoryName="Application">
       <classpathModifications>
@@ -145,5 +136,8 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/attackerJava$main.ic" NAME="main Coverage Results" MODIFIED="1726476749016" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
   </component>
 </project>

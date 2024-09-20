@@ -3,6 +3,8 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import org.felix.thesis.BaseConfigCreator;
+import org.felix.thesis.BaseWorkflowCreator;
 
 import java.nio.file.Path;
 

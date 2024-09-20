@@ -56,7 +56,7 @@ public class TestSetupResult {
         }
         sb.append("\n⎢ Subtests:");
         for (TestCaseResult caseRes : this.results) {
-            sb.append("\n").append(caseRes);
+            sb.append("\n").append(caseRes.toStringShort());
         }
         sb.append("\n");
         //sb.append("\n⎣_______________________⎦");

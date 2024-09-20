@@ -3,6 +3,7 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.sessionTickets.Ticket;
 
 import java.nio.file.Path;
@@ -21,23 +22,24 @@ public class ReconnectToACertTestCase extends ReconnectToATestCase{
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
+        // same as ReconnectToATestCase
         State state = super.getStateA(port, siteADomain, siteAClientCert);
 
+        // apply the certificate for site A
         Config config = state.getConfig();
         WorkflowTrace wf = state.getWorkflowTrace();
-
         config = this.applyCert(config, siteAClientCert);
 
         return new State(config, wf);
     }
 
     public State getStateB(int port, String siteBDomain, Path siteBCert, Ticket ticket) {
-        // just use the ticket from siteA to connect to siteA again
+        // same as ReconnectToATestCase
         State state = super.getStateB(port, savedSiteADomain, savedSiteAClientCert, ticket);
 
+        // apply the certificate for site A
         Config config = state.getConfig();
         WorkflowTrace wf = state.getWorkflowTrace();
-
         config = this.applyCert(config, savedSiteAClientCert);
 
         return new State(config, wf);
