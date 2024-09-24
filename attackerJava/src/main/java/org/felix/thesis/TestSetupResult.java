@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestSetupResult {
-    public TestSetupResult(String name) {
+    public TestSetupResult(String name, int port) {
         this.setupName = name;
+        this.port = port;
     }
 
     String setupName;
+    int port;
 
     DockerResult dockerBuildResult;
     Exception dockerBuildException;
@@ -23,7 +25,7 @@ public class TestSetupResult {
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\n\u001b[m⎡‾‾‾‾‾‾‾‾[").append(this.setupName).append("]‾‾‾‾‾‾‾‾⎤");
+        sb.append("\n\u001b[m⎡‾‾‾‾‾‾‾‾[").append(this.setupName).append("][port=").append(this.port).append("]‾‾‾‾‾‾‾‾⎤");
 
         if (this.dockerBuildSuccessful) {
             sb.append("\n⎢ => build: successful");

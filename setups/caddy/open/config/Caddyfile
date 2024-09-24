@@ -7,7 +7,7 @@
 	}
 }
 
-siteA.org  {
+siteA.org {
 	tls /keys/siteA.pem /keys/siteA.key {
 	}
 
@@ -16,7 +16,7 @@ siteA.org  {
 	}
 }
 
-siteB.org  {
+siteB.org {
 	tls /keys/siteB.crt /keys/siteB.key {
 	}
 
@@ -25,7 +25,8 @@ siteB.org  {
 	}
 }
 
-:80 :443 { # everything else
+:80 :443 {
+	# everything else
 	handle {
 		respond 404
 	}

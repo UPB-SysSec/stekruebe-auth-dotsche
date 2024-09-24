@@ -4,12 +4,14 @@ import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.connection.OutboundConnection;
 import de.rub.nds.tlsattacker.core.layer.constant.LayerConfiguration;
 import de.rub.nds.tlsattacker.core.protocol.message.extension.sni.ServerNamePair;
-import de.rub.nds.tlsattacker.core.workflow.factory.WorkflowTraceType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class BaseConfigCreator {
+    private static final Logger LOGGER = LogManager.getLogger("configCreator");
     /**
      * prepare the config
      * @param port the port to connect on
@@ -17,17 +19,18 @@ public class BaseConfigCreator {
      * @return the configured config
      */
     public static Config buildConfig(int port, String domain) {
-        Config config = new Config();
-        //config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
-        config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
+        if (domain == null) throw new AssertionError();
+        LOGGER.info("domain: {}", domain);
 
+        Config config = new Config();
+        config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
 
         // use session tickets
         config.setAddSessionTicketTLSExtension(true);
 
 
         // set connection type
-        config.setDefaultClientConnection(new OutboundConnection("client", 443, "localhost"));
+        config.setDefaultClientConnection(new OutboundConnection("client", port, "127.0.0.2"));
 
 
         // set http path
@@ -35,8 +38,8 @@ public class BaseConfigCreator {
 
 
         // set port
-        config.setDefaultClientConnection(new OutboundConnection(port));
-
+//        config.setDefaultClientConnection(new OutboundConnection(port));
+        LOGGER.info("outbound connection to port {}", port);
 
         // add SNI extension
         config.setAddServerNameIndicationExtension(true);
@@ -45,7 +48,6 @@ public class BaseConfigCreator {
                 domain.getBytes(StandardCharsets.US_ASCII)
         );
         config.setDefaultSniHostnames(List.of(sn));
-
 
         return config;
     }

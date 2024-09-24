@@ -7,7 +7,7 @@
 	}
 }
 
-siteA.org  {
+siteA.org {
 	tls /keys/siteA.crt /keys/siteA.key {
 		client_auth {
 			mode require_and_verify #this is super important!! (not default even if trust pool is given)
@@ -16,12 +16,13 @@ siteA.org  {
 			}
 		}
 	}
+
 	handle {
 		respond "hello from the other siteA"
 	}
 }
 
-siteB.org  {
+siteB.org {
 	tls /keys/siteB.crt /keys/siteB.key {
 		client_auth {
 			mode require_and_verify #this is super important!! (not default even if trust pool is given)
@@ -36,7 +37,8 @@ siteB.org  {
 	}
 }
 
-:80 :443 { # everything else
+:80 :443 {
+	# everything else
 	handle {
 		respond 404
 	}

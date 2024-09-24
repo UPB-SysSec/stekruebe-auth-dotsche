@@ -7,7 +7,7 @@
 	}
 }
 
-subdomainA.site.org  {
+siteA.site.org {
 	tls /keys/subdomainA.pem /keys/siteA.key {
 		load /keys
 	}
@@ -22,7 +22,7 @@ subdomainA.site.org  {
 	}
 }
 
-subdomainB.site.org  {
+siteA.site.org {
 	tls /keys/subdomainB.pem /keys/siteB.key {
 		client_auth {
 			mode require_and_verify #this is super important!! (not default even if trust pool is given)

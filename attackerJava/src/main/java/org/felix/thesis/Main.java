@@ -21,10 +21,15 @@ public class Main {
 //        tm.run();
         tm.runParallel();
 
+        try { Thread.sleep(100L);
+        } catch (InterruptedException ignored) {}
         LOGGER.info("Results:");
         List<TestSetupResult> results = tm.getResults();
         for (TestSetupResult res : results) {
             LOGGER.info(res.toString());
+        }
+        for (TestSetupResult res : results) {
+            LOGGER.info("{} on port {}", res.setupName, res.port);
         }
     }
 }

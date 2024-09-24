@@ -1,1 +1,1 @@
-curl -I --tlsv1.3 --insecure --no-progress-meter https://siteA.org --resolve "siteA.org:443:127.0.0.1"
+curl -I --tlsv1.3 --insecure --no-progress-meter https://siteA.org:44300/eee --resolve "siteA.org:44300:127.0.0.1"

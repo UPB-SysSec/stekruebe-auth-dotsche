@@ -78,7 +78,7 @@ public class TestSetupInstance {
                 this.result.addResult(res)
             docker.stop()
         */
-        result = new TestSetupResult(this.name);
+        result = new TestSetupResult(this.name, this.port);
 
         /* ------ Build Docker Container ------ */
         if (false) {

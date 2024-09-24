@@ -3,6 +3,7 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.sessionTickets.Ticket;
 
@@ -18,30 +19,35 @@ public class ReconnectToACertTestCase extends ReconnectToATestCase{
      */
     public ReconnectToACertTestCase(String name) {
         super(name);
-        this.sendsCorrectCertToA = true;
+        this.certForA = CertificateChoice.A;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
         // same as ReconnectToATestCase
-        State state = super.getStateA(port, siteADomain, siteAClientCert);
+        State ignore = super.getStateA(port, siteADomain, siteAClientCert);
 
-        // apply the certificate for site A
-        Config config = state.getConfig();
-        WorkflowTrace wf = state.getWorkflowTrace();
-        config = this.applyCert(config, siteAClientCert);
-
-        return new State(config, wf);
+        //basic connection config
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        //apply the cert
+        config = applyCert(config, siteAClientCert);
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        // return state
+        return new State(config, trace);
     }
 
     public State getStateB(int port, String siteBDomain, Path siteBCert, Ticket ticket) {
         // same as ReconnectToATestCase
         State state = super.getStateB(port, savedSiteADomain, savedSiteAClientCert, ticket);
 
-        // apply the certificate for site A
+        //basic connection config
         Config config = state.getConfig();
-        WorkflowTrace wf = state.getWorkflowTrace();
-        config = this.applyCert(config, savedSiteAClientCert);
-
-        return new State(config, wf);
+        //apply the cert
+//        config = applyCert(config, savedSiteAClientCert); //let's try without this
+        //apply the ticket
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
+        // return state
+        return new State(config, trace);
     }
 }

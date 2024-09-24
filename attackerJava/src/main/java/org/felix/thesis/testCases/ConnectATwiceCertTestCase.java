@@ -3,6 +3,8 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import org.felix.thesis.BaseConfigCreator;
+import org.felix.thesis.BaseWorkflowCreator;
 
 import java.nio.file.Path;
 
@@ -16,17 +18,18 @@ public class ConnectATwiceCertTestCase extends ConnectATwiceTestCase{
      */
     public ConnectATwiceCertTestCase(String name) {
         super(name);
-        this.sendsCorrectCertToA = true;
+        this.certForA = CertificateChoice.A;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        State state = super.getStateA(port, siteADomain, siteAClientCert);
-        Config config = state.getConfig();
-        WorkflowTrace wf = state.getWorkflowTrace();
-
-        // apply the client cert for site A
-        config = this.applyCert(config, siteAClientCert);
-
-        return new State(config, wf);
+        super.getStateA(port, siteADomain, siteAClientCert);
+        //basic connection config
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        //apply the cert
+        config = applyCert(config, siteAClientCert);
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        // return state
+        return new State(config, trace);
     }
 }

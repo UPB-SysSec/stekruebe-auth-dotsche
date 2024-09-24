@@ -3,6 +3,7 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.sessionTickets.Ticket;
 
@@ -18,31 +19,29 @@ public class BothCertsTestCase extends BaseTestCase{
      */
     public BothCertsTestCase(String name) {
         super(name);
-        this.sendsCorrectCertToA = true;
-        this.sendsCorrectCertToB = true;
+        this.certForA = CertificateChoice.A;
+        this.certForB = CertificateChoice.B;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        // get the usual stateA
-        State state = super.getStateA(port, siteADomain, siteAClientCert);
-        Config config = state.getConfig();
-        WorkflowTrace trace = state.getWorkflowTrace();
-
-        //apply the client cert
-        config = this.applyCert(config, siteAClientCert);
-
+        //basic connection config
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        //apply the cert
+        config = applyCert(config, siteAClientCert);
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        // return state
         return new State(config, trace);
     }
 
     public State getStateB(int port, String siteBDomain, Path siteBClientCert, Ticket ticket) {
-        // get usual stateB
-        State state = super.getStateB(port, siteBDomain, siteBClientCert, ticket);
-        Config config = state.getConfig();
-        WorkflowTrace trace = state.getWorkflowTrace();
-
-        // apply the client cert
-        config = this.applyCert(config, siteBClientCert);
-
+        //basic connection config
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        //apply the cert
+        config = applyCert(config, siteBClientCert);
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
+        // return state
         return new State(config, trace);
     }
 

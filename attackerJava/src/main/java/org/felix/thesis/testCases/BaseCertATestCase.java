@@ -16,18 +16,16 @@ public class BaseCertATestCase extends BaseTestCase{
      */
     public BaseCertATestCase(String name) {
         super(name);
-        this.sendsCorrectCertToA = true;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        // get usual stateA
-        State state = super.getStateA(port, siteADomain, siteAClientCert);
-        Config config = state.getConfig();
-        WorkflowTrace trace = state.getWorkflowTrace();
-
-        //add the cert
-        config = this.applyCert(config, siteAClientCert);
-
+        //basic connection config
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        //apply the cert
+        config = applyCert(config, siteAClientCert);
+        //create a workflow-trace from the config
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        // return state
         return new State(config, trace);
     }
 }

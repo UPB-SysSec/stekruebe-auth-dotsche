@@ -2,10 +2,8 @@ package org.felix.thesis.testCases;
 
 import de.rub.nds.tlsattacker.core.certificate.CertificateKeyPair;
 import de.rub.nds.tlsattacker.core.config.Config;
-import de.rub.nds.tlsattacker.core.connection.OutboundConnection;
 import de.rub.nds.tlsattacker.core.constants.ClientAuthenticationType;
 import de.rub.nds.tlsattacker.core.constants.ClientCertificateType;
-import de.rub.nds.tlsattacker.core.protocol.message.extension.sni.ServerNamePair;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +18,6 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.sessionTickets.Ticket;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.KeyFactory;
@@ -33,11 +30,11 @@ import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.*;
 
 public class BaseTestCase {
-    private static final Logger LOGGER = LogManager.getLogger();
+    private static final Logger LOGGER = LogManager.getLogger("TestCase");
 
     private final String name;
-    boolean sendsCorrectCertToA;
-    boolean sendsCorrectCertToB;
+    CertificateChoice certForA;
+    CertificateChoice certForB;
     boolean doesSomethingIllegal;
 
     /**
@@ -50,8 +47,8 @@ public class BaseTestCase {
     public BaseTestCase(String name) {
         this.name = name;
         this.doesSomethingIllegal = true;
-        this.sendsCorrectCertToA = false;
-        this.sendsCorrectCertToB = false;
+        this.certForA = CertificateChoice.None;
+        this.certForB = CertificateChoice.None;
     }
 
     public String getName() {
@@ -66,9 +63,10 @@ public class BaseTestCase {
      * @return whether the test is expected to go smoothly or have the server fail
      */
     public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
-        return this.doesSomethingIllegal
-                || siteANeedsClientCert && !this.sendsCorrectCertToA
-                || siteBNeedsClientCert && !this.sendsCorrectCertToB;
+        if (this.doesSomethingIllegal) return true;
+        if (this.certForA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
+        if (this.certForB != (siteBNeedsClientCert ? CertificateChoice.B : CertificateChoice.None)) return true;
+        return false;
     }
 
     /**
@@ -84,13 +82,14 @@ public class BaseTestCase {
 
         try {
             //make sure the file exists and contains relevant stuff
-            BufferedReader assertReader = Files.newBufferedReader(certPath);
-            assert Objects.equals(assertReader.readLine(), "-----BEGIN CERTIFICATE-----");
-            assertReader.close();
+            BufferedReader certReader = Files.newBufferedReader(certPath);
+            certReader.mark(1024); //set mark at the beginning
+            assert Objects.equals(certReader.readLine(), "-----BEGIN CERTIFICATE-----");
+            certReader.reset(); //jump back to mark
 
             //read private key and client cert
             //the pem file contains both the client cert and the client key
-            PEMParser pemParser = new PEMParser(Files.newBufferedReader(certPath));
+            PEMParser pemParser = new PEMParser(certReader);
 
             // read the first pemObject from the file
             Object pemObjectCert = pemParser.readObject();
@@ -131,10 +130,10 @@ public class BaseTestCase {
      */
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
         //basic connection config
+        if (siteADomain == null) throw new AssertionError();
         Config config = BaseConfigCreator.buildConfig(port, siteADomain);
-
         // return state
-        WorkflowTrace trace = BaseWorkflowCreator.getWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 
@@ -149,14 +148,10 @@ public class BaseTestCase {
     public State getStateB(int port, String siteBDomain, Path siteBClientCert, Ticket ticket) {
         // basic connection config
         Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
-
         // add session ticket
         ticket.applyTo(config);
-
         // return state
-        WorkflowTrace trace = BaseWorkflowCreator.createResumptionWorkflow(config);
-        //WorkflowTrace trace = BaseConfigCreator.getResumptionWorkflow(config);
-        //trace.addTlsAction(new ReceiveAction(new ApplicationMessage()));
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
         return new State(config, trace);
     }
 }

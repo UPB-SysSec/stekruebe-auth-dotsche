@@ -46,6 +46,9 @@ public class TestCaseResult {
                     .append(AlertLevel.getAlertLevel((Byte) this.requestAAlert.getLevel().getValue()).name())
                     .append("): ")
                     .append(AlertDescription.getAlertDescription((Byte) this.requestAAlert.getDescription().getValue()).name());
+            //sb.append("\n").append(this.requestATrace);
+        } else if (this.requestAException != null) {
+            sb.append("an exception: ").append(this.requestBException);
         } else {
             sb.append("something unexpected");
         }
@@ -62,9 +65,13 @@ public class TestCaseResult {
         } else if (this.requestBException != null) {
             sb.append("an exception: ").append(this.requestBException);
         } else if (!this.requestAHadTicket) {
-            sb.append("nothing (wasn't sent)");
+            sb.append("nothing (wasn't sent because A had no ticket)");
+        } else if (this.requestBApplicationData != null) {
+            sb.append("application data, that didn't contain a http status code");
+        } else if (this.requestBWorkflowExecutedAsPlanned) {
+            sb.append("an empty response, while the workflow was executed as planned");
         } else {
-            sb.append("something unexpected");
+            sb.append("something unexpected: received no alert or application data, threw no exception ...");
         }
 
         // wrap up

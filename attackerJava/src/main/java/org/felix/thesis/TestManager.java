@@ -44,7 +44,7 @@ public class TestManager {
         var setups = new ArrayList<TestSetupInstance>();
 
         List<String> folderNames = List.of("apache", "caddy", "nginx"); //the subfolders to search for setups in
-        boolean disableCertA = true; //flag to disable the inclusion of CertA setups
+        boolean disableCertA = false; //flag to disable the inclusion of CertA setups
 
         for (File elem : setupsFolder.listFiles()) {
             if (!elem.isDirectory()) {continue;}
@@ -148,8 +148,10 @@ public class TestManager {
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }
-        executor.shutdown();
         try {
+            Thread.sleep(100L);
+            executor.shutdown();
+
             boolean finishedInTime = executor.awaitTermination(100, TimeUnit.SECONDS);
             if (!finishedInTime) {
                 LOGGER.error("executor timeout reached");
