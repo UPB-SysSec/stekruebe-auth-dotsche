@@ -10,16 +10,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0f7cf924-cbd0-47dc-a36a-c3c321512037" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/CertificateChoice.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/StopReason.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ConnectBoth.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ConnectBothCertA.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/InvalidDomainBTestCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractBaseTestCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractFirstRequestTwiceTestCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractInvalidSecondHostHeader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractInvalidSecondSNI.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractInvalidTestCase.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/abstractTestCases/AbstractValidTestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseConfigCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseConfigCreator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseWorkflowCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/BaseWorkflowCreator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCaseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCaseResult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCasesBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestCasesBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestManager.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupInstance.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupInstance.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/TestSetupResult.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseCertATestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseCertATestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BaseTestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BothCertsTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/BothCertsTestCase.java" afterDir="false" />
@@ -27,10 +34,16 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ConnectATwiceTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ConnectATwiceTestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToACertTestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToACertTestCase.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToATestCase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/felix/thesis/testCases/ReconnectToATestCase.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/domains/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/domains/config/Caddyfile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../setups/caddy/open/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/open/config/Caddyfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/nginx/domains/config/webserver.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/nginx/domains/config/webserver.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/config/Caddyfile" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/caddy/subdomains_certA/config/Caddyfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/nginx/subdomains/config/webserver.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/nginx/subdomains/config/webserver.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/nginx/subdomains_certA/config/webserver.conf" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/nginx/subdomains_certA/config/webserver.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/scripts/life.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/scripts/life.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../setups/scripts/run2.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/scripts/run2.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../setups/shared/scripts/domains/curl/getA.sh" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/shared/scripts/domains/curl/getA.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/site-content/siteA/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/site-content/siteA/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../setups/site-content/siteB/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../setups/site-content/siteB/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,12 +53,19 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Enum" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/layer/LayerStack.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/layer/ProtocolLayer.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/layer/impl/MessageLayer.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/workflow/action/MessageAction.class" root0="SKIP_INSPECTION" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -68,25 +88,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.main.executor": "Debug",
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/felix/.m2/repository/de/rub/nds/tls/attacker/tls-core/6.0.3-SNAPSHOT/tls-core-6.0.3-SNAPSHOT.jar",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.26678932",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "editor.preferences.fonts.default"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.main.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/felix/.m2/repository/de/rub/nds/tls/attacker/tls-core/6.0.3-SNAPSHOT/tls-core-6.0.3-SNAPSHOT.jar&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26678932&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.felix.thesis.testCases" />
@@ -142,7 +162,7 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint type="java-method">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/workflow/factory/WorkflowConfigurationFactory.class</url>
           <line>468</line>
           <properties class="de.rub.nds.tlsattacker.core.workflow.factory.WorkflowConfigurationFactory" method="createHttpsDynamicWorkflow">
@@ -151,7 +171,7 @@
           </properties>
           <option name="timeStamp" value="25" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint type="java-method">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/workflow/factory/WorkflowConfigurationFactory.class</url>
           <line>876</line>
           <properties class="de.rub.nds.tlsattacker.core.workflow.factory.WorkflowConfigurationFactory" method="createDynamicHandshakeWorkflow">
@@ -160,7 +180,7 @@
           </properties>
           <option name="timeStamp" value="26" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-method">
+        <line-breakpoint type="java-method">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/workflow/action/MessageAction.class</url>
           <line>250</line>
           <properties class="de.rub.nds.tlsattacker.core.workflow.action.MessageAction" method="send">
@@ -169,17 +189,17 @@
           </properties>
           <option name="timeStamp" value="38" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/workflow/factory/WorkflowConfigurationFactory.class</url>
           <line>896</line>
           <option name="timeStamp" value="27" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/layer/LayerStack.class</url>
           <line>82</line>
           <option name="timeStamp" value="45" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
+        <line-breakpoint type="java-line">
           <url>jar://$MAVEN_REPOSITORY$/de/rub/nds/tls/attacker/tls-core/5.3.0/tls-core-5.3.0.jar!/de/rub/nds/tlsattacker/core/layer/impl/MessageLayer.class</url>
           <line>55</line>
           <option name="timeStamp" value="46" />

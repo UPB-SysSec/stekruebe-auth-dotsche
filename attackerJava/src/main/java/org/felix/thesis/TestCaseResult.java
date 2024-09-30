@@ -7,6 +7,7 @@ import de.rub.nds.tlsattacker.core.protocol.message.ApplicationMessage;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class TestCaseResult {
     public TestCaseResult(String name, boolean expectedToFail) {
@@ -27,6 +28,7 @@ public class TestCaseResult {
     int requestBStatusCode = 0;
     Boolean requestBWorkflowExecutedAsPlanned = false;
     int requestBHttpStatusCode = -1;
+    String requestBHttpContent;
     Throwable requestBException;
     AlertMessage requestBAlert;
     ApplicationMessage requestBApplicationData;
@@ -57,6 +59,10 @@ public class TestCaseResult {
         sb.append("\n⎢ ⎣Request B resulted in ");
         if (this.requestBHttpStatusCode != -1) {
             sb.append("the HTTP code ").append(this.requestBHttpStatusCode);
+            sb.append("\n⎢   ⎡contains site A: ").append(this.requestBHttpContent.contains("site A")).append("]");
+            sb.append("\n⎢   ⎣contains site B: ").append(this.requestBHttpContent.contains("site B")).append("]");
+            String body = this.getBodySimple(this.requestBHttpContent);
+            sb.append("\n⎢  [body: ").append(body);
         } else if (this.requestBAlert != null) {
             sb.append("a TLS alert [")
                     .append(AlertLevel.getAlertLevel((Byte) this.requestBAlert.getLevel().getValue()).name())
@@ -152,5 +158,16 @@ public class TestCaseResult {
         sb.append("\n⎣was that expected?:      ").append(expectedThisResult);
         sb.append("\u001b[m"); //reset color
         return sb.toString();
+    }
+
+    private String getBodySimple(String content) {
+        if (!(content.contains("<body>") && content.contains("</body>"))) return "";
+        String body = content.split("<body>")[1].split("</body>")[0];
+        //body = body.replaceAll("<[^>]*>", "");
+        body = body.replaceAll("\r", "");
+        body = body.replaceAll("\n", " ");
+        body = body.replaceAll("\t", " ");
+        body = body.replaceAll("\s+", " ");
+        return body;
     }
 }

@@ -58,7 +58,7 @@ public class BaseWorkflowCreator {
      * @param config the config file to base the workflow on
      * @return the finished workflow
      */
-    public static WorkflowTrace getNormalWorkflowTrace(Config config) {
+    public static WorkflowTrace getNormalWorkflowTrace(Config config, String domain) {
         AliasedConnection connection = config.getDefaultClientConnection();
         config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
 
@@ -85,10 +85,31 @@ public class BaseWorkflowCreator {
         trace.addTlsAction(new SendAction(new ChangeCipherSpecMessage(), new FinishedMessage()));
         trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
 
+        // send the http message
+        HttpRequestMessage reqMessage = new HttpRequestMessage(config);
+        ArrayList<HttpHeader> headers = new ArrayList<>();
+        HostHeader hostHeader = new HostHeader();
+        hostHeader.setHeaderValue(domain);
+        headers.add(hostHeader);
+        reqMessage.setHeader(headers);
+        trace.addTlsAction(
+                createHttpAction(
+                        config,
+                        connection,
+                        ConnectionEndType.CLIENT,
+                        reqMessage)
+        );
+        // receive the http answer
+        trace.addTlsAction(
+                createHttpAction(
+                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
+        );
+
         return trace;
     }
 
-    public static WorkflowTrace getResumptionWorkflowTrace(Config config) {
+    public static WorkflowTrace getResumptionWorkflowTrace(Config config, String domain) {
+        LOGGER.info("domain for workflow: {}", domain);
         AliasedConnection connection = config.getDefaultClientConnection();
         WorkflowTrace trace = new WorkflowTrace();
 
@@ -119,8 +140,9 @@ public class BaseWorkflowCreator {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
         ArrayList<HttpHeader> headers = new ArrayList<>();
         HostHeader hostHeader = new HostHeader();
-        hostHeader.setHeaderValue(config.getDefaultClientConnection().getHostname());
+        hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
+        reqMessage.setHeader(headers);
         trace.addTlsAction(
                 createHttpAction(
                         config,

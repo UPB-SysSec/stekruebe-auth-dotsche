@@ -24,7 +24,7 @@ public class BaseCertATestCase extends BaseTestCase{
         //apply the cert
         config = applyCert(config, siteAClientCert);
         //create a workflow-trace from the config
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
         // return state
         return new State(config, trace);
     }

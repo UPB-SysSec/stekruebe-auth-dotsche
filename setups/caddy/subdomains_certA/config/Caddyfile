@@ -18,7 +18,7 @@ siteA.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteA"
+		respond "hello from the other siteA site A"
 	}
 }
 
@@ -33,7 +33,7 @@ siteB.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteB"
+		respond "hello from the other siteB site B"
 	}
 }
 

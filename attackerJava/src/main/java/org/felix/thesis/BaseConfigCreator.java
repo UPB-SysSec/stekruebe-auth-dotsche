@@ -23,6 +23,8 @@ public class BaseConfigCreator {
         LOGGER.info("domain: {}", domain);
 
         Config config = new Config();
+        config.setWriteKeylogFile(true);
+        config.setKeylogFilePath("/tmp/keylogfile");
         config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
 
         // use session tickets
@@ -30,7 +32,9 @@ public class BaseConfigCreator {
 
 
         // set connection type
-        config.setDefaultClientConnection(new OutboundConnection("client", port, "127.0.0.2"));
+        var connection = new OutboundConnection("client", port, domain);
+        connection.setIp("127.0.0.2");
+        config.setDefaultClientConnection(connection);
 
 
         // set http path

@@ -33,8 +33,12 @@ public class BaseTestCase {
     private static final Logger LOGGER = LogManager.getLogger("TestCase");
 
     private final String name;
-    CertificateChoice certForA;
-    CertificateChoice certForB;
+    private String siteADomain;
+    private String siteBDomain;
+    private Path siteAClientCert;
+    private Path siteBClientCert;
+    CertificateChoice certSentToA;
+    CertificateChoice certSentToB;
     boolean doesSomethingIllegal;
 
     /**
@@ -47,8 +51,18 @@ public class BaseTestCase {
     public BaseTestCase(String name) {
         this.name = name;
         this.doesSomethingIllegal = true;
-        this.certForA = CertificateChoice.None;
-        this.certForB = CertificateChoice.None;
+        this.certSentToA = CertificateChoice.None;
+        this.certSentToB = CertificateChoice.None;
+    }
+
+    public void setup(String siteADomain, String siteBDomain, Path siteAClientCert, Path siteBClientCert) {
+        this.siteADomain = siteADomain;
+        this.siteBDomain = siteBDomain;
+        this.siteAClientCert = siteAClientCert;
+        this.siteBClientCert = siteBClientCert;
+    }
+    public boolean isSetUp() {
+        return this.siteAClientCert!=null && this.siteBClientCert!=null && this.siteADomain!=null && this.siteBDomain!=null;
     }
 
     public String getName() {
@@ -64,8 +78,8 @@ public class BaseTestCase {
      */
     public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
         if (this.doesSomethingIllegal) return true;
-        if (this.certForA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
-        if (this.certForB != (siteBNeedsClientCert ? CertificateChoice.B : CertificateChoice.None)) return true;
+        if (this.certSentToA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
+        if (this.certSentToB != (siteBNeedsClientCert ? CertificateChoice.B : CertificateChoice.None)) return true;
         return false;
     }
 
@@ -77,6 +91,7 @@ public class BaseTestCase {
      */
     Config applyCert(Config config, Path certPath) {
         config.setClientAuthentication(true);
+        config.setAutoSelectCertificate(false);
         config.setClientAuthenticationType(ClientAuthenticationType.CERTIFICATE_BASED);
         config.setClientCertificateTypes(ClientCertificateType.RSA_SIGN); // is this the appropriate type?
 
@@ -133,7 +148,7 @@ public class BaseTestCase {
         if (siteADomain == null) throw new AssertionError();
         Config config = BaseConfigCreator.buildConfig(port, siteADomain);
         // return state
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
         return new State(config, trace);
     }
 
@@ -151,7 +166,7 @@ public class BaseTestCase {
         // add session ticket
         ticket.applyTo(config);
         // return state
-        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
     }
 }

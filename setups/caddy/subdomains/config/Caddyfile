@@ -8,7 +8,7 @@
 }
 
 siteA.site.org {
-	tls /keys/subdomainA.pem /keys/siteA.key {
+	tls /keys/subdomainA.crt /keys/siteA.key {
 		load /keys
 	}
 	#tls {
@@ -18,12 +18,12 @@ siteA.site.org {
 	#	}
 	#}
 	handle {
-		respond "hello from the other siteA"
+		respond "hello from the other siteA site A"
 	}
 }
 
-siteA.site.org {
-	tls /keys/subdomainB.pem /keys/siteB.key {
+siteB.site.org {
+	tls /keys/subdomainB.crt /keys/siteB.key {
 		client_auth {
 			mode require_and_verify #this is super important!! (not default even if trust pool is given)
 			trust_pool file {
@@ -33,7 +33,7 @@ siteA.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteB"
+		respond "hello from the other siteB site B"
 	}
 }
 

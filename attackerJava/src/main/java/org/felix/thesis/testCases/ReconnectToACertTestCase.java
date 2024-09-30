@@ -19,7 +19,7 @@ public class ReconnectToACertTestCase extends ReconnectToATestCase{
      */
     public ReconnectToACertTestCase(String name) {
         super(name);
-        this.certForA = CertificateChoice.A;
+        this.certSentToA = CertificateChoice.A;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
@@ -31,7 +31,7 @@ public class ReconnectToACertTestCase extends ReconnectToATestCase{
         //apply the cert
         config = applyCert(config, siteAClientCert);
         //create a workflow-trace from the config
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
         // return state
         return new State(config, trace);
     }
@@ -46,7 +46,7 @@ public class ReconnectToACertTestCase extends ReconnectToATestCase{
 //        config = applyCert(config, savedSiteAClientCert); //let's try without this
         //apply the ticket
         //create a workflow-trace from the config
-        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, savedSiteADomain);
         // return state
         return new State(config, trace);
     }

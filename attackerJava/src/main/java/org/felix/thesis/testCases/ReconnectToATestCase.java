@@ -30,7 +30,7 @@ public class ReconnectToATestCase extends BaseTestCase{
      */
     public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
         if (this.doesSomethingIllegal) return true;
-        if (this.certForA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
+        if (this.certSentToA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
         return false;
     }
 

@@ -81,7 +81,7 @@ public class TestSetupInstance {
         result = new TestSetupResult(this.name, this.port);
 
         /* ------ Build Docker Container ------ */
-        if (false) {
+        if (true) {
             // build docker containers
             LOGGER.info("building container");
             //Path p = Path.of("../setups/nginx/domains/dockerfile");
@@ -103,6 +103,7 @@ public class TestSetupInstance {
                 LOGGER.info("> building successful");
             }
         }
+        /* ------ Run Docker containers ------ */
         if (true) {
             // start docker containers
             LOGGER.info("starting container on port {}", this.port);
@@ -125,17 +126,18 @@ public class TestSetupInstance {
                 return; //cannot continue if run fails
             } else {
                 try {
-                    Thread.sleep(100L); //wait for the server to start
+                    LOGGER.info("waiting for server to start");
+                    Thread.sleep(200L); //wait for the server to start
                 } catch (InterruptedException ignore) {}
                 LOGGER.info("> running successful");
             }
         }
-
+        /* ------ make Test connections ------ */
         LOGGER.info("> running tests");
         for (BaseTestCase test : this.tests) {
             runTest(test);
         }
-
+        /* ------ Stop Docker Containers ------ */
         LOGGER.info("stopping container");
         DockerWrapper.stop(this.name);
         //LOGGER.info("removing container");
@@ -147,9 +149,10 @@ public class TestSetupInstance {
         boolean expectedToFail = test.getExpectedToFail(siteAUsesClientCert, siteBUsesClientCert);
         LOGGER.info("running test: '{}' on '{}', expected to fail: '{}'", test.getName(), name, expectedToFail);
         TestCaseResult testRes = new TestCaseResult(test.getName(), expectedToFail);
+        test.setup(siteADomain, siteBDomain, siteACert, siteBCert);
 
         // do first request
-        State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert);
+        State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert); //TODO: make it so that i don't have to pass these values anymore
         try {
             // ---- RUN THE WORKFLOW ----
             DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
@@ -190,6 +193,7 @@ public class TestSetupInstance {
             if (appDataB!=null) {
                 testRes.requestBApplicationData = appDataB;
                 testRes.receivedDataFromB = true;
+                testRes.requestBHttpContent = new String(appDataB.getData().getValue(), StandardCharsets.UTF_8);
                 testRes.requestBHttpStatusCode = getHTTPCode(appDataB.getData().getValue());
             }
             testRes.requestBAlert = stateB.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);

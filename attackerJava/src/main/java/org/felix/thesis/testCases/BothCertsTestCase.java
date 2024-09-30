@@ -19,8 +19,8 @@ public class BothCertsTestCase extends BaseTestCase{
      */
     public BothCertsTestCase(String name) {
         super(name);
-        this.certForA = CertificateChoice.A;
-        this.certForB = CertificateChoice.B;
+        this.certSentToA = CertificateChoice.A;
+        this.certSentToB = CertificateChoice.B;
     }
 
     public State getStateA(int port, String siteADomain, Path siteAClientCert) {
@@ -29,7 +29,7 @@ public class BothCertsTestCase extends BaseTestCase{
         //apply the cert
         config = applyCert(config, siteAClientCert);
         //create a workflow-trace from the config
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
         // return state
         return new State(config, trace);
     }
@@ -40,7 +40,7 @@ public class BothCertsTestCase extends BaseTestCase{
         //apply the cert
         config = applyCert(config, siteBClientCert);
         //create a workflow-trace from the config
-        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config);
+        WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         // return state
         return new State(config, trace);
     }

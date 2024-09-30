@@ -19,7 +19,7 @@ public class ConnectATwiceTestCase extends BaseTestCase{
     public ConnectATwiceTestCase(String name) {
         super(name);
         this.doesSomethingIllegal = false; //connecting to a twice is not an illegal move
-        this.certForA = CertificateChoice.None;
+        this.certSentToA = CertificateChoice.None;
     }
 
     /**
@@ -31,7 +31,7 @@ public class ConnectATwiceTestCase extends BaseTestCase{
      */
     public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
         if (this.doesSomethingIllegal) return true;
-        if (this.certForA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
+        if (this.certSentToA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
         return false;
     }
 
@@ -46,7 +46,6 @@ public class ConnectATwiceTestCase extends BaseTestCase{
     public State getStateB(int port, String siteBDomain, Path siteBCert, Ticket ticket) {
         // use the saved domain and cert for site B
         // note: (this does not actually use the certificate)
-        if (savedSiteADomain == null || savedSiteAClientCert == null) throw new AssertionError();
         return super.getStateA(port, savedSiteADomain, savedSiteAClientCert);
     }
 }
