@@ -8,6 +8,8 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -23,14 +25,16 @@ Steps:
 */
 public class TestManager {
     private static final Logger LOGGER = LogManager.getLogger();
-    List<BaseTestCase> tests;
+    Callable testsCreator;
     List<TestSetupInstance> setups;
 
-    public TestManager(List<BaseTestCase> tests, Path setupsPath){
-        this.tests = tests;
+    public TestManager(Callable testCreator, Path setupsPath){
+        this.testsCreator = testCreator;
 
         // read in setupsFolder
-        this._collectSetups(setupsPath.toFile());
+        try {
+            this._collectSetups(setupsPath.toFile());
+        } catch (Exception ignored) {}
     }
 
     /**
@@ -38,18 +42,22 @@ public class TestManager {
      * Will only look in subfolders named 'apache', 'caddy' or 'nginx'.
      * @param setupsFolder the folder to search for setups
      */
-    private void _collectSetups(File setupsFolder) {
+    private void _collectSetups(File setupsFolder) throws Exception {
         assert setupsFolder.isDirectory();
         int port = 11443;
         var setups = new ArrayList<TestSetupInstance>();
 
-        List<String> folderNames = List.of("apache", "caddy", "nginx"); //the subfolders to search for setups in
+        List<String> folderNames = List.of(
+                "apache",
+                "caddy",
+                "nginx"
+        ); //the subfolders to search for setups in
         boolean disableCertA = false; //flag to disable the inclusion of CertA setups
 
-        for (File elem : setupsFolder.listFiles()) {
+        for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
             if (!elem.isDirectory()) {continue;}
             if (folderNames.contains(elem.getName())) {
-                for (File setup : elem.listFiles()) {
+                for (File setup : Objects.requireNonNull(elem.listFiles())) {
                     if (!setup.isDirectory()) {continue;}
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
@@ -58,7 +66,7 @@ public class TestManager {
                         case "domains":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    this.tests,
+                                    (List<BaseTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -71,7 +79,7 @@ public class TestManager {
                         case "domains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    this.tests,
+                                    (List<BaseTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -84,7 +92,7 @@ public class TestManager {
                         case "subdomains":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    this.tests,
+                                    (List<BaseTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -97,7 +105,7 @@ public class TestManager {
                         case "subdomains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    this.tests,
+                                    (List<BaseTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -110,7 +118,7 @@ public class TestManager {
                         case "open":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    this.tests,
+                                    (List<BaseTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -152,7 +160,7 @@ public class TestManager {
             Thread.sleep(100L);
             executor.shutdown();
 
-            boolean finishedInTime = executor.awaitTermination(100, TimeUnit.SECONDS);
+            boolean finishedInTime = executor.awaitTermination(500, TimeUnit.SECONDS);
             if (!finishedInTime) {
                 LOGGER.error("executor timeout reached");
             }

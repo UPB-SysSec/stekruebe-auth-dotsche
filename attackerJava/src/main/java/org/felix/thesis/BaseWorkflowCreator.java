@@ -22,37 +22,6 @@ import java.util.*;
 
 public class BaseWorkflowCreator {
     private static final Logger LOGGER = LogManager.getLogger("WorkflowCreator");
-
-    /**
-     * creates the default workflow, usually used in the first connection
-     * @param config the config file to base the workflow on
-     * @return the finished workflow
-     */
-    public static WorkflowTrace getNormalWorkflowTraceALT(Config config) {
-        config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
-        WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
-        WorkflowTrace trace = factory.createWorkflowTrace(config.getWorkflowTraceType(), config.getDefaultRunningMode());
-        if (trace == null) {
-            throw new ConfigurationException("Could not load workflow trace");
-        } else {
-//            AliasedConnection connection = config.getDefaultClientConnection();
-//            //send the http message
-//            trace.addTlsAction(
-//                    createHttpAction(
-//                            config,
-//                            connection,
-//                            ConnectionEndType.CLIENT,
-//                            new HttpRequestMessage(config))
-//            );
-//            // receive the http answer
-//            trace.addTlsAction(
-//                    createHttpAction(
-//                            config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
-//            );
-            return trace;
-        }
-    }
-
     /**
      * creates the default workflow, usually used in the first connection
      * @param config the config file to base the workflow on
@@ -104,6 +73,7 @@ public class BaseWorkflowCreator {
                 createHttpAction(
                         config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
         );
+        trace.addTlsAction(new SendAction());
 
         return trace;
     }

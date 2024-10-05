@@ -15,7 +15,7 @@ public class Main {
 
         LOGGER.info("init"); /*if log4j is unable to find "appenders", add src/main/resources to the classpath*/
         Path path = Path.of("../setups");
-        TestManager tm = new TestManager(TestCasesBuilder.getTestCases(), path);
+        TestManager tm = new TestManager(TestCasesBuilder::getTestCases, path);
 
         LOGGER.info("running");
 //        tm.run();

@@ -21,7 +21,7 @@ public class TestSetupResult {
     Boolean dockerRunSuccessful = true;
 
     List<TestCaseResult> results = new ArrayList<>();
-    boolean allSuccessful = true;
+    boolean allAsExpected = true;
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -47,21 +47,21 @@ public class TestSetupResult {
             sb.append("\u001b[m"); //reset color
         }
 
-        if (this.allSuccessful) {
+        if (this.allAsExpected) {
             sb.append("\u001b[0;32m"); //in green
-            sb.append("\n⎢ => tests: successful");
+            sb.append("\n⎢ => tests: everything as expected");
             sb.append("\u001b[m"); //reset color
         } else {
             sb.append("\u001b[0;31m"); //in red
-            sb.append("\n⎢ => tests: FAILED");
+            sb.append("\n⎢ => tests: unexpected results");
             sb.append("\u001b[m"); //reset color
         }
         sb.append("\n⎢ Subtests:");
         for (TestCaseResult caseRes : this.results) {
-            sb.append("\n").append(caseRes.toStringShort());
+            sb.append("\n").append(caseRes.toString());
         }
-        sb.append("\n");
-        //sb.append("\n⎣_______________________⎦");
+//        sb.append("\n");
+        sb.append("\n⎣_________");
         return sb.toString();
     }
 }

@@ -15,6 +15,7 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
+import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
 import java.io.*;
@@ -32,14 +33,15 @@ import java.util.*;
 public class BaseTestCase {
     private static final Logger LOGGER = LogManager.getLogger("TestCase");
 
-    private final String name;
-    private String siteADomain;
-    private String siteBDomain;
-    private Path siteAClientCert;
-    private Path siteBClientCert;
-    CertificateChoice certSentToA;
-    CertificateChoice certSentToB;
-    boolean doesSomethingIllegal;
+    int port;
+    final String name;
+    String siteADomain;
+    String siteBDomain;
+    Path siteAClientCert;
+    Path siteBClientCert;
+    boolean siteANeedsCert;
+    boolean siteBNeedsCert;
+    public TestOutcome[] expectedTestOutcome;
 
     /**
      * 1. connects to site A and requests a session Ticket
@@ -50,37 +52,24 @@ public class BaseTestCase {
      */
     public BaseTestCase(String name) {
         this.name = name;
-        this.doesSomethingIllegal = true;
-        this.certSentToA = CertificateChoice.None;
-        this.certSentToB = CertificateChoice.None;
+        this.expectedTestOutcome = new TestOutcome[] {
+                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_http421_misdirectedRequest,
+                TestOutcome.secondRequest_http403_forbidden
+        };
     }
 
-    public void setup(String siteADomain, String siteBDomain, Path siteAClientCert, Path siteBClientCert) {
+    public void setup(int port, boolean siteANeedsCert, boolean siteBNeedsCert, String siteADomain, String siteBDomain, Path siteAClientCert, Path siteBClientCert) {
+        this.port = port;
+        this.siteANeedsCert = siteANeedsCert;
+        this.siteBNeedsCert = siteBNeedsCert;
         this.siteADomain = siteADomain;
         this.siteBDomain = siteBDomain;
         this.siteAClientCert = siteAClientCert;
         this.siteBClientCert = siteBClientCert;
     }
-    public boolean isSetUp() {
-        return this.siteAClientCert!=null && this.siteBClientCert!=null && this.siteADomain!=null && this.siteBDomain!=null;
-    }
-
     public String getName() {
         return name;
-    }
-
-    /**
-     * return true if we: </br>
-     *    1. do something illegal or </br>
-     *    2. siteA needs the correct cert, and we don't send it or </br>
-     *    3. siteB needs the correct cert, and we don't send it
-     * @return whether the test is expected to go smoothly or have the server fail
-     */
-    public boolean getExpectedToFail(boolean siteANeedsClientCert, boolean siteBNeedsClientCert) {
-        if (this.doesSomethingIllegal) return true;
-        if (this.certSentToA != (siteANeedsClientCert ? CertificateChoice.A : CertificateChoice.None)) return true;
-        if (this.certSentToB != (siteBNeedsClientCert ? CertificateChoice.B : CertificateChoice.None)) return true;
-        return false;
     }
 
     /**
@@ -138,34 +127,23 @@ public class BaseTestCase {
 
     /**
      * builds the State(config + workflow trace) for this test run
-     * @param port the port to contact
-     * @param siteADomain the domain of site A
-     * @param siteAClientCert the client cert for site A
      * @return the State object
      */
-    public State getStateA(int port, String siteADomain, Path siteAClientCert) {
-        //basic connection config
-        if (siteADomain == null) throw new AssertionError();
+    public State getStateA() {
         Config config = BaseConfigCreator.buildConfig(port, siteADomain);
-        // return state
+        if (this.siteANeedsCert) config = applyCert(config, siteAClientCert);
         WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
         return new State(config, trace);
     }
 
     /**
      * builds the State(config + workflow trace) for this test run
-     * @param port the port to contact
-     * @param siteBDomain the domain of site A
-     * @param siteBClientCert the client cert for site A
      * @param ticket the session Ticket to use for the resumption
      * @return the State object
      */
-    public State getStateB(int port, String siteBDomain, Path siteBClientCert, Ticket ticket) {
-        // basic connection config
+    public State getStateB(Ticket ticket) {
         Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
-        // add session ticket
         ticket.applyTo(config);
-        // return state
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
     }

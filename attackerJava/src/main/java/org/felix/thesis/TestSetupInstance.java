@@ -8,13 +8,11 @@ Steps:
 
 */
 
-import de.rub.nds.tlsattacker.core.protocol.message.*;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.DefaultWorkflowExecutor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -27,18 +25,18 @@ import org.felix.thesis.testCases.BaseTestCase;
 public class TestSetupInstance {
     private final int port;
     private final List<BaseTestCase> tests;
-    private final Path basePath;
+
     private final Path dockerFilePath;
     private final String siteADomain;
     private final String siteBDomain;
     private final Path siteACert;
     private final Path siteBCert;
+    private final boolean siteAUsesClientCert;
+    private final boolean siteBUsesClientCert;
 
     public String name;
     private final Logger LOGGER;
 
-    private final boolean siteAUsesClientCert;
-    private final boolean siteBUsesClientCert;
 
     private TestSetupResult result;
 
@@ -51,8 +49,7 @@ public class TestSetupInstance {
     public TestSetupInstance(int port, List<BaseTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
         this.port = port;
         this.tests = tests;
-        this.basePath = dockerFileFolder;
-        this.dockerFilePath = Paths.get(this.basePath.toString(), "dockerfile");
+        this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
         this.siteADomain = siteADomain;
         this.siteBDomain = siteBDomain;
         this.siteACert = Path.of("../setups/shared/cert/keys/clientA.pem");
@@ -146,63 +143,56 @@ public class TestSetupInstance {
 
 
     public void runTest(BaseTestCase test) {
-        boolean expectedToFail = test.getExpectedToFail(siteAUsesClientCert, siteBUsesClientCert);
-        LOGGER.info("running test: '{}' on '{}', expected to fail: '{}'", test.getName(), name, expectedToFail);
-        TestCaseResult testRes = new TestCaseResult(test.getName(), expectedToFail);
-        test.setup(siteADomain, siteBDomain, siteACert, siteBCert);
-
+        LOGGER.info("running test: '{}' on '{}'", test.getName(), name);
+        test.setup(
+                port,
+                siteAUsesClientCert,
+                siteBUsesClientCert,
+                siteADomain,
+                siteBDomain,
+                siteACert,
+                siteBCert
+        );
+        TestCaseResult testRes = new TestCaseResult(test.getName());
+        testRes.expectedTestOutcome = test.expectedTestOutcome;
         // do first request
-        State stateA = test.getStateA(this.port, this.siteADomain, this.siteACert); //TODO: make it so that i don't have to pass these values anymore
+        State stateA = test.getStateA();
         try {
             // ---- RUN THE WORKFLOW ----
             DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
             executor.executeWorkflow();
+            executor.sendCloseNotify();
             executor.closeConnection();
         } catch (Exception e) {
             testRes.requestAException = e;
         }
-        testRes.requestAWorkflowExecutedAsPlanned = stateA.getWorkflowTrace().executedAsPlanned();
         testRes.requestAException = stateA.getExecutionException();
-        testRes.requestAAlert = stateA.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
         testRes.requestATrace = stateA.getWorkflowTrace();
-        //testRes.requestAStatusCode = #TODO
 
         // get session ticket from request
         Ticket ticket = null;
         try {
             ticket = SessionTicketUtil.getSessionTickets(stateA).get(0);
-        } catch (IndexOutOfBoundsException e) {
-            testRes.requestAHadTicket = false;
-        }
+        } catch (IndexOutOfBoundsException ignore) {} //no ticket
 
         if (ticket != null) { //only if we have a ticket
+            testRes.executedRequestB = true;
             // do second request (with the ticket from the first session)
-            State stateB = test.getStateB(this.port, this.siteBDomain, this.siteBCert, ticket);
+            State stateB = test.getStateB(ticket);
             try {
                 // ---- RUN THE WORKFLOW ----
                 DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateB);
                 executor.executeWorkflow();
+                executor.sendCloseNotify();
                 executor.closeConnection();
             } catch (Exception e) {
                 testRes.requestBException = e;
             }
-            testRes.requestBWorkflowExecutedAsPlanned = stateB.getWorkflowTrace().executedAsPlanned();
-            testRes.receivedDataFromB &= testRes.requestBWorkflowExecutedAsPlanned;
-            testRes.requestBException = stateB.getExecutionException();
-            ApplicationMessage appDataB = stateB.getWorkflowTrace().getFirstReceivedMessage(ApplicationMessage.class);
-            if (appDataB!=null) {
-                testRes.requestBApplicationData = appDataB;
-                testRes.receivedDataFromB = true;
-                testRes.requestBHttpContent = new String(appDataB.getData().getValue(), StandardCharsets.UTF_8);
-                testRes.requestBHttpStatusCode = getHTTPCode(appDataB.getData().getValue());
-            }
-            testRes.requestBAlert = stateB.getWorkflowTrace().getLastReceivedMessage(AlertMessage.class);
             testRes.requestBTrace = stateB.getWorkflowTrace();
-            //testRes.requestBStatusCode = stateB... #TODO
+            testRes.requestBException = stateB.getExecutionException();
         }
-
+        if (!testRes.wasOutcomeExpected()) result.allAsExpected = false; //if any one test result wasn't expected, set to false
         result.results.add(testRes); // save testResult in setupResults
-        if (testRes.receivedDataFromB ==testRes.expectedToFail) {result.allSuccessful = false;}
     }
 
     /**
@@ -222,20 +212,5 @@ public class TestSetupInstance {
         String server = parts[2];
         String setup = parts[3];
         return server+"_"+setup;
-    }
-
-    private int getHTTPCode(byte[] appData) {
-        String text = new String(appData, StandardCharsets.UTF_8);
-        try {
-            if (!text.startsWith("HTTP/1.1 ")) {
-                return -1;
-            } else {
-                String code = text.split(" ")[1];
-                return Integer.parseInt(code);
-            }
-        }catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-            LOGGER.warn("unable to parse HTTP code from '{}'", text.substring(0, Math.min(20, text.length())));
-            return -1;
-        }
     }
 }

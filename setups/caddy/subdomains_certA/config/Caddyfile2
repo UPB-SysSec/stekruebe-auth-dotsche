@@ -1,0 +1,15 @@
+{
+	auto_https off
+	ocsp_stapling off #we don't need to revoke our own certificates here
+	log default {
+		output stdout
+		level DEBUG
+	}
+}
+
+:80 :443 {
+	# everything else
+	handle {
+		respond 1337
+	}
+}

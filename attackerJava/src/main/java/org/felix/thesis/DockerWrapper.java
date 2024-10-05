@@ -66,7 +66,7 @@ public class DockerWrapper {
                 String.format("docker build -q -t %s -f %s .", imageName, dockerFilePath.toString()),
                 new String[0],
                 new File("../setups/"),
-                5*1000
+                10*1000
             );
         } catch (IOException e) {
             result = new DockerResult(e, "docker during build");

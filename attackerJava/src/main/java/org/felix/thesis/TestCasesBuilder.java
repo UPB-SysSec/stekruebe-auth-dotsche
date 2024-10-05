@@ -10,15 +10,12 @@ public class TestCasesBuilder {
         ArrayList<BaseTestCase> tests = new ArrayList<>();
         // base tests
         tests.add(new BaseTestCase("BaseTestCase"));
-//        tests.add(new BaseCertATestCase("BaseCertATestCase"));
-        tests.add(new InvalidDomainBTestCase("InvalidDomainBTestCase"));
-//        tests.add(new BothCertsTestCase("BothCertsTestCase"));
-        tests.add(new ConnectATwiceTestCase("ConnectATwiceTestCase"));
-//        tests.add(new ConnectATwiceCertTestCase("ConnectATwiceCertTestCase"));
-        tests.add(new ReconnectToATestCase("ReconnectToATestCase"));
-//        tests.add(new ReconnectToACertTestCase("ReconnectToACertTestCase"));
-        tests.add(new ConnectBoth("ConnectBoth"));
-//        tests.add(new ConnectBothCertA("ConnectBothCertA"));
+        tests.add(new BaseTestCaseReversed("baseTestCaseReversed"));
+        tests.add(new TestReconnectToA("reconnectToA"));
+        tests.add(new TestReconnectToB("reconnectToB"));
+        tests.add(new TestReconnectToB_NoCert("reconnectToB - no Cert"));
+        tests.add(new ReconnectAInvalidDomain("ReconnectA - InvalidDomain"));
+        tests.add(new ReconnectBInvalidDomain("ReconnectB - InvalidDomain"));
         return tests;
     }
 }
