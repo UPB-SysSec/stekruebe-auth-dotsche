@@ -8,9 +8,13 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class BaseTestCaseReversed extends BaseTestCase{
-    public BaseTestCaseReversed(String name) {
+public class Connect_BB_AA extends Connect_AA_BB {
+    public Connect_BB_AA(String name) {
         super(name);
+        expectedTestOutcome = new TestOutcome[] {
+                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_http421_misdirectedRequest
+        };
     }
 
     //getStateA is the same as in baseTestCase

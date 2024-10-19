@@ -5,6 +5,8 @@ public enum TestOutcome {
     secondRequest_tlsAlert_unexpectedMessage,
      firstRequest_tlsAlert_internalError,
     secondRequest_tlsAlert_internalError,
+     firstRequest_tlsAlert_unknownCA,
+    secondRequest_tlsAlert_unknownCA,
      firstRequest_tlsAlert_other,
     secondRequest_tlsAlert_other,
 
@@ -19,6 +21,8 @@ public enum TestOutcome {
     secondRequest_http200_contentA,
     secondRequest_http200_contentB,
     secondRequest_http200_unknownContent,
+     firstRequest_http400_badRequest,
+    secondRequest_http400_badRequest,
      firstRequest_http404_notFound,
     secondRequest_http404_notFound,
      firstRequest_http421_misdirectedRequest,
@@ -33,5 +37,5 @@ public enum TestOutcome {
 
     debugOutcome_1,
     debugOutcome_2,
-    debugOutcome_3
+    debugOutcome_3,
 }

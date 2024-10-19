@@ -20,11 +20,11 @@ import java.util.Locale;
 
 import org.felix.thesis.sessionTickets.SessionTicketUtil;
 import org.felix.thesis.sessionTickets.Ticket;
-import org.felix.thesis.testCases.BaseTestCase;
+import org.felix.thesis.testCases.Connect_AA_BB;
 
 public class TestSetupInstance {
     private final int port;
-    private final List<BaseTestCase> tests;
+    private final List<Connect_AA_BB> tests;
 
     private final Path dockerFilePath;
     private final String siteADomain;
@@ -46,7 +46,7 @@ public class TestSetupInstance {
      * @param tests the list of TestCases
      * @param dockerFileFolder the folder containing the dockerFile
      */
-    public TestSetupInstance(int port, List<BaseTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
+    public TestSetupInstance(int port, List<Connect_AA_BB> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
         this.port = port;
         this.tests = tests;
         this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
@@ -131,7 +131,7 @@ public class TestSetupInstance {
         }
         /* ------ make Test connections ------ */
         LOGGER.info("> running tests");
-        for (BaseTestCase test : this.tests) {
+        for (Connect_AA_BB test : this.tests) {
             runTest(test);
         }
         /* ------ Stop Docker Containers ------ */
@@ -142,7 +142,7 @@ public class TestSetupInstance {
     }
 
 
-    public void runTest(BaseTestCase test) {
+    public void runTest(Connect_AA_BB test) {
         LOGGER.info("running test: '{}' on '{}'", test.getName(), name);
         test.setup(
                 port,
@@ -166,7 +166,9 @@ public class TestSetupInstance {
         } catch (Exception e) {
             testRes.requestAException = e;
         }
-        testRes.requestAException = stateA.getExecutionException();
+        if (stateA.getExecutionException() != null) {
+            testRes.requestAException = stateA.getExecutionException();
+        }
         testRes.requestATrace = stateA.getWorkflowTrace();
 
         // get session ticket from request
@@ -188,8 +190,10 @@ public class TestSetupInstance {
             } catch (Exception e) {
                 testRes.requestBException = e;
             }
+            if (stateB.getExecutionException() != null) {
+                testRes.requestBException = stateB.getExecutionException();
+            }
             testRes.requestBTrace = stateB.getWorkflowTrace();
-            testRes.requestBException = stateB.getExecutionException();
         }
         if (!testRes.wasOutcomeExpected()) result.allAsExpected = false; //if any one test result wasn't expected, set to false
         result.results.add(testRes); // save testResult in setupResults

@@ -2,7 +2,7 @@ package org.felix.thesis;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.felix.thesis.testCases.BaseTestCase;
+import org.felix.thesis.testCases.Connect_AA_BB;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -53,6 +53,7 @@ public class TestManager {
                 "nginx"
         ); //the subfolders to search for setups in
         boolean disableCertA = false; //flag to disable the inclusion of CertA setups
+        boolean disableOpen = false; //flag to disable the '_open' setups
 
         for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
             if (!elem.isDirectory()) {continue;}
@@ -62,11 +63,12 @@ public class TestManager {
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
                     if (name.endsWith("certA") && disableCertA) {continue;}
+                    if (name.endsWith("open") && disableOpen) {continue;}
                     switch (name) {
                         case "domains":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<BaseTestCase>) this.testsCreator.call(),
+                                    (List<Connect_AA_BB>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -79,7 +81,7 @@ public class TestManager {
                         case "domains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<BaseTestCase>) this.testsCreator.call(),
+                                    (List<Connect_AA_BB>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -92,7 +94,7 @@ public class TestManager {
                         case "subdomains":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<BaseTestCase>) this.testsCreator.call(),
+                                    (List<Connect_AA_BB>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -105,7 +107,7 @@ public class TestManager {
                         case "subdomains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<BaseTestCase>) this.testsCreator.call(),
+                                    (List<Connect_AA_BB>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -118,7 +120,7 @@ public class TestManager {
                         case "open":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<BaseTestCase>) this.testsCreator.call(),
+                                    (List<Connect_AA_BB>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -152,7 +154,7 @@ public class TestManager {
      * same as run, but in parallel ;)
      */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(4);
+        ExecutorService executor = Executors.newFixedThreadPool(6);
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }

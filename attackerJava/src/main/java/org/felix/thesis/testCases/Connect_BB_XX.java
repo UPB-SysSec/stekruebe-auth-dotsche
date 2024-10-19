@@ -8,21 +8,26 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class ReconnectAInvalidDomain extends TestReconnectToA{
+public class Connect_BB_XX extends Connect_BB_BB {
     /**
-     * we reconnect to site A, but the second request requests an invalid domain
+     * we reconnect to site B, but the second request requests an invalid domain
      */
-    public ReconnectAInvalidDomain(String name) {
+    public Connect_BB_XX(String name) {
         super(name);
-        expectedTestOutcome = new TestOutcome[]{
+        expectedTestOutcome =  new TestOutcome[]{
                 TestOutcome.secondRequest_tlsAlert_internalError,
                 TestOutcome.secondRequest_http421_misdirectedRequest,
                 TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
-                TestOutcome.secondRequest_http200_contentA
+                TestOutcome.secondRequest_http404_notFound
         };
     }
 
-    // getStateA is the same as in TestReconnectToA
+    public State getStateA() {
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        if (siteBNeedsCert) config = applyCert(config, siteBClientCert);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
+        return new State(config, trace);
+    }
 
     public State getStateB(Ticket ticket) {
         Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid");

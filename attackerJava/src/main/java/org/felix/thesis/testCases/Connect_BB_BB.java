@@ -6,10 +6,9 @@ import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
-import org.felix.thesis.sessionTickets.Ticket;
 
-public class TestReconnectToB extends BaseTestCase{
-    public TestReconnectToB(String name) {
+public class Connect_BB_BB extends Connect_AA_BB {
+    public Connect_BB_BB(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_http200_contentB
@@ -22,5 +21,6 @@ public class TestReconnectToB extends BaseTestCase{
         WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
     }
+
     //getStateB is the same as fow the base case, we just expect it to work this time
 }

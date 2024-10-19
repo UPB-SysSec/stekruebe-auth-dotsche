@@ -1,6 +1,7 @@
 package org.felix.thesis;
 
 import de.rub.nds.tlsattacker.core.constants.AlertDescription;
+import de.rub.nds.tlsattacker.core.exceptions.TransportHandlerConnectException;
 import de.rub.nds.tlsattacker.core.protocol.message.AlertMessage;
 import de.rub.nds.tlsattacker.core.protocol.message.ApplicationMessage;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
@@ -51,6 +52,8 @@ public class TestCaseResult {
             if (requestAException != null) {
                 if (requestAException instanceof ConnectException) {
                     return TestOutcome.firstRequest_exception_noConnection;
+                } else if (requestAException instanceof TransportHandlerConnectException) {
+                    return TestOutcome.firstRequest_exception_noConnection;
                 } else {
                     return TestOutcome.firstRequest_exception_other;
                 }
@@ -63,6 +66,7 @@ public class TestCaseResult {
                 if (httpCode != -1) {
                     httpCodeA = httpCode;
                     return switch (httpCode) {
+                        case 400 -> TestOutcome.firstRequest_http400_badRequest;
                         case 403 -> TestOutcome.firstRequest_http403_forbidden;
                         case 404 -> TestOutcome.firstRequest_http404_notFound;
                         case 421 -> TestOutcome.firstRequest_http421_misdirectedRequest;
@@ -79,6 +83,7 @@ public class TestCaseResult {
                 return switch (alert) {
                     case UNEXPECTED_MESSAGE -> TestOutcome.firstRequest_tlsAlert_unexpectedMessage;
                     case INTERNAL_ERROR     -> TestOutcome.firstRequest_tlsAlert_internalError;
+                    case UNKNOWN_CA         -> TestOutcome.firstRequest_tlsAlert_unknownCA;
                     default                 -> TestOutcome.firstRequest_tlsAlert_other;
                 };
             }
@@ -87,6 +92,8 @@ public class TestCaseResult {
         } else { //outcome with B
             if (requestBException != null) {
                 if (requestBException instanceof ConnectException) {
+                    return TestOutcome.secondRequest_exception_noConnection;
+                } else if (requestBException instanceof TransportHandlerConnectException) {
                     return TestOutcome.secondRequest_exception_noConnection;
                 } else {
                     return TestOutcome.secondRequest_exception_other;
@@ -110,6 +117,7 @@ public class TestCaseResult {
                         }
                     }
                     return switch (httpCode) {
+                        case 400 -> TestOutcome.secondRequest_http400_badRequest;
                         case 403 -> TestOutcome.secondRequest_http403_forbidden;
                         case 404 -> TestOutcome.secondRequest_http404_notFound;
                         case 421 -> TestOutcome.secondRequest_http421_misdirectedRequest;
@@ -126,6 +134,7 @@ public class TestCaseResult {
                 return switch (alert) {
                     case UNEXPECTED_MESSAGE -> TestOutcome.secondRequest_tlsAlert_unexpectedMessage;
                     case INTERNAL_ERROR     -> TestOutcome.secondRequest_tlsAlert_internalError;
+                    case UNKNOWN_CA         -> TestOutcome.secondRequest_tlsAlert_unknownCA;
                     default                 -> TestOutcome.secondRequest_tlsAlert_other;
                 };
             }
@@ -149,17 +158,17 @@ public class TestCaseResult {
                     String simpleBody = getBodySimple(siteContentA);
                     sb.append("\n⎢   ⎢BodyA: ").append(simpleBody, 0, Math.min(simpleBody.length(), 300));
                 }
-                if (httpCodeA!=-1) {
-                    sb.append("\n⎢   ⎢HttpCodeA: ").append(httpCodeA);
-                }
+//                if (httpCodeA!=-1) {
+//                    sb.append("\n⎢   ⎢HttpCodeA: ").append(httpCodeA);
+//                }
             } else {
                 if (siteContentB != null) {
                     String simpleBody = getBodySimple(siteContentB);
                     sb.append("\n⎢   ⎢BodyB: ").append(simpleBody, 0, Math.min(simpleBody.length(), 300));
                 }
-                if (httpCodeB!=-1) {
-                    sb.append("\n⎢   ⎢HttpCodeB: ").append(httpCodeB);
-                }
+//                if (httpCodeB!=-1) {
+//                    sb.append("\n⎢   ⎢HttpCodeB: ").append(httpCodeB);
+//                }
             }
 
             sb.append("\n⎢   ⎢got:             [").append(testOutcome).append(        "]");

@@ -28,8 +28,12 @@ public class Main {
         for (TestSetupResult res : results) {
             LOGGER.info(res.toString());
         }
+        // print results to console
         for (TestSetupResult res : results) {
             LOGGER.info("{} on port {}", res.setupName, res.port);
         }
+
+        //write results to file
+        ResultsHTMLWriter.writeToFile(results, Path.of("./result.html"));
     }
 }

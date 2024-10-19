@@ -30,7 +30,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.*;
 
-public class BaseTestCase {
+public class Connect_AA_BB {
     private static final Logger LOGGER = LogManager.getLogger("TestCase");
 
     int port;
@@ -50,12 +50,11 @@ public class BaseTestCase {
      * </br>
      * Note: this test case always fails for setups that require a certificate on siteA
      */
-    public BaseTestCase(String name) {
+    public Connect_AA_BB(String name) {
         this.name = name;
         this.expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
-                TestOutcome.secondRequest_http421_misdirectedRequest,
-                TestOutcome.secondRequest_http403_forbidden
+                TestOutcome.secondRequest_http421_misdirectedRequest
         };
     }
 
