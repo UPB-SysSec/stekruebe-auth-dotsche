@@ -20,7 +20,6 @@ import org.felix.thesis.sessionTickets.TicketHolder;
 //import de.rub.nds.tlsscanner.serverscanner.probe.sessionticket.ticket.TicketTls13;
 import org.felix.thesis.sessionTickets.TicketTls13;
 
-import javax.naming.OperationNotSupportedException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;

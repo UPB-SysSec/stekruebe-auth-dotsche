@@ -26,7 +26,7 @@ public class ResultsHTMLWriter {
         for (TestCaseResult caseRes : res.get(0).results) {
             sb.append("<th>").append(caseRes.testName).append("</th>");
         }
-        sb.append("\n</rt>\n");
+        sb.append("\n</tr>\n");
 
         //print setup results in rows
         for (TestSetupResult testRes : res) {

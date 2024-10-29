@@ -17,8 +17,8 @@ public class Connect_AA_XX extends Connect_AA_AA {
         expectedTestOutcome = new TestOutcome[]{
                 TestOutcome.secondRequest_tlsAlert_internalError,
                 TestOutcome.secondRequest_http421_misdirectedRequest,
-                TestOutcome.secondRequest_http200_contentA,
-                TestOutcome.secondRequest_http404_notFound
+                TestOutcome.secondRequest_http404_notFound,
+                TestOutcome.secondRequest_http200_contentA
         };
     }
 

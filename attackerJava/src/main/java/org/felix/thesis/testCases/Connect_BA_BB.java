@@ -6,7 +6,6 @@ import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
-import org.felix.thesis.sessionTickets.Ticket;
 
 public class Connect_BA_BB extends Connect_AA_BB {
     public Connect_BA_BB(String name) {

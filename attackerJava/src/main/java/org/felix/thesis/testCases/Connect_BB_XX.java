@@ -18,7 +18,8 @@ public class Connect_BB_XX extends Connect_BB_BB {
                 TestOutcome.secondRequest_tlsAlert_internalError,
                 TestOutcome.secondRequest_http421_misdirectedRequest,
                 TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
-                TestOutcome.secondRequest_http404_notFound
+                TestOutcome.secondRequest_http404_notFound,
+                TestOutcome.secondRequest_http200_contentB
         };
     }
 

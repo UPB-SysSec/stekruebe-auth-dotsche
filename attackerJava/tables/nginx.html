@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-spacing: 0;
+  max-width: 100vw; max-height: 100vh;
+}
+td, th {
+  border: gray solid;
+  border-width: 0 1px 1px 0;
+  padding: .3rem;
+  background: white;
+}
+th {
+  border-bottom-width: 2px;
+  position: sticky;
+  top: 0;
+  box-shadow: 0px 2px 2px -1px #0008;
+}
+th:first-child {
+  z-index: 1;
+}
+th:first-child,
+td:first-child {
+  font-weight: bold;
+  border-right-width: 2px;
+  position: sticky;
+  left: 0;
+  box-shadow: 2px 0px 2px -1px #0008;
+}
+.unexpected {
+  color: red;
+  font-weight: bold;
+}
+tr:nth-child(2n) > td {
+  background: #e8e8e8;
+}
+.open>td:not(:first-child) {
+    color: gray;
+}
+</style>
+</head>
+<body>
+
+<table>
+<tr>
+<th>Setup Name</th><th>AA -> AA (reconnect to A)</th><th>AA -> XX</th><th>AA -> AB</th><th>AA -> BA</th><th>AA -> BB (Base Test Case)</th><th>AB -> AB</th><th>AB -> BA</th><th>AB -> BB</th><th>BA -> AB</th><th>BA -> BA</th><th>BA -> BB</th><th>BB -> AA (baseCase reversed)</th><th>BB -> BB (reconnect to B)</th><th>BB -> XX</th><th>BB* -> BB (*but no ClientCert for B)</th>
+</rt>
+
+<tr class="open">
+<td>nginx_open</td><td>secondRequest_http200_contentA</td><td>secondRequest_http404_notFound</td><td>secondRequest_http200_contentA</td><td class="unexpected">secondRequest_http200_contentB</td><td class="unexpected">secondRequest_http200_contentB</td><td>secondRequest_http200_contentA</td><td class="unexpected">secondRequest_http200_contentB</td><td class="unexpected">secondRequest_http200_contentB</td><td class="unexpected">secondRequest_http200_contentA</td><td class="unexpected">secondRequest_http200_contentB</td><td class="unexpected">secondRequest_http200_contentB</td><td class="unexpected">secondRequest_http200_contentA</td><td>secondRequest_http200_contentB</td><td>secondRequest_http404_notFound</td><td class="unexpected">secondRequest_http200_contentB</td>
+</rt>
+
+<tr>
+<td>nginx_domains_certa</td><td>secondRequest_http200_contentA</td><td>secondRequest_http404_notFound</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http400_badRequest</td><td>secondRequest_http400_badRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentB</td><td>secondRequest_http404_notFound</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_domains</td><td>secondRequest_http200_contentA</td><td>secondRequest_http404_notFound</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td class="unexpected">secondRequest_http200_contentA</td><td>secondRequest_http200_contentB</td><td>secondRequest_http404_notFound</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_subdomains</td><td>secondRequest_http200_contentA</td><td>secondRequest_http404_notFound</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td class="unexpected">secondRequest_http200_contentA</td><td>secondRequest_http200_contentB</td><td>secondRequest_http404_notFound</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_subdomains_certa</td><td>secondRequest_http200_contentA</td><td>secondRequest_http404_notFound</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentA</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http400_badRequest</td><td>secondRequest_http400_badRequest</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentB</td><td>secondRequest_http404_notFound</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+</body>
+</table>
