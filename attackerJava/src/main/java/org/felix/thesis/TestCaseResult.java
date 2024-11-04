@@ -84,6 +84,8 @@ public class TestCaseResult {
                     case UNEXPECTED_MESSAGE -> TestOutcome.firstRequest_tlsAlert_unexpectedMessage;
                     case INTERNAL_ERROR     -> TestOutcome.firstRequest_tlsAlert_internalError;
                     case UNKNOWN_CA         -> TestOutcome.firstRequest_tlsAlert_unknownCA;
+                    case UNRECOGNIZED_NAME  -> TestOutcome.firstRequest_tlsAlert_unknownName;
+                    case ACCESS_DENIED      -> TestOutcome.firstRequest_tlsAlert_accessDenied;
                     default                 -> TestOutcome.firstRequest_tlsAlert_other;
                 };
             }
@@ -135,6 +137,8 @@ public class TestCaseResult {
                     case UNEXPECTED_MESSAGE -> TestOutcome.secondRequest_tlsAlert_unexpectedMessage;
                     case INTERNAL_ERROR     -> TestOutcome.secondRequest_tlsAlert_internalError;
                     case UNKNOWN_CA         -> TestOutcome.secondRequest_tlsAlert_unknownCA;
+                    case UNRECOGNIZED_NAME  -> TestOutcome.secondRequest_tlsAlert_unknownName;
+                    case ACCESS_DENIED      -> TestOutcome.secondRequest_tlsAlert_accessDenied;
                     default                 -> TestOutcome.secondRequest_tlsAlert_other;
                 };
             }

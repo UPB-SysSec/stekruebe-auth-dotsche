@@ -7,6 +7,10 @@ public enum TestOutcome {
     secondRequest_tlsAlert_internalError,
      firstRequest_tlsAlert_unknownCA,
     secondRequest_tlsAlert_unknownCA,
+    firstRequest_tlsAlert_unknownName,
+    secondRequest_tlsAlert_unknownName,
+    firstRequest_tlsAlert_accessDenied,
+    secondRequest_tlsAlert_accessDenied,
      firstRequest_tlsAlert_other,
     secondRequest_tlsAlert_other,
 
