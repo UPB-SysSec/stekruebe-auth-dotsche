@@ -48,7 +48,7 @@ public class TestManager {
         var setups = new ArrayList<TestSetupInstance>();
 
         List<String> folderNames = List.of(
-                "apache",
+//                "apache",
                 "caddy",
                 "nginx"
         ); //the subfolders to search for setups in
@@ -65,7 +65,7 @@ public class TestManager {
                     if (name.endsWith("certA") && disableCertA) {continue;}
                     if (name.endsWith("open") && disableOpen) {continue;}
                     switch (name) {
-                        case "domains":
+                        case "domains", "domains_defaultB":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<Connect_AA_BB>) this.testsCreator.call(),

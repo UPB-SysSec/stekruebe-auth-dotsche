@@ -12,13 +12,17 @@ import java.util.List;
 
 public class BaseConfigCreator {
     private static final Logger LOGGER = LogManager.getLogger("configCreator");
+
+    public static Config buildConfig(int port, String domain) {
+        return buildConfig(port, domain, true);
+    }
     /**
      * prepare the config
      * @param port the port to connect on
      * @param domain the domain to set in the SNI extension
      * @return the configured config
      */
-    public static Config buildConfig(int port, String domain) {
+    public static Config buildConfig(int port, String domain, boolean useSNI) {
         if (domain == null) throw new AssertionError();
         LOGGER.info("domain: {}", domain);
 
@@ -45,13 +49,15 @@ public class BaseConfigCreator {
 //        config.setDefaultClientConnection(new OutboundConnection(port));
         LOGGER.info("outbound connection to port {}", port);
 
-        // add SNI extension
-        config.setAddServerNameIndicationExtension(true);
-        ServerNamePair sn = new ServerNamePair(
-                (byte) 0,
-                domain.getBytes(StandardCharsets.US_ASCII)
-        );
-        config.setDefaultSniHostnames(List.of(sn));
+        if (useSNI) {
+            // add SNI extension
+            config.setAddServerNameIndicationExtension(true);
+            ServerNamePair sn = new ServerNamePair(
+                    (byte) 0,
+                    domain.getBytes(StandardCharsets.US_ASCII)
+            );
+            config.setDefaultSniHostnames(List.of(sn));
+        }
 
         return config;
     }
