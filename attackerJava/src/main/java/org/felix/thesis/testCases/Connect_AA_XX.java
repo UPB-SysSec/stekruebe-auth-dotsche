@@ -8,7 +8,7 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class Connect_AA_XX extends Connect_AA_AA {
+public class Connect_AA_XX extends RefTestCase {
     /**
      * we reconnect to site A, but the second request requests an invalid domain
      */

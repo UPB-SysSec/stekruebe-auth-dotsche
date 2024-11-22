@@ -8,7 +8,7 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class Connect_AB_AB extends Connect_AA_BB {
+public class Connect_AB_AB extends RefTestCase {
     public Connect_AB_AB(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[]{

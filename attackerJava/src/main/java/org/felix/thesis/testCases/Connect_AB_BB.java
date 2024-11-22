@@ -7,7 +7,7 @@ import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_AB_BB extends Connect_AA_BB {
+public class Connect_AB_BB extends RefTestCase {
     public Connect_AB_BB(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[]{

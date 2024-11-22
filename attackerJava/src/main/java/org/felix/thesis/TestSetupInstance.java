@@ -20,11 +20,11 @@ import java.util.Locale;
 
 import org.felix.thesis.sessionTickets.SessionTicketUtil;
 import org.felix.thesis.sessionTickets.Ticket;
-import org.felix.thesis.testCases.Connect_AA_BB;
+import org.felix.thesis.testCases.RefTestCase;
 
 public class TestSetupInstance {
     private final int port;
-    private final List<Connect_AA_BB> tests;
+    private final List<RefTestCase> tests;
 
     private final Path dockerFilePath;
     private final String siteADomain;
@@ -46,7 +46,7 @@ public class TestSetupInstance {
      * @param tests the list of TestCases
      * @param dockerFileFolder the folder containing the dockerFile
      */
-    public TestSetupInstance(int port, List<Connect_AA_BB> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
+    public TestSetupInstance(int port, List<RefTestCase> tests, Path dockerFileFolder, String siteADomain, String siteBDomain, Boolean siteAUsesClientCert, Boolean siteBUsesClientCert) {
         this.port = port;
         this.tests = tests;
         this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
@@ -131,7 +131,7 @@ public class TestSetupInstance {
         }
         /* ------ make Test connections ------ */
         LOGGER.info("> running tests");
-        for (Connect_AA_BB test : this.tests) {
+        for (RefTestCase test : this.tests) {
             runTest(test);
         }
         /* ------ Stop Docker Containers ------ */
@@ -142,7 +142,7 @@ public class TestSetupInstance {
     }
 
 
-    public void runTest(Connect_AA_BB test) {
+    public void runTest(RefTestCase test) {
         LOGGER.info("running test: '{}' on '{}'", test.getName(), name);
         test.setup(
                 port,

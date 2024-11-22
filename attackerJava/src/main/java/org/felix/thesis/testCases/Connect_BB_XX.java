@@ -23,12 +23,7 @@ public class Connect_BB_XX extends Connect_BB_BB {
         };
     }
 
-    public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
-        if (siteBNeedsCert) config = applyCert(config, siteBClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
-        return new State(config, trace);
-    }
+    // getStateA is the same as in Connect_BB_BB
 
     public State getStateB(Ticket ticket) {
         Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid");

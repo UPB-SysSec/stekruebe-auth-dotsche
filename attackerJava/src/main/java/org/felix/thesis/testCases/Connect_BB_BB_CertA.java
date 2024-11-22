@@ -7,11 +7,11 @@ import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_BB_BB_CertA extends Connect_AA_BB {
+public class Connect_BB_BB_CertA extends Connect_BB_BB {
     public Connect_BB_BB_CertA(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[] {
-                TestOutcome.secondRequest_http200_contentB
+                TestOutcome.firstRequest_tlsAlert_unknownCA
         };
     }
 

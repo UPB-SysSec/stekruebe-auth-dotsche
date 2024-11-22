@@ -2,7 +2,7 @@ package org.felix.thesis;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.felix.thesis.testCases.Connect_AA_BB;
+import org.felix.thesis.testCases.RefTestCase;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -68,7 +68,7 @@ public class TestManager {
                         case "domains", "domains_defaultB":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<Connect_AA_BB>) this.testsCreator.call(),
+                                    (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -81,7 +81,7 @@ public class TestManager {
                         case "domains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<Connect_AA_BB>) this.testsCreator.call(),
+                                    (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
@@ -94,7 +94,7 @@ public class TestManager {
                         case "subdomains":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<Connect_AA_BB>) this.testsCreator.call(),
+                                    (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -107,7 +107,7 @@ public class TestManager {
                         case "subdomains_certA":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<Connect_AA_BB>) this.testsCreator.call(),
+                                    (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.site.org",
                                     "siteB.site.org",
@@ -120,7 +120,7 @@ public class TestManager {
                         case "open":
                             setups.add(new TestSetupInstance(
                                     port,
-                                    (List<Connect_AA_BB>) this.testsCreator.call(),
+                                    (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
                                     "siteA.org",
                                     "siteB.org",
