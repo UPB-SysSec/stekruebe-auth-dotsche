@@ -1,1 +1,0 @@
-java -jar TLS-Client.jar -connect localhost:4433
