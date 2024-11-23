@@ -1,1 +1,0 @@
-curl -I --tlsv1.3 --insecure --no-progress-meter https://siteB.org -H "SSL-Client-Verify: SUCCESS" --resolve siteA.org:localhost

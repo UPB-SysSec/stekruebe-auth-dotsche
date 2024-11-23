@@ -1,1 +1,0 @@
-curl -k -v https://siteA.org https://siteB.siteA.org --resolve siteA.org:localhost --resolve siteB.org:localhost

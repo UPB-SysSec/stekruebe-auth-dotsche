@@ -10,6 +10,4 @@ mvn clean install -DskipTests=true
 
 
 ## Running
-run `python3 main.py` 
-(needs permission to build and start docker containers)
 
