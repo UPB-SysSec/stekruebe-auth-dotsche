@@ -39,11 +39,11 @@ public class TestCasesBuilder {
         tests.add(new Connect_BA_BB("BA -> BB"));
 
         /*just for reference, the attacker wouldn't have this ability*/
-        tests.add(new Connect_BB_AA("BB -> AA (baseCase reversed)"));
+//        tests.add(new Connect_BB_AA("BB -> AA (baseCase reversed)"));
         tests.add(new Connect_BB_BB("BB -> BB (reconnect to B)"));
-        tests.add(new Connect_BB_XX("BB -> XX"));
-        tests.add(new Connect_BB_BB_CertA("BB -> BB (with certA)"));
-        tests.add(new Connect_BB_BB_noCert("BB* -> BB (*but no ClientCert for B)"));
+//        tests.add(new Connect_BB_XX("BB -> XX"));
+//        tests.add(new Connect_BB_BB_CertA("BB -> BB (with certA)"));
+//        tests.add(new Connect_BB_BB_noCert("BB* -> BB (*but no ClientCert for B)"));
 
         return tests;
     }

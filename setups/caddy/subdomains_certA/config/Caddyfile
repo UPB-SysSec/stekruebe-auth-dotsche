@@ -18,7 +18,8 @@ siteA.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteA site A"
+		root * /srv/siteA
+		file_server
 	}
 }
 
@@ -33,7 +34,8 @@ siteB.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteB site B"
+		root * /srv/siteB
+		file_server
 	}
 }
 

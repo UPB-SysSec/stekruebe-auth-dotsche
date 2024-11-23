@@ -11,14 +11,10 @@ siteA.site.org {
 	tls /keys/subdomainA.crt /keys/siteA.key {
 		load /keys
 	}
-	#tls {
-	#	client_auth {
-	#		mode: require_and_verify
-	#		trusted_leaf_cert_file: /keys/user_ca_a.crt
-	#	}
-	#}
+
 	handle {
-		respond "hello from the other siteA site A"
+		root * /srv/siteA
+		file_server
 	}
 }
 
@@ -33,7 +29,8 @@ siteB.site.org {
 	}
 
 	handle {
-		respond "hello from the other siteB site B"
+		root * /srv/siteB
+		file_server
 	}
 }
 
