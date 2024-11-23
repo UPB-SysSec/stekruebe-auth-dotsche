@@ -56,19 +56,12 @@ public class BaseWorkflowCreator {
         trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
 
         // send the http message
-        HttpRequestMessage reqMessage = new HttpRequestMessage(config);
-        ArrayList<HttpHeader> headers = new ArrayList<>();
-        HostHeader hostHeader = new HostHeaderCustom();
-        hostHeader.setHeaderName("Host");
-        hostHeader.setHeaderValue(domain.toLowerCase());
-        headers.add(hostHeader);
-        reqMessage.setHeader(headers);
         trace.addTlsAction(
                 createHttpAction(
                         config,
                         connection,
                         ConnectionEndType.CLIENT,
-                        reqMessage)
+                        buildHTTPRequestMessage(config, domain))
         );
         // receive the http answer
         trace.addTlsAction(
@@ -80,53 +73,74 @@ public class BaseWorkflowCreator {
         return trace;
     }
 
-    public static WorkflowTrace getResumptionWorkflowTrace(Config config, String domain) {
-        LOGGER.info("domain for workflow: {}", domain);
+    public static WorkflowTrace getNormalWorkflowTrace_13(Config config, String domain) {
+        LOGGER.info("domain for 1.3 workflow: {}", domain);
         AliasedConnection connection = config.getDefaultClientConnection();
         WorkflowTrace trace = new WorkflowTrace();
 
-        trace.addTlsAction(
-                MessageActionFactory.createTLSAction(
+
+        trace.addTlsAction(new SendAction(new ClientHelloMessage(config)));
+
+        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
+
+        trace.addTlsAction(new SendAction(
+                new ChangeCipherSpecMessage(),
+                new FinishedMessage()
+        ));
+        // send the http message
+        trace.addTlsAction(createHttpAction(
                         config,
                         connection,
                         ConnectionEndType.CLIENT,
-                        new ClientHelloMessage(config)));
-
-        trace.addTlsAction(
-                MessageActionFactory.createTLSAction(
+                        buildHTTPRequestMessage(config, domain)
+                ));
+        // receive the http answer
+        trace.addTlsAction(createHttpAction(
                         config,
                         connection,
                         ConnectionEndType.SERVER,
-                        new ServerHelloMessage(config),
-                        new ChangeCipherSpecMessage(),
-                        new FinishedMessage()));
-        trace.addTlsAction(
-                MessageActionFactory.createTLSAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        new ChangeCipherSpecMessage(),
-                        new FinishedMessage()));
+                        new HttpResponseMessage()
+                ));
+        return trace;
+    }
 
-        // send the http message
+
+    private static HttpRequestMessage buildHTTPRequestMessage(Config config, String domain) {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
         ArrayList<HttpHeader> headers = new ArrayList<>();
         HostHeader hostHeader = new HostHeader();
         hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
         reqMessage.setHeader(headers);
-        trace.addTlsAction(
-                createHttpAction(
+        return reqMessage;
+    }
+
+
+    public static WorkflowTrace getResumptionWorkflowTrace(Config config, String domain) {
+        LOGGER.info("domain for workflow: {}", domain);
+        AliasedConnection connection = config.getDefaultClientConnection();
+        WorkflowTrace trace = new WorkflowTrace();
+
+        trace.addTlsAction(new SendAction(new ClientHelloMessage(config)));
+        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
+        trace.addTlsAction(new SendAction(
+                new ChangeCipherSpecMessage(),
+                new FinishedMessage()
+        ));
+        // send the http request
+        trace.addTlsAction(createHttpAction(
                         config,
                         connection,
                         ConnectionEndType.CLIENT,
-                        reqMessage)
-        );
+                        buildHTTPRequestMessage(config, domain)
+                ));
         // receive the http answer
-        trace.addTlsAction(
-                createHttpAction(
-                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
-        );
+        trace.addTlsAction(createHttpAction(
+                        config,
+                        connection,
+                        ConnectionEndType.SERVER,
+                        new HttpResponseMessage()
+                ));
         return trace;
     }
 
