@@ -48,9 +48,10 @@ public class TestManager {
         var setups = new ArrayList<TestSetupInstance>();
 
         List<String> folderNames = List.of(
-                "apache",
-                "caddy",
-                "nginx"
+//                "apache",
+//                "caddy",
+//                "nginx",
+                "openlitespeed"
         ); //the subfolders to search for setups in
         boolean disableCertA = false; //flag to disable the inclusion of CertA setups
         boolean disableOpen = true; //flag to disable the '_open' setups

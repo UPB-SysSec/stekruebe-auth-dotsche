@@ -1,0 +1,15 @@
+FROM litespeedtech/openlitespeed:1.8.2-lsphp82
+
+
+# ------ COPY CONFIG ------
+# copy password: admin:adminadmin
+COPY openlitespeed/domains/config/htpasswd /usr/local/lsws/admin/conf/htpasswd
+
+RUN rm -rf /usr/local/lsws/conf/
+COPY openlitespeed/domains/config/conf /usr/local/lsws/conf
+
+# ------ COPY KEYS AND CONTENT ------
+RUN mkdir /keys 
+#RUN mkdir /srv
+COPY shared/cert/keys /keys
+COPY site-content /srv

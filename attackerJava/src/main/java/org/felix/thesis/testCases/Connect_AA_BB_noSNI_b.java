@@ -35,6 +35,8 @@ public class Connect_AA_BB_noSNI_b extends Connect_AA_BB {
     public Connect_AA_BB_noSNI_b(String name) {
         super(name);
         this.expectedTestOutcome = new TestOutcome[] {
+                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_http421_misdirectedRequest
         };
     }
 
