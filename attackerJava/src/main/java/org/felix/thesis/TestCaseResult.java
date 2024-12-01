@@ -2,15 +2,18 @@ package org.felix.thesis;
 
 import de.rub.nds.tlsattacker.core.constants.AlertDescription;
 import de.rub.nds.tlsattacker.core.exceptions.TransportHandlerConnectException;
+import de.rub.nds.tlsattacker.core.protocol.ProtocolMessage;
 import de.rub.nds.tlsattacker.core.protocol.message.AlertMessage;
 import de.rub.nds.tlsattacker.core.protocol.message.ApplicationMessage;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
+import de.rub.nds.tlsattacker.core.workflow.WorkflowTraceUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import java.util.List;
 
 public class TestCaseResult {
     private final Logger LOGGER;
@@ -61,8 +64,8 @@ public class TestCaseResult {
 
             ApplicationMessage appMessage = requestATrace.getFirstReceivedMessage(ApplicationMessage.class);
             if (appMessage!=null) {
-                siteContentA = new String(appMessage.getData().getValue(), StandardCharsets.UTF_8);
-                int httpCode = getHTTPCode(appMessage.getData().getValue());
+                siteContentA = getFullContent(requestATrace);
+                int httpCode = getHTTPCode(siteContentA);
                 if (httpCode != -1) {
                     httpCodeA = httpCode;
                     return switch (httpCode) {
@@ -104,8 +107,8 @@ public class TestCaseResult {
 
             ApplicationMessage appMessage = requestBTrace.getFirstReceivedMessage(ApplicationMessage.class);
             if (appMessage!=null) {
-                siteContentB = new String(appMessage.getData().getValue(), StandardCharsets.UTF_8);
-                int httpCode = getHTTPCode(appMessage.getData().getValue());
+                siteContentB = getFullContent(requestBTrace);
+                int httpCode = getHTTPCode(siteContentB);
                 if (httpCode != -1) {
                     httpCodeB = httpCode;
                     if (httpCode==200) {
@@ -313,8 +316,20 @@ public class TestCaseResult {
         return content;
     }
 
-    private int getHTTPCode(byte[] appData) {
-        String text = new String(appData, StandardCharsets.UTF_8);
+    private String getFullContent(WorkflowTrace trace) {
+        StringBuilder fullBody = new StringBuilder();
+        List<ProtocolMessage> messageList = WorkflowTraceUtil.getAllReceivedMessages(trace);
+        List<ApplicationMessage> applicationMessages = messageList.stream()
+                .filter(ApplicationMessage.class::isInstance)
+                .map(ApplicationMessage.class::cast)
+                .toList();
+        for (ApplicationMessage message : applicationMessages) {
+            fullBody.append(new String(message.getData().getValue(), StandardCharsets.UTF_8));
+        }
+        return fullBody.toString();
+    }
+
+    private int getHTTPCode(String text) {
         try {
             if (!text.startsWith("HTTP/1.1 ")) {
                 return -1;

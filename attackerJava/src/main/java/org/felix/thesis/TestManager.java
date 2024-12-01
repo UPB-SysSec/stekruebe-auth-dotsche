@@ -71,8 +71,8 @@ public class TestManager {
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
-                                    "siteA.org",
-                                    "siteB.org",
+                                    "sitea.org",
+                                    "siteb.org",
                                     false,
                                     true
                                 )
@@ -84,8 +84,8 @@ public class TestManager {
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
-                                    "siteA.org",
-                                    "siteB.org",
+                                    "sitea.org",
+                                    "siteb.org",
                                     true,
                                     true
                                 )
@@ -97,8 +97,8 @@ public class TestManager {
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
-                                    "siteA.site.org",
-                                    "siteB.site.org",
+                                    "sitea.site.org",
+                                    "siteb.site.org",
                                     false,
                                     true
                                 )
@@ -110,8 +110,8 @@ public class TestManager {
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
-                                    "siteA.site.org",
-                                    "siteB.site.org",
+                                    "sitea.site.org",
+                                    "siteb.site.org",
                                     true,
                                     true
                                 )
@@ -123,8 +123,8 @@ public class TestManager {
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
                                     setup.toPath(),
-                                    "siteA.org",
-                                    "siteB.org",
+                                    "sitea.org",
+                                    "siteb.org",
                                     false,
                                     false
                                 )
