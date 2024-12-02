@@ -52,8 +52,8 @@ public class TestSetupInstance {
         this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
         this.siteADomain = siteADomain;
         this.siteBDomain = siteBDomain;
-        this.siteACert = Path.of("../setups/shared/cert/keys/clientA.pem");
-        this.siteBCert = Path.of("../setups/shared/cert/keys/clientB.pem");
+        this.siteACert = Path.of("./setups/shared/cert/keys/clientA.pem");
+        this.siteBCert = Path.of("./setups/shared/cert/keys/clientB.pem");
 
         this.siteAUsesClientCert = siteAUsesClientCert;
         this.siteBUsesClientCert = siteBUsesClientCert;
@@ -213,8 +213,8 @@ public class TestSetupInstance {
      */
     private String _getName() {
         String[] parts = this.dockerFilePath.toString().toLowerCase(Locale.ENGLISH).split("/");
-        String server = parts[2];
-        String setup = parts[3];
+        String server = parts[parts.length - 3];
+        String setup = parts[parts.length - 2];
         return server+"_"+setup;
     }
 }

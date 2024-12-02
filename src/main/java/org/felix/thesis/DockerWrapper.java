@@ -62,10 +62,11 @@ public class DockerWrapper {
     public static DockerResult build(String imageName, Path dockerFilePath) {
         DockerResult result;
         try {
+
             result = _exec(
                 String.format("docker build -q -t %s -f %s .", imageName, dockerFilePath.toString()),
                 new String[0],
-                new File("../setups/"),
+                new File("./setups"),
                 10*1000
             );
         } catch (IOException e) {

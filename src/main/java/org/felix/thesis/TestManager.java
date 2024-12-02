@@ -70,7 +70,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     false,
@@ -83,7 +83,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     true,
@@ -96,7 +96,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.site.org",
                                     "siteb.site.org",
                                     false,
@@ -109,7 +109,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.site.org",
                                     "siteb.site.org",
                                     true,
@@ -122,7 +122,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     false,
