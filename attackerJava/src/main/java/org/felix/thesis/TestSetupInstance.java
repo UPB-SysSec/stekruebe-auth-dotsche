@@ -124,7 +124,7 @@ public class TestSetupInstance {
             } else {
                 try {
                     LOGGER.info("waiting for server to start");
-                    Thread.sleep(200L); //wait for the server to start
+                    Thread.sleep(500L); //wait for the server to start
                 } catch (InterruptedException ignore) {}
                 LOGGER.info("> running successful");
             }

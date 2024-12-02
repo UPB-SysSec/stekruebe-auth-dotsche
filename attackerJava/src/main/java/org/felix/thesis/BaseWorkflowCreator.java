@@ -68,7 +68,6 @@ public class BaseWorkflowCreator {
                 createHttpAction(
                         config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
         );
-        trace.addTlsAction(new SendAction());
 
         return trace;
     }
