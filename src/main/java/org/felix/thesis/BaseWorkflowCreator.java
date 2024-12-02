@@ -8,6 +8,7 @@ import de.rub.nds.tlsattacker.core.http.HttpRequestMessage;
 import de.rub.nds.tlsattacker.core.http.HttpResponseMessage;
 import de.rub.nds.tlsattacker.core.http.header.HttpHeader;
 import de.rub.nds.tlsattacker.core.http.header.HostHeader;
+import de.rub.nds.tlsattacker.core.layer.constant.LayerConfiguration;
 import de.rub.nds.tlsattacker.core.protocol.message.*;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import de.rub.nds.tlsattacker.core.workflow.action.*;
@@ -31,6 +32,7 @@ public class BaseWorkflowCreator {
     public static WorkflowTrace getNormalWorkflowTrace(Config config, String domain) {
         AliasedConnection connection = config.getDefaultClientConnection();
         config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
+        config.setDefaultLayerConfiguration(LayerConfiguration.HTTPS);
 
         WorkflowTrace trace = new WorkflowTrace();
         trace.addTlsAction(
@@ -68,7 +70,7 @@ public class BaseWorkflowCreator {
                 createHttpAction(
                         config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
         );
-        trace.addTlsAction(new SendAction());
+//        trace.addTlsAction(new SendAction());
 
         return trace;
     }

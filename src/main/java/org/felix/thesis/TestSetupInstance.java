@@ -10,6 +10,8 @@ Steps:
 
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.DefaultWorkflowExecutor;
+import de.rub.nds.tlsattacker.core.workflow.WorkflowExecutor;
+import de.rub.nds.tlsattacker.core.workflow.WorkflowExecutorFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -159,10 +161,11 @@ public class TestSetupInstance {
         State stateA = test.getStateA();
         try {
             // ---- RUN THE WORKFLOW ----
-            DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
+//            DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateA);
+            WorkflowExecutor executor = WorkflowExecutorFactory.createWorkflowExecutor(stateA.getConfig().getWorkflowExecutorType(), stateA);
             executor.executeWorkflow();
-            executor.sendCloseNotify();
-            executor.closeConnection();
+//            executor.sendCloseNotify();
+//            executor.closeConnection();
         } catch (Exception e) {
             testRes.requestAException = e;
         }
