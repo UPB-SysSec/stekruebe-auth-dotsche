@@ -68,11 +68,11 @@
       <vhostMapList>
         <vhostMap>
           <vhost>siteA</vhost>
-          <domain>sitea.org</domain>
+          <domain>sitea.site.org</domain>
         </vhostMap>
         <vhostMap>
           <vhost>siteB</vhost>
-          <domain>siteb.org</domain>
+          <domain>siteb.site.org</domain>
         </vhostMap>
       </vhostMapList>
       <keyFile>/usr/local/lsws/admin/conf/webadmin.key</keyFile>
