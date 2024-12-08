@@ -18,7 +18,7 @@ public class Connect_AA_XX extends RefTestCase {
                 TestOutcome.secondRequest_tlsAlert_internalError,
                 TestOutcome.secondRequest_http421_misdirectedRequest,
                 TestOutcome.secondRequest_http404_notFound,
-                TestOutcome.secondRequest_http200_contentA
+                TestOutcome.secondRequest_tlsAlert_unexpectedMessage
         };
     }
 

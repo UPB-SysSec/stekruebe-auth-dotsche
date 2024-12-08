@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtualHostConfig>
+  <docRoot>/srv/siteB</docRoot>
+  <vhssl>
+    <keyFile>/keys/subdomainB.key</keyFile>
+    <certFile>/keys/subdomainB.crt</certFile>
+    <CACertPath>/keys</CACertPath>
+    <CACertFile>/keys/user_ca_b.crt</CACertFile>
+    <clientVerify>2</clientVerify>
+  </vhssl>
+</virtualHostConfig>
