@@ -188,8 +188,8 @@ public class TestSetupInstance {
                 // ---- RUN THE WORKFLOW ----
                 DefaultWorkflowExecutor executor = new DefaultWorkflowExecutor(stateB);
                 executor.executeWorkflow();
-                executor.sendCloseNotify();
-                executor.closeConnection();
+//                executor.sendCloseNotify();
+//                executor.closeConnection();
             } catch (Exception e) {
                 testRes.requestBException = e;
             }

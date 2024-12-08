@@ -57,19 +57,29 @@ public class BaseWorkflowCreator {
         trace.addTlsAction(new SendAction(new ChangeCipherSpecMessage(), new FinishedMessage()));
         trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
 
+        MessageAction action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.CLIENT, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(buildHTTPRequestMessage(config, domain));
+        action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.SERVER, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(new HttpResponseMessage());
         // send the http message
-        trace.addTlsAction(
-                createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        buildHTTPRequestMessage(config, domain))
-        );
-        // receive the http answer
-        trace.addTlsAction(
-                createHttpAction(
-                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
-        );
+//        trace.addTlsAction(
+//                createHttpAction(
+//                        config,
+//                        connection,
+//                        ConnectionEndType.CLIENT,
+//                        buildHTTPRequestMessage(config, domain))
+//        );
+//        // receive the http answer
+//        trace.addTlsAction(
+//                createHttpAction(
+//                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
+//        );
 
         return trace;
     }
@@ -108,9 +118,10 @@ public class BaseWorkflowCreator {
 
     private static HttpRequestMessage buildHTTPRequestMessage(Config config, String domain) {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
+        reqMessage.setRequestPath("index.html");
         ArrayList<HttpHeader> headers = new ArrayList<>();
+//        HostHeader hostHeader = new HostHeaderCustom(domain);
         HostHeader hostHeader = new HostHeader();
-        hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
         reqMessage.setHeader(headers);
         return reqMessage;
@@ -129,19 +140,29 @@ public class BaseWorkflowCreator {
                 new FinishedMessage()
         ));
         // send the http request
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        buildHTTPRequestMessage(config, domain)
-                ));
-        // receive the http answer
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.SERVER,
-                        new HttpResponseMessage()
-                ));
+//        trace.addTlsAction(createHttpAction(
+//                        config,
+//                        connection,
+//                        ConnectionEndType.CLIENT,
+//                        buildHTTPRequestMessage(config, domain)
+//                ));
+//        // receive the http answer
+//        trace.addTlsAction(createHttpAction(
+//                        config,
+//                        connection,
+//                        ConnectionEndType.SERVER,
+//                        new HttpResponseMessage()
+//                ));
+        MessageAction action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.CLIENT, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(buildHTTPRequestMessage(config, domain));
+        action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.SERVER, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(new HttpResponseMessage());
         return trace;
     }
 

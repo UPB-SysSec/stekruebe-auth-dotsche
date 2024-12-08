@@ -45,10 +45,26 @@ tr:nth-child(2n) > td {
 
 <table>
 <tr>
-<th>Setup Name</th>
+<th>Setup Name</th><th>BA -> AB</th><th>BB -> BB (reconnect to B)</th><th>BB* -> BB (*but no ClientCert for B)</th>
 </tr>
 
 <tr>
-<td>openlitespeed_domains</td>
+<td>nginx_domains_certa</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentB</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_subdomains</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>secondRequest_http200_contentB</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_domains</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>secondRequest_http200_contentB</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_subdomains_certa</td><td>secondRequest_http421_misdirectedRequest</td><td>secondRequest_http200_contentB</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
+</rt>
+
+<tr>
+<td>nginx_domains_defaultb</td><td>firstRequest_tlsAlert_unexpectedMessage</td><td>secondRequest_http200_contentB</td><td>firstRequest_tlsAlert_unexpectedMessage</td>
 </rt>
 </table></body>
