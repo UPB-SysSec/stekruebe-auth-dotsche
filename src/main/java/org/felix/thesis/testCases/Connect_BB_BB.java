@@ -1,6 +1,7 @@
 package org.felix.thesis.testCases;
 
 import de.rub.nds.tlsattacker.core.config.Config;
+import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.BaseConfigCreator;
@@ -8,17 +9,17 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
 public class Connect_BB_BB extends RefTestCase {
-    public Connect_BB_BB(String name) {
-        super(name);
+    public Connect_BB_BB(String name, ProtocolVersion version) {
+        super(name, version);
         expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_http200_contentB
         };
     }
 
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         if (siteBNeedsCert) config = applyCert(config, siteBClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 

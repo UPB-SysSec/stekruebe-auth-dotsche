@@ -16,9 +16,9 @@ public class Connect_BB_BB_CertA extends Connect_BB_BB {
     }
 
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         if (siteBNeedsCert) config = applyCert(config, siteAClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 

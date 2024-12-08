@@ -26,7 +26,7 @@ public class Connect_BB_XX extends Connect_BB_BB {
     // getStateA is the same as in Connect_BB_BB
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid");
+        Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid", version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, "unknownDomain.invalid");
         return new State(config, trace);

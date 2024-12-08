@@ -17,14 +17,14 @@ public class Connect_AB_AB extends RefTestCase {
     }
 
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain, version);
         if (siteANeedsCert) config = applyCert(config, siteAClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain, version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         return new State(config, trace);

@@ -18,9 +18,9 @@ public class Connect_BA_BB extends RefTestCase {
     }
 
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         if (siteANeedsCert) config = applyCert(config, siteAClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 

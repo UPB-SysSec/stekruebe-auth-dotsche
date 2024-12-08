@@ -25,7 +25,7 @@ public class Connect_AA_XX extends RefTestCase {
     // getStateA is the same as in TestReconnectToA
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid");
+        Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid", version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, "unknownDomain.invalid");
         return new State(config, trace);

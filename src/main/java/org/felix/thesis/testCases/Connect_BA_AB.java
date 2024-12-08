@@ -1,6 +1,7 @@
 package org.felix.thesis.testCases;
 
 import de.rub.nds.tlsattacker.core.config.Config;
+import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.felix.thesis.BaseConfigCreator;
@@ -9,8 +10,8 @@ import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
 public class Connect_BA_AB extends RefTestCase {
-    public Connect_BA_AB(String name) {
-        super(name);
+    public Connect_BA_AB(String name, ProtocolVersion version) {
+        super(name, version);
         expectedTestOutcome = new TestOutcome[]{
                 TestOutcome.firstRequest_tlsAlert_unknownCA,
                 TestOutcome.firstRequest_tlsAlert_unexpectedMessage,
@@ -19,14 +20,14 @@ public class Connect_BA_AB extends RefTestCase {
     }
 
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         if (siteANeedsCert) config = applyCert(config, siteAClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain, version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         return new State(config, trace);

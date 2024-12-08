@@ -20,7 +20,7 @@ public class Connect_AA_BA extends RefTestCase {
     //getStateA is the same as in baseTestCase
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteADomain);
         return new State(config, trace);
