@@ -2,7 +2,7 @@ package org.felix.thesis;
 
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.connection.AliasedConnection;
-import de.rub.nds.tlsattacker.core.exceptions.ConfigurationException;
+import de.rub.nds.tlsattacker.core.constants.RunningModeType;
 import de.rub.nds.tlsattacker.core.http.HttpMessage;
 import de.rub.nds.tlsattacker.core.http.HttpRequestMessage;
 import de.rub.nds.tlsattacker.core.http.HttpResponseMessage;
@@ -17,7 +17,6 @@ import de.rub.nds.tlsattacker.core.workflow.factory.WorkflowTraceType;
 import de.rub.nds.tlsattacker.transport.ConnectionEndType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.felix.thesis.custom.HostHeaderCustom;
 
 import java.util.*;
 
@@ -25,50 +24,13 @@ public class BaseWorkflowCreator {
     private static final Logger LOGGER = LogManager.getLogger("WorkflowCreator");
     /**
      * creates the default workflow, usually used in the first connection
+     *
      * @param config the config file to base the workflow on
      * @return the finished workflow
      */
-    public static WorkflowTrace getNormalWorkflowTrace(Config config, String domain) {
-        AliasedConnection connection = config.getDefaultClientConnection();
-        config.setWorkflowTraceType(WorkflowTraceType.DYNAMIC_HTTPS);
-
-        WorkflowTrace trace = new WorkflowTrace();
-        trace.addTlsAction(
-                MessageActionFactory.createTLSAction(config, connection, ConnectionEndType.CLIENT, new ClientHelloMessage(config))
-        );
-
-        if (config.getHighestProtocolVersion().isTLS13()) {
-            trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
-        } else {
-            trace.addTlsAction(new ReceiveTillAction(new ServerHelloDoneMessage()));
-        }
-
-
-        if (Objects.equals(config.isClientAuthentication(), Boolean.TRUE)) {
-            trace.addTlsAction(new SendAction(new CertificateMessage()));
-            trace.addTlsAction(new SendDynamicClientKeyExchangeAction());
-            trace.addTlsAction(new SendAction(new CertificateVerifyMessage()));
-        } else {
-            trace.addTlsAction(new SendDynamicClientKeyExchangeAction());
-        }
-
-        trace.addTlsAction(new SendAction(new ChangeCipherSpecMessage(), new FinishedMessage()));
-        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
-
-        // send the http message
-        trace.addTlsAction(
-                createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        buildHTTPRequestMessage(config, domain))
-        );
-        // receive the http answer
-        trace.addTlsAction(
-                createHttpAction(
-                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
-        );
-
+    public static WorkflowTrace getNormalWorkflowTrace(Config config) {
+        WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
+        WorkflowTrace trace = factory.createWorkflowTrace(WorkflowTraceType.DYNAMIC_HTTPS, RunningModeType.CLIENT);
         return trace;
     }
 
@@ -107,6 +69,7 @@ public class BaseWorkflowCreator {
     private static HttpRequestMessage buildHTTPRequestMessage(Config config, String domain) {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
         ArrayList<HttpHeader> headers = new ArrayList<>();
+//        HostHeader hostHeader = new HostHeaderCustom(domain);
         HostHeader hostHeader = new HostHeader();
         hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
@@ -117,29 +80,46 @@ public class BaseWorkflowCreator {
 
     public static WorkflowTrace getResumptionWorkflowTrace(Config config, String domain) {
         LOGGER.info("domain for workflow: {}", domain);
+        WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
+        WorkflowTrace trace;
+        if(config.getHighestProtocolVersion().isTLS13()) {
+            trace = factory.createWorkflowTrace(WorkflowTraceType.TLS13_PSK, RunningModeType.CLIENT);
+        } else {
+            trace = factory.createWorkflowTrace(WorkflowTraceType.RESUMPTION, RunningModeType.CLIENT);
+        }
         AliasedConnection connection = config.getDefaultClientConnection();
-        WorkflowTrace trace = new WorkflowTrace();
-
-        trace.addTlsAction(new SendAction(new ClientHelloMessage(config)));
-        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
-        trace.addTlsAction(new SendAction(
-                new ChangeCipherSpecMessage(),
-                new FinishedMessage()
-        ));
+//        WorkflowTrace trace = new WorkflowTrace();
+//
+//        trace.addTlsAction(new SendAction(new ClientHelloMessage(config)));
+//        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
+//        trace.addTlsAction(new SendAction(
+//                new ChangeCipherSpecMessage(),
+//                new FinishedMessage()
+//        ));
         // send the http request
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        buildHTTPRequestMessage(config, domain)
-                ));
-        // receive the http answer
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.SERVER,
-                        new HttpResponseMessage()
-                ));
+//        trace.addTlsAction(createHttpAction(
+//                        config,
+//                        connection,
+//                        ConnectionEndType.CLIENT,
+//                        buildHTTPRequestMessage(config, domain)
+//                ));
+//        // receive the http answer
+//        trace.addTlsAction(createHttpAction(
+//                        config,
+//                        connection,
+//                        ConnectionEndType.SERVER,
+//                        new HttpResponseMessage()
+//                ));
+        MessageAction action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.CLIENT, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(buildHTTPRequestMessage(config, domain));
+        action =
+                MessageActionFactory.createTLSAction(
+                        config, connection, ConnectionEndType.SERVER, new ApplicationMessage());
+        trace.addTlsAction(action);
+        action.getHttpMessages().add(new HttpResponseMessage());
         return trace;
     }
 

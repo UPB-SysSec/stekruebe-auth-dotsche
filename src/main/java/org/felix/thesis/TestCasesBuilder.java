@@ -1,5 +1,6 @@
 package org.felix.thesis;
 
+import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import org.felix.thesis.testCases.*;
 
 import java.util.ArrayList;
@@ -22,23 +23,23 @@ public class TestCasesBuilder {
 
 
         /*just as a test, we want site B, so we should ask for site B somewhere*/
-        tests.add(new Connect_A_AA("A -> AA (reconnect to A)"));
-        tests.add(new Connect_A_AB("A -> AB"));
-        tests.add(new Connect_A_BA("A -> BA"));
-        tests.add(new Connect_A_BB("A -> BB (Base Test Case)"));
-        tests.add(new Connect_A_nB("A -> nB"));
-        tests.add(new Connect_A_XX("A -> XX"));
+        tests.add(new Connect_A_AA("A -> AA (reconnect to A)", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_AB("A -> AB", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_BA("A -> BA", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_BB("A -> BB (Base Test Case)", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_nB("A -> nB", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_XX("A -> XX", ProtocolVersion.TLS12));
 
-        tests.add(new Connect_B_BB("B -> BB (no cert)"));
-        tests.add(new Connect_B_BB_CertA("B -> BB (with certA)"));
+        tests.add(new Connect_B_BB_noCert("B -> BB (no cert)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_BB_CertA("B -> BB (with certA)", ProtocolVersion.TLS12));
 
         /*  these tests have access to a client certificate for site B
             we do this just for reference, the attacker wouldn't have this ability in our attack scenario
             these cases are labeled as '_test' for this reason
         */
-        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)"));
-        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)"));
-        tests.add(new Connect_B_XX_test("B -> XX"));
+        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_XX_test("B -> XX", ProtocolVersion.TLS12));
 
         return tests;
     }

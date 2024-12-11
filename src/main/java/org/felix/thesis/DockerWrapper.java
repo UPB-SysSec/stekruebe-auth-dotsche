@@ -62,6 +62,7 @@ public class DockerWrapper {
     public static DockerResult build(String imageName, Path dockerFilePath) {
         DockerResult result;
         try {
+
             result = _exec(
                 String.format("docker build -q -t %s -f %s .", imageName, dockerFilePath.toString()),
                 new String[0],
@@ -70,7 +71,9 @@ public class DockerWrapper {
             );
         } catch (IOException e) {
             result = new DockerResult(e, "docker during build");
+            result = new DockerResult(e, "docker during build");
         } catch (InterruptedException e) {
+            result = new DockerResult(e, "timeout during build");
             result = new DockerResult(e, "timeout during build");
         }
         if (result.stdOut.contains("Error")) {

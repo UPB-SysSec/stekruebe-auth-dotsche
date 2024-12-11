@@ -50,9 +50,10 @@ public class TestManager {
         List<String> folderNames = List.of(
                 "apache",
                 "caddy",
-                "nginx",
-                "openlitespeed"
+                "nginx"
+//                "openlitespeed"
         ); //the subfolders to search for setups in
+        boolean disableCertA = false; //flag to disable the inclusion of CertA setups
         boolean disableOpen = true; //flag to disable the '_open' setups
 
         for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
@@ -62,13 +63,14 @@ public class TestManager {
                     if (!setup.isDirectory()) {continue;}
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
+                    if (name.endsWith("certA") && disableCertA) {continue;}
                     if (name.endsWith("open") && disableOpen) {continue;}
                     switch (name) {
                         case "domains", "domains_defaultB":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     false,
@@ -81,7 +83,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     true,
@@ -94,7 +96,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.site.org",
                                     "siteb.site.org",
                                     false,
@@ -107,7 +109,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.site.org",
                                     "siteb.site.org",
                                     true,
@@ -120,7 +122,7 @@ public class TestManager {
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.toPath(),
+                                    setup.getCanonicalFile().toPath(),
                                     "sitea.org",
                                     "siteb.org",
                                     false,

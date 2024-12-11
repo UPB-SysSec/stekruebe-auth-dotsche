@@ -4,6 +4,7 @@ import de.rub.nds.tlsattacker.core.certificate.CertificateKeyPair;
 import de.rub.nds.tlsattacker.core.config.Config;
 import de.rub.nds.tlsattacker.core.constants.ClientAuthenticationType;
 import de.rub.nds.tlsattacker.core.constants.ClientCertificateType;
+import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import de.rub.nds.tlsattacker.core.state.State;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +41,7 @@ public abstract class RefTestCase {
     String siteBDomain;
     Path siteAClientCert;
     Path siteBClientCert;
+    ProtocolVersion version;
     boolean siteANeedsCert;
     boolean siteBNeedsCert;
     public TestOutcome[] expectedTestOutcome;
@@ -51,8 +53,9 @@ public abstract class RefTestCase {
      * </br>
      * Note: this test case always fails for setups that require a certificate on siteA
      */
-    public RefTestCase(String name) {
+    public RefTestCase(String name, ProtocolVersion version) {
         this.name = name;
+        this.version = version;
     }
 
     public void setup(int port, boolean siteANeedsCert, boolean siteBNeedsCert, String siteADomain, String siteBDomain, Path siteAClientCert, Path siteBClientCert) {
@@ -126,9 +129,9 @@ public abstract class RefTestCase {
      * @return the State object
      */
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain, version);
         if (this.siteANeedsCert) config = applyCert(config, siteAClientCert);
-        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteADomain);
+        WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config);
         return new State(config, trace);
     }
 
@@ -138,7 +141,7 @@ public abstract class RefTestCase {
      * @return the State object
      */
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, version);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
