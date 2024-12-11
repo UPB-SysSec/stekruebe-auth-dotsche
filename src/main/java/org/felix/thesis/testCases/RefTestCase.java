@@ -53,10 +53,6 @@ public abstract class RefTestCase {
      * </br>
      * Note: this test case always fails for setups that require a certificate on siteA
      */
-    public RefTestCase(String name) {
-        this.name = name;
-        this.version = ProtocolVersion.TLS12;
-    }
     public RefTestCase(String name, ProtocolVersion version) {
         this.name = name;
         this.version = version;

@@ -1,10 +1,12 @@
-attackerJava/out
+out/
+target/
+**/.idea/
+
 *.conf.bak
 *.conf0
 *.conf.txt
 *.properties0
 
-target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

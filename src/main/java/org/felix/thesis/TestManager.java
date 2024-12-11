@@ -155,7 +155,7 @@ public class TestManager {
      * same as run, but in parallel ;)
      */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(1);
+        ExecutorService executor = Executors.newFixedThreadPool(6);
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }

@@ -83,7 +83,7 @@ public class TestSetupInstance {
         if (true) {
             // build docker containers
             LOGGER.info("building container");
-            //Path p = Path.of("../setups/nginx/domains/dockerfile");
+            //Path p = Path.of("./setups/nginx/domains/dockerfile");
             try {
                 result.dockerBuildResult =  DockerWrapper.build(this.name, this.dockerFilePath);
                 result.dockerBuildSuccessful = (result.dockerBuildResult.exitVal == 0);

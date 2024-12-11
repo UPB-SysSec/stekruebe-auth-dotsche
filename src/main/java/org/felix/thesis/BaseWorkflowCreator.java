@@ -31,20 +31,6 @@ public class BaseWorkflowCreator {
     public static WorkflowTrace getNormalWorkflowTrace(Config config) {
         WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
         WorkflowTrace trace = factory.createWorkflowTrace(WorkflowTraceType.DYNAMIC_HTTPS, RunningModeType.CLIENT);
-        // send the http message
-//        trace.addTlsAction(
-//                createHttpAction(
-//                        config,
-//                        connection,
-//                        ConnectionEndType.CLIENT,
-//                        buildHTTPRequestMessage(config, domain))
-//        );
-//        // receive the http answer
-//        trace.addTlsAction(
-//                createHttpAction(
-//                        config, connection, ConnectionEndType.SERVER, new HttpResponseMessage())
-//        );
-
         return trace;
     }
 

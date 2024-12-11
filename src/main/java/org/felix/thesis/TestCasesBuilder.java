@@ -23,32 +23,23 @@ public class TestCasesBuilder {
 
 
         /*just as a test, we want site B, so we should ask for site B somewhere*/
-//        tests.add(new Connect_AA_AA("AA -> AA (reconnect to A)"));
-//        tests.add(new Connect_AA_XX("AA -> XX"));
+        tests.add(new Connect_A_AA("A -> AA (reconnect to A)", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_AB("A -> AB", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_BA("A -> BA", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_BB("A -> BB (Base Test Case)", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_nB("A -> nB", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_XX("A -> XX", ProtocolVersion.TLS12));
 
-//        tests.add(new Connect_AA_AB("AA -> AB"));
-//        tests.add(new Connect_AA_BA("AA -> BA"));
-        tests.add(new Connect_AA_BB("AA -> BB (Base Test Case)", ProtocolVersion.TLS12));
-        tests.add(new Connect_AA_BB("AA -> BB (Base Test Case)", ProtocolVersion.TLS13));
-//        tests.add(new Connect_AA_BB_noSNI_b("AA -> BB (no SNI for B)"));
+        tests.add(new Connect_B_BB_noCert("B -> BB (no cert)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_BB_CertA("B -> BB (with certA)", ProtocolVersion.TLS12));
 
-//        tests.add(new Connect_AB_AB("AB -> AB"));
-//        tests.add(new Connect_AB_BA("AB -> BA"));
-//        tests.add(new Connect_AB_BB("AB -> BB"));
-
-        tests.add(new Connect_BA_AB("BA -> AB", ProtocolVersion.TLS12));
-        tests.add(new Connect_BA_AB("BA -> AB TLS 1.3", ProtocolVersion.TLS13));
-//        tests.add(new Connect_BA_BA("BA -> BA"));
-//        tests.add(new Connect_BA_BB("BA -> BB"));
-
-        /*just for reference, the attacker wouldn't have this ability*/
-//        tests.add(new Connect_BB_AA("BB -> AA (baseCase reversed)"));
-        tests.add(new Connect_BB_BB("BB -> BB (reconnect to B)", ProtocolVersion.TLS12));
-        tests.add(new Connect_BB_BB("BB -> BB (reconnect to B) TLS 1.3", ProtocolVersion.TLS13));
-//        tests.add(new Connect_BB_XX("BB -> XX"));
-//        tests.add(new Connect_BB_BB_CertA("BB -> BB (with certA)"));
-        tests.add(new Connect_BB_BB_noCert("BB* -> BB (*but no ClientCert for B)", ProtocolVersion.TLS12));
-        tests.add(new Connect_BB_BB_noCert("BB* -> BB (*but no ClientCert for B) TLS 1.3", ProtocolVersion.TLS13));
+        /*  these tests have access to a client certificate for site B
+            we do this just for reference, the attacker wouldn't have this ability in our attack scenario
+            these cases are labeled as '_test' for this reason
+        */
+        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_XX_test("B -> XX", ProtocolVersion.TLS12));
 
         return tests;
     }

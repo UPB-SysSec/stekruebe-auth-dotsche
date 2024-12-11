@@ -3,7 +3,7 @@ package org.felix.thesis.testCases;
 import de.rub.nds.tlsattacker.core.constants.ProtocolVersion;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_AA_BB extends RefTestCase {
+public class Connect_A_BB extends RefTestCase {
 
     /**
      * 1. connects to site A and requests a session Ticket
@@ -12,7 +12,7 @@ public class Connect_AA_BB extends RefTestCase {
      * </br>
      * Note: this test case always fails for setups that require a certificate on siteA
      */
-    public Connect_AA_BB(String name, ProtocolVersion version) {
+    public Connect_A_BB(String name, ProtocolVersion version) {
         super(name, version);
         this.expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
