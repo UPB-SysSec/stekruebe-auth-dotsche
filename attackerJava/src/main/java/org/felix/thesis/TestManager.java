@@ -53,7 +53,6 @@ public class TestManager {
                 "nginx",
                 "openlitespeed"
         ); //the subfolders to search for setups in
-        boolean disableCertA = false; //flag to disable the inclusion of CertA setups
         boolean disableOpen = true; //flag to disable the '_open' setups
 
         for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
@@ -63,7 +62,6 @@ public class TestManager {
                     if (!setup.isDirectory()) {continue;}
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
-                    if (name.endsWith("certA") && disableCertA) {continue;}
                     if (name.endsWith("open") && disableOpen) {continue;}
                     switch (name) {
                         case "domains", "domains_defaultB":

@@ -7,8 +7,8 @@ import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_B_BB_test_CertA extends Connect_B_BB_test {
-    public Connect_B_BB_test_CertA(String name) {
+public class Connect_B_BB_CertA extends Connect_B_BB_test {
+    public Connect_B_BB_CertA(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.firstRequest_tlsAlert_unknownCA

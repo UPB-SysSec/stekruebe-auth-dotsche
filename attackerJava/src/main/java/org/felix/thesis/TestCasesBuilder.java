@@ -29,12 +29,15 @@ public class TestCasesBuilder {
         tests.add(new Connect_A_nB("A -> nB"));
         tests.add(new Connect_A_XX("A -> XX"));
 
-        tests.add(new Connect_B_BB("B -> BB (asks for B without client cert)"));
+        tests.add(new Connect_B_BB("B -> BB (no cert)"));
+        tests.add(new Connect_B_BB_CertA("B -> BB (with certA)"));
 
-        /*just for reference, the attacker wouldn't have this ability*/
+        /*  these tests have access to a client certificate for site B
+            we do this just for reference, the attacker wouldn't have this ability in our attack scenario
+            these cases are labeled as '_test' for this reason
+        */
         tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)"));
         tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)"));
-        tests.add(new Connect_B_BB_test_CertA("B -> BB (with certA)"));
         tests.add(new Connect_B_XX_test("B -> XX"));
 
         return tests;

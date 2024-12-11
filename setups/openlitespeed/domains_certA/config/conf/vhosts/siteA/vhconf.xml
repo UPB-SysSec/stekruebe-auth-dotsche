@@ -4,7 +4,6 @@
   <vhssl>
     <keyFile>/keys/siteA.key</keyFile>
     <certFile>/keys/siteA.crt</certFile>
-    <CACertPath>/keys</CACertPath>
     <CACertFile>/keys/user_ca_a.crt</CACertFile>
     <clientVerify>2</clientVerify>
   </vhssl>
