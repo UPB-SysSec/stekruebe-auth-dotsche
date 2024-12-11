@@ -7,8 +7,8 @@ import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_BB_BB extends RefTestCase {
-    public Connect_BB_BB(String name) {
+public class Connect_B_BB_test extends RefTestCase {
+    public Connect_B_BB_test(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_http200_contentB

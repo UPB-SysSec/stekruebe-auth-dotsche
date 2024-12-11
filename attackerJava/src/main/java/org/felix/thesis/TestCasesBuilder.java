@@ -22,28 +22,20 @@ public class TestCasesBuilder {
 
 
         /*just as a test, we want site B, so we should ask for site B somewhere*/
-//        tests.add(new Connect_AA_AA("AA -> AA (reconnect to A)"));
-//        tests.add(new Connect_AA_XX("AA -> XX"));
+        tests.add(new Connect_A_AA("A -> AA (reconnect to A)"));
+        tests.add(new Connect_A_AB("A -> AB"));
+        tests.add(new Connect_A_BA("A -> BA"));
+        tests.add(new Connect_A_BB("A -> BB (Base Test Case)"));
+        tests.add(new Connect_A_nB("A -> nB"));
+        tests.add(new Connect_A_XX("A -> XX"));
 
-//        tests.add(new Connect_AA_AB("AA -> AB"));
-//        tests.add(new Connect_AA_BA("AA -> BA"));
-//        tests.add(new Connect_AA_BB("AA -> BB (Base Test Case)"));
-//        tests.add(new Connect_AA_BB_noSNI_b("AA -> BB (no SNI for B)"));
-
-//        tests.add(new Connect_AB_AB("AB -> AB"));
-//        tests.add(new Connect_AB_BA("AB -> BA"));
-//        tests.add(new Connect_AB_BB("AB -> BB"));
-
-        tests.add(new Connect_BA_AB("BA -> AB"));
-//        tests.add(new Connect_BA_BA("BA -> BA"));
-//        tests.add(new Connect_BA_BB("BA -> BB"));
+        tests.add(new Connect_B_BB("B -> BB (asks for B without client cert)"));
 
         /*just for reference, the attacker wouldn't have this ability*/
-//        tests.add(new Connect_BB_AA("BB -> AA (baseCase reversed)"));
-        tests.add(new Connect_BB_BB("BB -> BB (reconnect to B)"));
-//        tests.add(new Connect_BB_XX("BB -> XX"));
-//        tests.add(new Connect_BB_BB_CertA("BB -> BB (with certA)"));
-        tests.add(new Connect_BB_BB_noCert("BB* -> BB (*but no ClientCert for B)"));
+        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)"));
+        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)"));
+        tests.add(new Connect_B_BB_test_CertA("B -> BB (with certA)"));
+        tests.add(new Connect_B_XX_test("B -> XX"));
 
         return tests;
     }

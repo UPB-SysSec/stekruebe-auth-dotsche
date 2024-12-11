@@ -8,27 +8,28 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class Connect_AB_BA extends RefTestCase {
-    public Connect_AB_BA(String name) {
+public class Connect_B_AA_test extends RefTestCase {
+    public Connect_B_AA_test(String name) {
         super(name);
-        expectedTestOutcome = new TestOutcome[]{
+        expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
                 TestOutcome.secondRequest_http421_misdirectedRequest
         };
     }
 
+    //getStateA is the same as in baseTestCase
+
     public State getStateA() {
-        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
-        if (siteANeedsCert) config = applyCert(config, siteAClientCert);
+        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        if (siteBNeedsCert) config = applyCert(config, siteBClientCert);
         WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
     }
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
+        Config config = BaseConfigCreator.buildConfig(port, siteADomain);
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteADomain);
         return new State(config, trace);
     }
-
 }

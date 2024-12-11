@@ -7,8 +7,8 @@ import org.felix.thesis.BaseConfigCreator;
 import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 
-public class Connect_BB_BB_noCert extends Connect_BB_BB {
-    public Connect_BB_BB_noCert(String name) {
+public class Connect_B_BB extends Connect_B_BB_test {
+    public Connect_B_BB(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.firstRequest_tlsAlert_unexpectedMessage
@@ -18,6 +18,7 @@ public class Connect_BB_BB_noCert extends Connect_BB_BB {
     public State getStateA() {
         Config config = BaseConfigCreator.buildConfig(port, siteBDomain);
         //this test expects to fail at the first request
+        //because we do not send the necessary client cert for site B
         WorkflowTrace trace = BaseWorkflowCreator.getNormalWorkflowTrace(config, siteBDomain);
         return new State(config, trace);
     }

@@ -8,11 +8,11 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class Connect_AA_XX extends RefTestCase {
+public class Connect_A_XX extends RefTestCase {
     /**
      * we reconnect to site A, but the second request requests an invalid domain
      */
-    public Connect_AA_XX(String name) {
+    public Connect_A_XX(String name) {
         super(name);
         expectedTestOutcome = new TestOutcome[]{
                 TestOutcome.secondRequest_tlsAlert_internalError,
