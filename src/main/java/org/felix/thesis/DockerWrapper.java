@@ -65,13 +65,13 @@ public class DockerWrapper {
             result = _exec(
                 String.format("docker build -q -t %s -f %s .", imageName, dockerFilePath.toString()),
                 new String[0],
-                new File("../setups/"),
-                5*1000
+                new File("./setups/"),
+                10*1000
             );
         } catch (IOException e) {
-            return new DockerResult(e, "docker during build");
+            result = new DockerResult(e, "docker during build");
         } catch (InterruptedException e) {
-            return new DockerResult(e, "timeout during build");
+            result = new DockerResult(e, "timeout during build");
         }
         if (result.stdOut.contains("Error")) {
             result.exitVal = -1;
@@ -94,9 +94,6 @@ public class DockerWrapper {
         return result;
     }
 
-    public static DockerResult run(String imageName, String containerName) {
-        return run(imageName, containerName, false, 443);
-    }
     public static DockerResult run(String imageName, String containerName, boolean restart, int port) {
 
         if (isRunning(containerName)) {
@@ -132,6 +129,7 @@ public class DockerWrapper {
             result = _exec(
                     String.format("docker kill %s", containerName)
             );
+            return new DockerResult(); //ignore result of kill. we sometimes try to kill containers that aren't alive anymore
         } catch (IOException e) {
             result = new DockerResult(e, "IOException during kill");
         } catch (InterruptedException e) {

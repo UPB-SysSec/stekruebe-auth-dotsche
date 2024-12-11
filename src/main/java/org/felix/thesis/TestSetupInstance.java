@@ -52,8 +52,8 @@ public class TestSetupInstance {
         this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
         this.siteADomain = siteADomain;
         this.siteBDomain = siteBDomain;
-        this.siteACert = Path.of("../setups/shared/cert/keys/clientA.pem");
-        this.siteBCert = Path.of("../setups/shared/cert/keys/clientB.pem");
+        this.siteACert = Path.of("./setups/shared/cert/keys/clientA.pem");
+        this.siteBCert = Path.of("./setups/shared/cert/keys/clientB.pem");
 
         this.siteAUsesClientCert = siteAUsesClientCert;
         this.siteBUsesClientCert = siteBUsesClientCert;
@@ -81,7 +81,7 @@ public class TestSetupInstance {
         if (true) {
             // build docker containers
             LOGGER.info("building container");
-            //Path p = Path.of("../setups/nginx/domains/dockerfile");
+            //Path p = Path.of("./setups/nginx/domains/dockerfile");
             try {
                 result.dockerBuildResult =  DockerWrapper.build(this.name, this.dockerFilePath);
                 result.dockerBuildSuccessful = (result.dockerBuildResult.exitVal == 0);
