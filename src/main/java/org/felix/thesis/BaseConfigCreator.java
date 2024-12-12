@@ -40,6 +40,9 @@ public class BaseConfigCreator {
         if (version != null) {
             config.setDefaultSelectedProtocolVersion(version);
             config.setHighestProtocolVersion(version);
+        } else {
+            config.setDefaultSelectedProtocolVersion(ProtocolVersion.TLS12);
+            config.setHighestProtocolVersion(ProtocolVersion.TLS12);
         }
         if(config.getHighestProtocolVersion().isTLS13()) {
             config.setAddSupportedVersionsExtension(true);
