@@ -17,6 +17,7 @@ import de.rub.nds.tlsattacker.core.workflow.factory.WorkflowTraceType;
 import de.rub.nds.tlsattacker.transport.ConnectionEndType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.felix.thesis.custom.HostHeaderCustom;
 
 import java.util.*;
 
@@ -69,9 +70,9 @@ public class BaseWorkflowCreator {
     private static HttpRequestMessage buildHTTPRequestMessage(Config config, String domain) {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
         ArrayList<HttpHeader> headers = new ArrayList<>();
-//        HostHeader hostHeader = new HostHeaderCustom(domain);
-        HostHeader hostHeader = new HostHeader();
-        hostHeader.setHeaderValue(domain);
+        HostHeader hostHeader = new HostHeaderCustom(domain);
+//        HostHeader hostHeader = new HostHeader();
+//        hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
         reqMessage.setHeader(headers);
         return reqMessage;
