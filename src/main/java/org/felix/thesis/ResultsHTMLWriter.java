@@ -37,11 +37,14 @@ public class ResultsHTMLWriter {
             sb.append(">\n"); // one setup per row
             sb.append("<td>").append(testRes.setupName).append("</td>"); //name row
             for (TestCaseResult caseRes : testRes.results) {
-                sb.append("<td");
+                sb.append("<td class=\"");
                 if (!caseRes.wasOutcomeExpected()) { //add ".unexpected" class if outcome is not normal
-                    sb.append(" class=\"unexpected\"");
+                    sb.append("unexpected");
                 }
-                sb.append(">");
+                if (caseRes.testName.startsWith("[D]")) {
+                    sb.append(" cheat");
+                }
+                sb.append("\">");
                 sb.append(caseRes.testOutcome).append("</td>");
             }
             sb.append("\n</rt>\n");
@@ -94,6 +97,10 @@ td:first-child {
 .unexpected {
   color: red;
   font-weight: bold;
+}
+.cheat {
+  color: gray !important;
+  font-style: italic;
 }
 tr:nth-child(2n) > td {
   background: #e8e8e8;

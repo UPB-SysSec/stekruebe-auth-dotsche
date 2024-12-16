@@ -71,8 +71,6 @@ public class BaseWorkflowCreator {
         HttpRequestMessage reqMessage = new HttpRequestMessage(config);
         ArrayList<HttpHeader> headers = new ArrayList<>();
         HostHeader hostHeader = new HostHeaderCustom(domain);
-//        HostHeader hostHeader = new HostHeader();
-//        hostHeader.setHeaderValue(domain);
         headers.add(hostHeader);
         reqMessage.setHeader(headers);
         return reqMessage;
@@ -114,13 +112,17 @@ public class BaseWorkflowCreator {
         MessageAction action =
                 MessageActionFactory.createTLSAction(
                         config, connection, ConnectionEndType.CLIENT, new ApplicationMessage());
-        trace.addTlsAction(action);
         action.getHttpMessages().add(buildHTTPRequestMessage(config, domain));
+        action.setActionOptions(Set.of(ActionOption.MAY_FAIL));
+        trace.addTlsAction(action);
+
         action =
                 MessageActionFactory.createTLSAction(
                         config, connection, ConnectionEndType.SERVER, new ApplicationMessage());
-        trace.addTlsAction(action);
         action.getHttpMessages().add(new HttpResponseMessage());
+        action.setActionOptions(Set.of(ActionOption.MAY_FAIL));
+        trace.addTlsAction(action);
+
         return trace;
     }
 

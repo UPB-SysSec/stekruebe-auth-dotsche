@@ -45,12 +45,12 @@ public class TestCasesBuilder {
             we do this just for reference, the attacker wouldn't have this ability in our attack scenario
             these cases are labeled as '_test' for this reason
         */
-        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed)", ProtocolVersion.TLS12));
-        tests.add(new Connect_B_AA_test("B -> AA (baseCase reversed) TLS 1.3", ProtocolVersion.TLS13));
-        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B)", ProtocolVersion.TLS12));
-        tests.add(new Connect_B_BB_test("B -> BB (reconnect to B) TLS 1.3", ProtocolVersion.TLS13));
-        tests.add(new Connect_B_XX_test("B -> XX", ProtocolVersion.TLS12));
-        tests.add(new Connect_B_XX_test("B -> XX TLS 1.3", ProtocolVersion.TLS13));
+        tests.add(new Connect_B_AA_test("[D] B -> AA (baseCase reversed)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_AA_test("[D] B -> AA (baseCase reversed) TLS 1.3", ProtocolVersion.TLS13));
+        tests.add(new Connect_B_BB_test("[D] B -> BB (reconnect to B)", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_BB_test("[D] B -> BB (reconnect to B) TLS 1.3", ProtocolVersion.TLS13));
+        tests.add(new Connect_B_XX_test("[D] B -> XX", ProtocolVersion.TLS12));
+        tests.add(new Connect_B_XX_test("[D] B -> XX TLS 1.3", ProtocolVersion.TLS13));
 
         return tests;
     }
