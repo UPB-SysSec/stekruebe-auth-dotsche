@@ -32,39 +32,15 @@ public class BaseWorkflowCreator {
     public static WorkflowTrace getNormalWorkflowTrace(Config config) {
         WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
         WorkflowTrace trace = factory.createWorkflowTrace(WorkflowTraceType.DYNAMIC_HTTPS, RunningModeType.CLIENT);
+        if(config.getHighestProtocolVersion().isTLS13()) {
+            // thanks to Post Handshake Tickets
+            // LiteSpeed especially seems to take this long
+            trace.addTlsAction(new WaitAction(20000));
+            trace.addTlsAction(new ReceiveTillAction(new ApplicationMessage()));
+        }
         return trace;
     }
 
-    public static WorkflowTrace getNormalWorkflowTrace_13(Config config, String domain) {
-        LOGGER.info("domain for 1.3 workflow: {}", domain);
-        AliasedConnection connection = config.getDefaultClientConnection();
-        WorkflowTrace trace = new WorkflowTrace();
-
-
-        trace.addTlsAction(new SendAction(new ClientHelloMessage(config)));
-
-        trace.addTlsAction(new ReceiveTillAction(new FinishedMessage()));
-
-        trace.addTlsAction(new SendAction(
-                new ChangeCipherSpecMessage(),
-                new FinishedMessage()
-        ));
-        // send the http message
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.CLIENT,
-                        buildHTTPRequestMessage(config, domain)
-                ));
-        // receive the http answer
-        trace.addTlsAction(createHttpAction(
-                        config,
-                        connection,
-                        ConnectionEndType.SERVER,
-                        new HttpResponseMessage()
-                ));
-        return trace;
-    }
 
 
     private static HttpRequestMessage buildHTTPRequestMessage(Config config, String domain) {
