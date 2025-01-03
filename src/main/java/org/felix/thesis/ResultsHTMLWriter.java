@@ -94,6 +94,10 @@ td:first-child {
   left: 0;
   box-shadow: 2px 0px 2px -1px #0008;
 }
+/* vertical line after 2 cols */
+td:nth-child(2n+1) {
+  border-right-width: 2px;
+}
 .unexpected {
   color: red;
   font-weight: bold;
@@ -105,7 +109,7 @@ td:first-child {
 tr:nth-child(2n) > td {
   background: #e8e8e8;
 }
-// this but starting count at 1
+/* to have a line after x, x_defaultB, x_defaultC */
 tr:nth-child(3n+1) > td {
   border-bottom: 4px solid black;
 }

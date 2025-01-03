@@ -5,7 +5,7 @@ FROM litespeedtech/litespeed
 RUN rm -rf /usr/local/lsws/conf/templates
 RUN rm -rf /usr/local/lsws/conf/cert
 
-COPY closedlitespeed/subdomains_certA/config/conf /usr/local/lsws/conf
+COPY closedlitespeed/subdomains_certA_defaultC/config/conf /usr/local/lsws/conf
 
 # ------ COPY KEYS AND CONTENT ------
 COPY shared/cert/keys /keys

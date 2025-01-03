@@ -2,7 +2,7 @@ FROM caddy:2.8.4-alpine
 
 
 # ------ COPY CADDY CONFIG ------
-COPY caddy/domains/config/Caddyfile /etc/caddy/Caddyfile
+COPY caddy/domains_defaultC/config/Caddyfile /etc/caddy/Caddyfile
 COPY site-content /srv
 
 # ------ COPY KEYS ------

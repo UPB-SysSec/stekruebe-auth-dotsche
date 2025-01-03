@@ -48,10 +48,10 @@ public class TestManager {
         var setups = new ArrayList<TestSetupInstance>();
 
         List<String> folderNames = List.of(
-                //"apache",
-                //"caddy",
-                //"nginx",
-                "closedlitespeed"
+//                "apache",
+//                "caddy",
+                "nginx"
+//                "closedlitespeed"
         ); //the subfolders to search for setups in
         //boolean disableCertA = false; //flag to disable the inclusion of CertA setups
         //boolean disableOpen = true; //flag to disable the '_open' setups
@@ -76,8 +76,8 @@ public class TestManager {
                             continue setups_loop;
                         }
                     }
-                    switch (name) {
-                        case "domains", "domains_defaultB", "domains_defaultC":
+                    switch (name.toLowerCase()) {
+                        case "domains", "domains_defaultb", "domains_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -90,7 +90,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "domains_certA", "domains_certA_defaultB", "domains_certA_defaultC":
+                        case "domains_certa", "domains_certa_defaultb", "domains_certa_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -103,7 +103,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "subdomains":
+                        case "subdomains", "subdomains_defaultb", "subdomains_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -116,7 +116,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "subdomains_certA":
+                        case "subdomains_certa", "subdomains_certa_defaultb", "subdomains_certa_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -166,7 +166,7 @@ public class TestManager {
      * same as run, but in parallel ;)
      */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(6);
+        ExecutorService executor = Executors.newFixedThreadPool(12);
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }

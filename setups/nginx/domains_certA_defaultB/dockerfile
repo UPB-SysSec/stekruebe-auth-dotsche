@@ -7,7 +7,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY site-content /data/www
 
 RUN rm -f /etc/nginx/nginx.conf
-COPY nginx/domains_certA/config/*.conf /etc/nginx/
+COPY nginx/domains_certA_defaultB/config/*.conf /etc/nginx/
 
 # ------ COPY KEYS ------
 RUN mkdir /keys
