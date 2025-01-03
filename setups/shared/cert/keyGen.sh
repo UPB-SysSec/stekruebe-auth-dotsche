@@ -46,6 +46,10 @@ cat subdomainA.crt siteA.key > subdomainA.pem
 openssl req -key siteB.key -new -out subdomainB.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteB.site.org"  # create signing request
 openssl x509 -req -days 365 -in subdomainB.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out subdomainB.crt    # have the authority sign the request
 cat subdomainB.crt siteB.key > subdomainB.pem
+# create subdomainC cert
+openssl req -key siteC.key -new -out subdomainC.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteC.site.org"  # create signing request
+openssl x509 -req -days 365 -in subdomainC.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out subdomainC.crt    # have the authority sign the request
+cat subdomainC.crt siteC.key > subdomainC.pem
 
 # create site cert (for differentiation by path)
 openssl req -key siteA.key -new -out siteAB.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteAB.org"  # create signing request
