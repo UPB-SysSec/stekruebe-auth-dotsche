@@ -105,6 +105,10 @@ td:first-child {
 tr:nth-child(2n) > td {
   background: #e8e8e8;
 }
+// this but starting count at 1
+tr:nth-child(3n+1) > td {
+  border-bottom: 4px solid black;
+}
 .open>td:not(:first-child) {
     color: gray;
 }
