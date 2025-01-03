@@ -48,25 +48,36 @@ public class TestManager {
         var setups = new ArrayList<TestSetupInstance>();
 
         List<String> folderNames = List.of(
-                "apache",
-                "caddy",
-                "nginx",
-                "openlitespeed"
+                //"apache",
+                //"caddy",
+                //"nginx",
+                "closedlitespeed"
         ); //the subfolders to search for setups in
-        boolean disableCertA = false; //flag to disable the inclusion of CertA setups
-        boolean disableOpen = true; //flag to disable the '_open' setups
+        //boolean disableCertA = false; //flag to disable the inclusion of CertA setups
+        //boolean disableOpen = true; //flag to disable the '_open' setups
+        List<String> disabledFeatures = List.of(
+//                "certA",
+                "open"
+//                "subdomains"
+        );
+
 
         for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
             if (!elem.isDirectory()) {continue;}
             if (folderNames.contains(elem.getName())) {
+                setups_loop:
                 for (File setup : Objects.requireNonNull(elem.listFiles())) {
                     if (!setup.isDirectory()) {continue;}
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
-                    if (name.endsWith("certA") && disableCertA) {continue;}
-                    if (name.endsWith("open") && disableOpen) {continue;}
+                    for(String feature : disabledFeatures) {
+                        if (name.contains(feature)) {
+                            LOGGER.info("skipping {}", name);
+                            continue setups_loop;
+                        }
+                    }
                     switch (name) {
-                        case "domains", "domains_defaultB":
+                        case "domains", "domains_defaultB", "domains_defaultC":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -79,7 +90,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "domains_certA":
+                        case "domains_certA", "domains_certA_defaultB", "domains_certA_defaultC":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -163,7 +174,7 @@ public class TestManager {
             Thread.sleep(100L);
             executor.shutdown();
 
-            boolean finishedInTime = executor.awaitTermination(500, TimeUnit.SECONDS);
+            boolean finishedInTime = executor.awaitTermination(this.setups.size()*120, TimeUnit.SECONDS);
             if (!finishedInTime) {
                 LOGGER.error("executor timeout reached");
             }
