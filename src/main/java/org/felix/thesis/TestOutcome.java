@@ -24,6 +24,7 @@ public enum TestOutcome {
 
     secondRequest_http200_contentA,
     secondRequest_http200_contentB,
+    getSecondRequest_http200_contentC,
     secondRequest_http200_unknownContent,
      firstRequest_http400_badRequest,
     secondRequest_http400_badRequest,
