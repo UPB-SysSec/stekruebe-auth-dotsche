@@ -23,6 +23,7 @@ cat ca_s.crt ca_s.key > ca_s.pem
 echo "#creating Server Certs"
 openssl genrsa -out siteA.key 4096 # create siteA key
 openssl genrsa -out siteB.key 4096 # create siteB key
+openssl genrsa -out siteC.key 4096 # create siteB key
 
 # create domainA cert
 openssl req -key siteA.key -new -out siteA.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteA.org"  # create signing request
@@ -32,6 +33,10 @@ cat siteA.crt siteA.key > siteA.pem
 openssl req -key siteB.key -new -out siteB.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteB.org"  # create signing request
 openssl x509 -req -days 365 -in siteB.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out siteB.crt    # have the authority sign the request
 cat siteB.crt siteB.key > siteB.pem
+
+openssl req -key siteC.key -new -out siteC.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteC.org"  # create signing request
+openssl x509 -req -days 365 -in siteC.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out siteC.crt    # have the authority sign the request
+cat siteC.crt siteC.key > siteC.pem
 
 # create subdomainA cert
 openssl req -key siteA.key -new -out subdomainA.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteA.site.org"  # create signing request
