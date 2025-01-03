@@ -31,6 +31,11 @@
       <vhRoot>$SERVER_ROOT/conf/vhosts/siteB</vhRoot>
       <configFile>$VH_ROOT/vhconf.xml</configFile>
     </virtualHost>
+    <virtualHost>
+      <name>siteC</name>
+      <vhRoot>$SERVER_ROOT/conf/vhosts/siteC</vhRoot>
+      <configFile>$VH_ROOT/vhconf.xml</configFile>
+    </virtualHost>
   </virtualHostList>
 
   <listenerList>
@@ -41,12 +46,16 @@
       <vhostMapList>
         <vhostMap>
           <vhost>siteA</vhost>
-          <domain>*</domain>
+          <domain>sitea.org</domain>
         </vhostMap>
 
         <vhostMap>
           <vhost>siteB</vhost>
           <domain>siteb.org</domain>
+        </vhostMap>
+        <vhostMap>
+          <vhost>siteC</vhost>
+          <domain>*</domain>
         </vhostMap>
 
       </vhostMapList>

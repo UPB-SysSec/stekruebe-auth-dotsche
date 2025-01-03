@@ -41,12 +41,12 @@
       <vhostMapList>
         <vhostMap>
           <vhost>siteA</vhost>
-          <domain>*</domain>
+          <domain>sitea.org</domain>
         </vhostMap>
 
         <vhostMap>
           <vhost>siteB</vhost>
-          <domain>siteb.org</domain>
+          <domain>*</domain>
         </vhostMap>
 
       </vhostMapList>
