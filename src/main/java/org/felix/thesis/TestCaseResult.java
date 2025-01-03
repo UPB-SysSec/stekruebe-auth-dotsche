@@ -116,6 +116,8 @@ public class TestCaseResult {
                             return TestOutcome.secondRequest_http200_contentA;
                         } else if (siteContentB.toLowerCase().contains("site b") ||  siteContentB.toLowerCase().contains("siteb")) {
                             return TestOutcome.secondRequest_http200_contentB;
+                        } else if (siteContentB.toLowerCase().contains("site c") ||  siteContentB.toLowerCase().contains("sitec")) {
+                            return TestOutcome.secondRequest_http200_contentC;
                         } else {
                             //what
                             return TestOutcome.secondRequest_http200_unknownContent;
