@@ -1,6 +1,6 @@
 indentStack = []
-with open("../setups/openlitespeed/domains/config/conf/httpd_config.xml", "w", encoding="UTF-8") as out:
-    with open("../setups/openlitespeed/domains/config/conf/httpd_config.conf", "r", encoding="UTF-8") as inp:
+with open("../setups/closedlitespeed/domains/config/conf/httpd_config.xml", "w", encoding="UTF-8") as out:
+    with open("../setups/closedlitespeed/domains/config/conf/httpd_config.conf", "r", encoding="UTF-8") as inp:
         for line in inp:
             line = line.strip()
             if line.startswith("#") or line=="": continue

@@ -6,6 +6,7 @@ import de.rub.nds.tlsattacker.core.constants.RunningModeType;
 import de.rub.nds.tlsattacker.core.http.HttpMessage;
 import de.rub.nds.tlsattacker.core.http.HttpRequestMessage;
 import de.rub.nds.tlsattacker.core.http.HttpResponseMessage;
+import de.rub.nds.tlsattacker.core.http.header.GenericHttpHeader;
 import de.rub.nds.tlsattacker.core.http.header.HttpHeader;
 import de.rub.nds.tlsattacker.core.http.header.HostHeader;
 import de.rub.nds.tlsattacker.core.protocol.message.*;
@@ -32,10 +33,20 @@ public class BaseWorkflowCreator {
     public static WorkflowTrace getNormalWorkflowTrace(Config config) {
         WorkflowConfigurationFactory factory = new WorkflowConfigurationFactory(config);
         WorkflowTrace trace = factory.createWorkflowTrace(WorkflowTraceType.DYNAMIC_HTTPS, RunningModeType.CLIENT);
+
+        // work around for LiteSpeed because this is base TLS-Attacker
+        if (trace.getLastSendingAction() != null) {
+            SendAction lastSendAction = (SendAction) trace.getLastSendingAction();
+            HttpRequestMessage request = (HttpRequestMessage) lastSendAction.getHttpMessages().get(0);
+            // WARNING: THIS IS SUPER FUCKING JANKY, but also the HTTP header thing is just fucked
+            request.getHeader().remove(1);
+            request.getHeader().add(1, new GenericHttpHeader("Connection", "close"));
+        }
+
         if(config.getHighestProtocolVersion().isTLS13()) {
             // thanks to Post Handshake Tickets
             // LiteSpeed especially seems to take this long
-            trace.addTlsAction(new WaitAction(20000));
+            trace.addTlsAction(new WaitAction(1000));
             trace.addTlsAction(new ReceiveTillAction(new ApplicationMessage()));
         }
         return trace;
@@ -48,6 +59,11 @@ public class BaseWorkflowCreator {
         ArrayList<HttpHeader> headers = new ArrayList<>();
         HostHeader hostHeader = new HostHeaderCustom(domain);
         headers.add(hostHeader);
+
+        // forces LSWS to give ticket quickly
+//        GenericHttpHeader connectionHeader = new GenericHttpHeader("Connection", "close");
+//        headers.add(connectionHeader);
+
         reqMessage.setHeader(headers);
         return reqMessage;
     }

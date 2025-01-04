@@ -51,22 +51,33 @@ public class TestManager {
                 "apache",
                 "caddy",
                 "nginx",
-                "openlitespeed"
+                "closedlitespeed"
         ); //the subfolders to search for setups in
-        boolean disableCertA = false; //flag to disable the inclusion of CertA setups
-        boolean disableOpen = true; //flag to disable the '_open' setups
+        //boolean disableCertA = false; //flag to disable the inclusion of CertA setups
+        //boolean disableOpen = true; //flag to disable the '_open' setups
+        List<String> disabledFeatures = List.of(
+//                "certA",
+                "open"
+//                "subdomains"
+        );
+
 
         for (File elem : Objects.requireNonNull(setupsFolder.listFiles())) {
             if (!elem.isDirectory()) {continue;}
             if (folderNames.contains(elem.getName())) {
+                setups_loop:
                 for (File setup : Objects.requireNonNull(elem.listFiles())) {
                     if (!setup.isDirectory()) {continue;}
                     String name = setup.getName();
                     if (name.startsWith(".")) {continue;}
-                    if (name.endsWith("certA") && disableCertA) {continue;}
-                    if (name.endsWith("open") && disableOpen) {continue;}
-                    switch (name) {
-                        case "domains", "domains_defaultB":
+                    for(String feature : disabledFeatures) {
+                        if (name.contains(feature)) {
+                            LOGGER.info("skipping {}", name);
+                            continue setups_loop;
+                        }
+                    }
+                    switch (name.toLowerCase()) {
+                        case "domains", "domains_defaultb", "domains_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -79,7 +90,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "domains_certA":
+                        case "domains_certa", "domains_certa_defaultb", "domains_certa_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -92,7 +103,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "subdomains":
+                        case "subdomains", "subdomains_defaultb", "subdomains_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -105,7 +116,7 @@ public class TestManager {
                             );
                             port++; //next test should get next port
                             break;
-                        case "subdomains_certA":
+                        case "subdomains_certa", "subdomains_certa_defaultb", "subdomains_certa_defaultc":
                             setups.add(new TestSetupInstance(
                                     port,
                                     (List<RefTestCase>) this.testsCreator.call(),
@@ -163,7 +174,7 @@ public class TestManager {
             Thread.sleep(100L);
             executor.shutdown();
 
-            boolean finishedInTime = executor.awaitTermination(20*60, TimeUnit.SECONDS); //500s was too short for the new wait times :|
+            boolean finishedInTime = executor.awaitTermination(this.setups.size()*120, TimeUnit.SECONDS); //500s was too short for the new wait times :|
             LOGGER.info("awaitTermination done");
             if (!finishedInTime) {
                 LOGGER.error("\n------------------------");

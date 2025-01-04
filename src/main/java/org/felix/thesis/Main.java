@@ -33,6 +33,17 @@ public class Main {
             LOGGER.info("{} on port {}", res.setupName, res.port);
         }
 
+        // order results in a way that _certA setups are next to each other
+        results.sort((a, b) -> {
+            if (a.setupName.contains("_certa") && !b.setupName.contains("_certa")) {
+                return -1;
+            } else if (!a.setupName.contains("_certa") && b.setupName.contains("_certa")) {
+                return 1;
+            } else {
+                return a.setupName.compareTo(b.setupName);
+            }
+        });
+
         //write results to file
         ResultsHTMLWriter.writeToFile(results, Path.of("./result.html"));
     }

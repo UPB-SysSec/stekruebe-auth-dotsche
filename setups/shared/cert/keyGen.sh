@@ -23,6 +23,7 @@ cat ca_s.crt ca_s.key > ca_s.pem
 echo "#creating Server Certs"
 openssl genrsa -out siteA.key 4096 # create siteA key
 openssl genrsa -out siteB.key 4096 # create siteB key
+openssl genrsa -out siteC.key 4096 # create siteB key
 
 # create domainA cert
 openssl req -key siteA.key -new -out siteA.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteA.org"  # create signing request
@@ -33,6 +34,10 @@ openssl req -key siteB.key -new -out siteB.csr -subj "/C=DE/ST=/L=researchCity/O
 openssl x509 -req -days 365 -in siteB.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out siteB.crt    # have the authority sign the request
 cat siteB.crt siteB.key > siteB.pem
 
+openssl req -key siteC.key -new -out siteC.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteC.org"  # create signing request
+openssl x509 -req -days 365 -in siteC.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out siteC.crt    # have the authority sign the request
+cat siteC.crt siteC.key > siteC.pem
+
 # create subdomainA cert
 openssl req -key siteA.key -new -out subdomainA.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteA.site.org"  # create signing request
 openssl x509 -req -days 365 -in subdomainA.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out subdomainA.crt    # have the authority sign the request
@@ -41,6 +46,10 @@ cat subdomainA.crt siteA.key > subdomainA.pem
 openssl req -key siteB.key -new -out subdomainB.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteB.site.org"  # create signing request
 openssl x509 -req -days 365 -in subdomainB.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out subdomainB.crt    # have the authority sign the request
 cat subdomainB.crt siteB.key > subdomainB.pem
+# create subdomainC cert
+openssl req -key siteC.key -new -out subdomainC.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteC.site.org"  # create signing request
+openssl x509 -req -days 365 -in subdomainC.csr -CA ca_s.crt -CAkey ca_s.key -set_serial 01 -out subdomainC.crt    # have the authority sign the request
+cat subdomainC.crt siteC.key > subdomainC.pem
 
 # create site cert (for differentiation by path)
 openssl req -key siteA.key -new -out siteAB.csr -subj "/C=DE/ST=/L=researchCity/O=/OU=/CN=siteAB.org"  # create signing request

@@ -31,6 +31,8 @@ public class TestCasesBuilder {
         tests.add(new Connect_A_BA("A -> BA TLS 1.3", ProtocolVersion.TLS13));
         tests.add(new Connect_A_BB("A -> BB (Base Test Case)", ProtocolVersion.TLS12));
         tests.add(new Connect_A_BB("A -> BB (Base Test Case) TLS 1.3", ProtocolVersion.TLS13));
+        tests.add(new Connect_A_nA("A -> nA", ProtocolVersion.TLS12));
+        tests.add(new Connect_A_nA("A -> nA TLS 1.3", ProtocolVersion.TLS13));
         tests.add(new Connect_A_nB("A -> nB", ProtocolVersion.TLS12));
         tests.add(new Connect_A_nB("A -> nB TLS 1.3", ProtocolVersion.TLS13));
         tests.add(new Connect_A_XX("A -> XX", ProtocolVersion.TLS12));
