@@ -155,7 +155,7 @@ public class TestManager {
      * same as run, but in parallel ;)
      */
     public void runParallel() {
-        ExecutorService executor = Executors.newFixedThreadPool(6);
+        ExecutorService executor = Executors.newFixedThreadPool(this.setups.size());
         for (TestSetupInstance setup : this.setups) {
             executor.execute(setup::runTests);
         }
@@ -163,11 +163,16 @@ public class TestManager {
             Thread.sleep(100L);
             executor.shutdown();
 
-            boolean finishedInTime = executor.awaitTermination(500, TimeUnit.SECONDS);
+            boolean finishedInTime = executor.awaitTermination(20*60, TimeUnit.SECONDS); //500s was too short for the new wait times :|
+            LOGGER.info("awaitTermination done");
             if (!finishedInTime) {
+                LOGGER.error("\n------------------------");
                 LOGGER.error("executor timeout reached");
+                LOGGER.error("------------------------\n");
+                executor.shutdown();
             }
         } catch (InterruptedException ignored) {}
+        LOGGER.info("runParallel done");
     }
 
     /**
