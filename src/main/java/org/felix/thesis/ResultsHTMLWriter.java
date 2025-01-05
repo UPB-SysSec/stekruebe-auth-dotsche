@@ -14,7 +14,7 @@ public class ResultsHTMLWriter {
     public static void writeToFile(List<TestSetupResult> res, Path path) {
         StringBuilder sb = new StringBuilder();
         sb.append(ResultsHTMLWriter.getPreText());
-        sb.append("<table>");
+        sb.append("<table id='table'>");
 
         //table:
         //  columns ~ tests
@@ -47,7 +47,7 @@ public class ResultsHTMLWriter {
                 sb.append("\">");
                 sb.append(caseRes.testOutcome).append("</td>");
             }
-            sb.append("\n</rt>\n");
+            sb.append("\n</tr>\n");
         }
 
         sb.append("</table>");
@@ -79,12 +79,10 @@ td, th {
 }
 th {
   border-bottom-width: 2px;
-  position: sticky;
+  position: sticky;  
+  z-index: 2;
   top: 0;
   box-shadow: 0px 2px 2px -1px #0008;
-}
-th:first-child {
-  z-index: 1;
 }
 th:first-child,
 td:first-child {
@@ -92,7 +90,14 @@ td:first-child {
   border-right-width: 2px;
   position: sticky;
   left: 0;
+  z-index: 2;
   box-shadow: 2px 0px 2px -1px #0008;
+}
+th:first-child {
+  z-index: 3;
+}
+td:not(:first-child) {
+  position: relative;
 }
 /* vertical line after 2 cols */
 td:nth-child(2n+1) {
@@ -116,7 +121,135 @@ tr:nth-child(3n+1) > td {
 .open>td:not(:first-child) {
     color: gray;
 }
+.flag {
+  --w: 24px;
+  opacity: .3;
+  width: var(--w);
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.flag:nth-last-of-type(2) {
+  right: calc(1 * var(--w))
+}
+.flag:nth-last-of-type(3) {
+  right: calc(2 * var(--w))
+}
+.flag:nth-last-of-type(4) {
+  right: calc(3 * var(--w))
+}
+.flag:hover {
+  outline: #000a 3px solid;
+  outline-offset: -3px;
+}
 </style>
+<script>
+var d = {};
+
+document.addEventListener("DOMContentLoaded", function() {
+  d.table = document.getElementById('table');
+  d.rows = Array.from(table.querySelectorAll('tbody tr'));
+  d.header = d.rows.shift()
+  d.getTR = getTR
+  d.getFirstTD = getFirstTD
+  highlightContent();
+  highlightSubDomainSiblings();
+  highlightBCSiblings();
+});
+
+function getFirstTD(td) {
+  return getTR(td).children[0]
+}
+function getTR(td) {
+  return td.parentElement
+}
+function getTH(td) {
+  var index = Array.prototype.indexOf.call(td.parentNode.children, td)
+  return table.querySelector('th:nth-child(' + (index+1) + ')')
+}
+function getTD(tr, th) { 
+  var index = Array.prototype.indexOf.call(th.parentNode.children, th)
+  return tr.children[index]
+}
+
+function strGetTR(td_s) { //get tr from string
+  for (let tr of d.rows) {
+    if (tr.children[0].innerText==td_s) {
+      return tr
+    }
+  }
+}
+function domToSub(tr) { //get _subdomains row from _domains row
+  var subName = tr.children[0].textContent.replace('domains', 'subdomains')
+  return strGetTR(subName)
+}
+function getDefBC(tr) { //get _defaultb and _defaultc rows from standard row
+  var name = tr.children[0].textContent
+  return [strGetTR(name+"_defaultb"), strGetTR(name+"_defaultc")]
+}
+
+function highlightContent() { //highlight all cells where _domain != _subdomain
+  for (let row of d.rows) {
+    for (let cell of row.children) {
+      if (cell==row.children[0]) continue //skip header
+      if (!cell.classList.contains("unexpected")) continue //skip where expected
+      if (cell.textContent.includes("contentA")) {
+        addFlag(cell, "#af0", "gives contentA when we didn't ask")
+      }
+      else if (cell.textContent.includes("contentB")) {
+        addFlag(cell, "#f00", "leaks contentB!")
+      }
+      else if (cell.textContent.includes("contentB")) {
+        addFlag(cell, "#af0", "gives contentC when we didn't ask")
+      }
+    }
+  }
+}
+function highlightSubDomainSiblings() { //highlight all cells where _domain != _subdomain
+  for (let row of d.rows) {
+    if (!row.children[0].textContent.includes("_domains_")) {continue}
+
+    const subTR = domToSub(row)
+
+    for (let cell of row.children) {
+      if (cell==row.children[0]) continue //skip header
+      const th = getTH(cell)
+      const sibling = getTD(subTR, th)
+      if (cell.textContent != sibling.textContent) {
+        addFlag(cell, "#fa0", "different than in _subdomains_")
+        addFlag(sibling, "#fa0", "different than in _domains_")
+      }
+    }
+  }
+}
+function highlightBCSiblings() { //highlight all cells where standard != _defB != _defC
+  for (let row of d.rows) {
+    if (row.children[0].textContent.includes("_default")) {continue}
+    const bc = getDefBC(row)
+
+    for (let cell of row.children) {
+      if (cell==row.children[0]) continue //skip header
+      const th = getTH(cell)
+      const siblingB = getTD(bc[0], th)
+      const siblingC = getTD(bc[1], th)
+      if (cell.textContent != siblingB.textContent || cell.textContent != siblingC.textContent) {
+        addFlag(cell,"#0af", "different than in _defaultB or _defaultC")
+        addFlag(siblingB, "#0af", "different than in _defaultA or _defaultC")
+        addFlag(siblingC, "#0af", "different than in _defaultA or _defaultB")
+      }
+    }
+  }
+}
+
+function addFlag(td, color, title) { //adds a colored flag to the element
+  const flag = document.createElement("div")
+  flag.style.background = color
+  flag.classList.add("flag")
+  flag.setAttribute("title", title)
+  td.appendChild(flag)
+}
+</script>
 </head>
 <body>
 
