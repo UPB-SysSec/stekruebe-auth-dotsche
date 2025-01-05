@@ -153,7 +153,7 @@ document.addEventListener("DOMContentLoaded", function() {
   d.header = d.rows.shift()
   d.getTR = getTR
   d.getFirstTD = getFirstTD
-  highlightContent();
+  //highlightContent();
   highlightSubDomainSiblings();
   highlightBCSiblings();
 });
@@ -200,7 +200,7 @@ function highlightContent() { //highlight all cells where _domain != _subdomain
       else if (cell.textContent.includes("contentB")) {
         addFlag(cell, "#f00", "leaks contentB!")
       }
-      else if (cell.textContent.includes("contentB")) {
+      else if (cell.textContent.includes("contentC")) {
         addFlag(cell, "#af0", "gives contentC when we didn't ask")
       }
     }
