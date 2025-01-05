@@ -9,7 +9,7 @@
 }
 
 siteA.org {
-	tls /keys/siteA.pem /keys/siteA.key {
+	tls /keys/siteA.crt /keys/siteA.key {
 		load /keys
 	}
 	#tls {

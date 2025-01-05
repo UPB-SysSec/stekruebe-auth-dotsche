@@ -5,10 +5,11 @@
 		output stdout
 		level DEBUG
 	}
+	default_sni siteA.org
 }
 
 siteA.org {
-	tls /keys/siteA.pem /keys/siteA.key {
+	tls /keys/siteA.crt /keys/siteA.key {
 		load /keys
 	}
 	#tls {

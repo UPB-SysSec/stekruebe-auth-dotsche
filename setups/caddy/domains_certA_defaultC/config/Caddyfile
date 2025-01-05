@@ -41,7 +41,7 @@ siteB.org {
 }
 
 siteC.org {
-	tls /keys/siteC.pem /keys/siteC.key {
+	tls /keys/siteC.crt /keys/siteC.key {
 		load /keys
 	}
 	handle {

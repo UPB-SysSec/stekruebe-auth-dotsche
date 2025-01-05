@@ -5,6 +5,7 @@
 		output stdout
 		level DEBUG
 	}
+	default_sni sitec.site.org
 }
 
 siteA.site.org {
