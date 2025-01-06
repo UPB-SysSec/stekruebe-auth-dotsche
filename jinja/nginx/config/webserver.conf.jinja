@@ -61,13 +61,13 @@ server { # Site B
     # Catch SNIs which we do not host!
     # Simulates Strict-SNI validation as it declines every conn with unrecognized SNI
     server {
-        listen 443 ssl default_server;
+        listen 443 ssl;
         server_name _; # some invalid name that won't match anything
         ssl_certificate /certs/fallback.crt;
         ssl_certificate_key /certs/fallback.key;
-        {% if strict_sni == "HTTP" %}
+        {% if strictType == "HTTP" %}
         return 404;
-        {% elif strict_sni == "TLS" %}
+        {% elif strictType == "TLS" %}
         ssl_reject_handshake on;
         {% endif %}
     }
