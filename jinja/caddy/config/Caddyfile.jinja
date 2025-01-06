@@ -8,9 +8,11 @@
     {% if defaultSite -%}
     default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
     {% endif -%}
-    {% if strictType=="off" -%}
-    strict_sni_host insecure_off
-    {% endif -%}
+    {%- if strictType=="off" %}
+	servers {
+    	strict_sni_host insecure_off
+	}
+	{%- endif %}
 }
 
 siteA{{ ".site" if isSubdomain else "" }}.org {

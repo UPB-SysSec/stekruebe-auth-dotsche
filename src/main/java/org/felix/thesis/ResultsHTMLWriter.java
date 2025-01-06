@@ -185,9 +185,13 @@ function domToSub(tr) { //get _subdomains row from _domains row
   var subName = tr.children[0].textContent.replace('domains', 'subdomains')
   return strGetTR(subName)
 }
-function getDefBC(tr) { //get _defaultb and _defaultc rows from standard row
+function getDefBC(tr) { //get _defaultb and _d rows from _defaulta row
   var name = tr.children[0].textContent
-  return [strGetTR(name+"_defaultb"), strGetTR(name+"_defaultc")]
+  var r = []
+  r.push(strGetTR(name.replace("_defaulta", "_defaultb")))
+  r.push(strGetTR(name.replace("_defaulta", "")))
+  r = r.filter(n => n)
+  return r
 }
 function addCertA(tr) { //get _certa row from normal row
   var certAName = tr.children[0].textContent.replace('domains', 'domains_certa')
@@ -235,18 +239,24 @@ function highlightSubDomainSiblings() { //highlight all cells where _domain != _
 }
 function highlightBCSiblings() { //highlight all cells where standard != _defB != _defC
   for (let row of d.rows) {
-    if (row.children[0].textContent.includes("_default")) {continue}
+    if (!row.children[0].textContent.includes("_defaulta")) {continue}
     const bc = getDefBC(row)
 
     for (let cell of row.children) {
       if (cell==row.children[0]) continue //skip header
       const th = getTH(cell)
-      const siblingB = getTD(bc[0], th)
-      const siblingC = getTD(bc[1], th)
-      if (cell.textContent != siblingB.textContent || cell.textContent != siblingC.textContent) {
-        addFlag(cell,"#0af", "different than in _defaultB or _defaultC")
-        addFlag(siblingB, "#0af", "different than in _defaultA or _defaultC")
-        addFlag(siblingC, "#0af", "different than in _defaultA or _defaultB")
+      var same = true
+      for (let s of bc) {
+        if (getTD(s, th).textContent != cell.textContent) {
+          same = false
+          break
+        }
+      }
+      if (!same) {
+        addFlag(cell,"#0af", "different than in other _defaults")
+        for (let s of bc) {
+          addFlag(getTD(s, th), "#0af", "different than in other _defaults")
+        }
       }
     }
   }

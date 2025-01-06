@@ -57,7 +57,6 @@ public class TestManager {
         //boolean disableOpen = true; //flag to disable the '_open' setups
         List<String> disabledFeatures = List.of(
 //                "certA",
-                "open"
 //                "subdomains"
         );
 
