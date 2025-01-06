@@ -45,7 +45,7 @@ for d in os.listdir("."):
                         # build folder name
                         folderName  = "subdomains" if isSubdomain else "domains"
                         folderName += ("_certA" if isCertA else "")
-                        folderName += (f"_default{defaultSite[4:]}" if defaultSite else "")
+                        folderName += (f"_default{defaultSite[-1:]}" if defaultSite else "")
                         folderName += (f"_strict_{strictType}" if isStrict else "")
 
                         # build config
