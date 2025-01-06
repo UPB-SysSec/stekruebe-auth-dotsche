@@ -1,0 +1,74 @@
+server { # Site A
+    listen       443 ssl{{ " default_server" if defaultSite == "siteA" else "" }};
+    listen  [::]:443 ssl{{ " default_server" if defaultSite == "siteA" else "" }};
+
+    server_name  siteA{{".site" if isSubdomain else ""}}.org;
+
+    # ssl setup
+    ssl_certificate /keys/{{"subdomain" if isSubdomain else "site"}}A.crt;
+    ssl_certificate_key /keys/siteA.key;
+
+    {%- if isCertA %}
+    # client certificate
+    ssl_client_certificate /keys/user_ca_a.crt;
+    ssl_verify_client on; #or just 'on'
+
+    location / {
+        if ($ssl_client_verify != SUCCESS) {
+            return 403;
+        }
+
+        root /data/www/siteA;
+        index  index.html;
+    }
+    {% else %}
+    location / {
+         root /data/www/siteA;
+         index  index.html;
+    }
+    {% endif %}
+    
+    access_log  /var/log/nginx/host.access.log  main;
+}
+
+server { # Site B
+    listen       443 ssl{{ " default_server" if defaultSite == "siteB" else "" }};
+    listen  [::]:443 ssl{{ " default_server" if defaultSite == "siteB" else "" }};
+
+    server_name  siteB{{".site" if isSubdomain else ""}}.org;
+
+    # ssl setup
+    ssl_certificate /keys/{{"subdomain" if isSubdomain else "site"}}B.crt;
+    ssl_certificate_key /keys/siteB.key;
+
+    # client certificate
+    ssl_client_certificate /keys/user_ca_b.crt;
+    ssl_verify_client on; #or just 'on'
+
+    location / {
+        if ($ssl_client_verify != SUCCESS) {
+            return 403;
+        }
+
+        root /data/www/siteB;
+        index  index.html;
+    }
+    
+    access_log  /var/log/nginx/host.access.log  main;
+}
+
+{% if strict_sni %}
+    # Catch SNIs which we do not host!
+    # Simulates Strict-SNI validation as it declines every conn with unrecognized SNI
+    server {
+        listen 443 ssl default_server;
+        server_name _; # some invalid name that won't match anything
+        ssl_certificate /certs/fallback.crt;
+        ssl_certificate_key /certs/fallback.key;
+        {% if strict_sni == "HTTP" %}
+        return 404;
+        {% elif strict_sni == "TLS" %}
+        ssl_reject_handshake on;
+        {% endif %}
+    }
+{% endif %}
