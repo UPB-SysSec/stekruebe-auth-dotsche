@@ -1,5 +1,6 @@
 import os, shutil
 import jinja2
+from pprint import pprint
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
@@ -21,7 +22,8 @@ for d in os.listdir("."):
     dName = os.fsdecode(d)
     if dName.startswith("_"): continue #skip folders like _keys etc.
     
-    files = os.listdir(f"./{d}")
+    files = [f"{r}/{f}"[len(d)+3:] for r, sd, fn in os.walk(f"./{d}") for f in fn]
+    pprint(files)
     templates = []
     for file in files:
         with open(f"./{d}/{file}", "r", encoding="UTF-8") as f:
@@ -42,7 +44,7 @@ for d in os.listdir("."):
                         # build config
                         for fileName, template in templates:
                             fullName = f"{dName}/{folderName}/{fileName}"
-                            print(f"building '{fullName}'")
+                            #print(f"building '{fullName}'")
                             readyF = template.render(
                                 folderName =    folderName,
                                 isSubdomain =   isSubdomain,
@@ -51,7 +53,7 @@ for d in os.listdir("."):
                                 isStrict =      isStrict,
                                 strictType =    strictType
                             )
-                            print(f" > {readyF[:50].replace('\n','  ')}")
+                            #print(f" > {readyF[:50].replace('\n','  ')}")
                             # write config into folder
                             os.makedirs(os.path.dirname(f"../setups/{fullName}"), exist_ok=True)
                             with open(f"../setups/{fullName}", "w+", encoding="UTF-8") as f:
