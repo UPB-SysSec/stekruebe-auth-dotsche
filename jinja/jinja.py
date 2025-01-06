@@ -62,6 +62,9 @@ for d in os.listdir("."):
                             )
                             #print(f" > {readyF[:50].replace('\n','  ')}")
                             # write config into folder
+                            if ".jinja" in fullName:
+                                fullName = fullName.split(".")[0]
                             os.makedirs(os.path.dirname(f"../setups/{fullName}"), exist_ok=True)
                             with open(f"../setups/{fullName}", "w+", encoding="UTF-8") as f:
+                                #print(f"Writing {fullName}")
                                 f.write(readyF)

@@ -1,0 +1,51 @@
+{
+	auto_https off
+	ocsp_stapling off #we don't need to revoke our own certificates here
+	log default {
+		output stdout
+		level DEBUG
+	}
+    {% if defaultSite %}
+    default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
+    {% endif %}
+    strict_sni_host {{ "on" if isStrict else "insecure_off" }}
+}
+
+siteA{{ ".site" if isSubdomain else "" }}.org{
+	tls /keys/{{"subdomain" if isSubdomain else "site"}}A.crt /keys/siteA.key {
+        {% if isCertA %}
+		client_auth {
+			mode require_and_verify
+			trust_pool file {
+				pem_file /keys/user_ca_a.pem
+			}
+		}
+        {% endif %}
+	}
+
+	handle {
+		respond "You have been served siteA."
+	}
+}
+
+siteB{{ ".site" if isSubdomain else "" }}.org {
+	tls /keys/{{"subdomain" if isSubdomain else "site"}}B.crt /keys/siteB.key {
+		client_auth {
+			mode require_and_verify
+			trust_pool file {
+				pem_file /keys/user_ca_b.pem
+			}
+		}
+	}
+
+	handle {
+		respond "You have been served siteB."
+	}
+}
+
+:80 :443 {
+	# everything else
+	handle {
+		respond 404
+	}
+}
