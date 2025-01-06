@@ -11,6 +11,13 @@ StrictVariants = {
     "nginx" : ["HTTP", "TLS"]
 }
 
+PossibleDefaultSites = {
+    "apache": ["siteA", "siteB"],
+    "caddy": ["siteA", "siteB", None],
+    "closedlitespeed": ["siteA", "siteB", None],
+    "nginx": ["siteA", "siteB"]
+}
+
 try:
     os.makedirs("../setups")
 except:
@@ -21,7 +28,7 @@ for d in os.listdir("."):
     if not os.path.isdir(f"./{d}"): continue
     dName = os.fsdecode(d)
     if dName.startswith("_"): continue #skip folders like _keys etc.
-    
+
     files = [f"{r}/{f}"[len(d)+3:] for r, sd, fn in os.walk(f"./{d}") for f in fn]
     pprint(files)
     templates = []
@@ -32,7 +39,7 @@ for d in os.listdir("."):
 
     for isSubdomain in [True,False]:
         for isCertA in [True,False]:
-            for defaultSite in ["siteA", "siteB", None]:
+            for defaultSite in PossibleDefaultSites[dName]:
                 for isStrict in [True,False]:
                     for strictType in (StrictVariants[dName] if isStrict else ["none"]):
                         # build folder name
