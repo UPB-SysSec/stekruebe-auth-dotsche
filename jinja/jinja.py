@@ -22,6 +22,8 @@ try:
 except:
     for d in os.listdir("../setups"):
         shutil.rmtree(f"../setups/{d}")
+shutil.copytree("./_shared", "../setups/shared")
+shutil.copytree("./_site-content", "../setups/site-content")
 
 for d in os.listdir("."):
     if not os.path.isdir(f"./{d}"): continue

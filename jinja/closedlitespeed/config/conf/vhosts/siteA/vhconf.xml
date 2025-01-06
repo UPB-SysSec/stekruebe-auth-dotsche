@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtualHostConfig>
+  <docRoot>/srv/siteA</docRoot>
+  <vhssl>
+    <keyFile>/keys/siteA.key</keyFile>
+    <certFile>/keys/{% if not isSubdomain %}siteA.crt{% else %}subdomainA.crt{% endif %}</certFile>
+    {%- if isCertA %}
+    <CACertFile>/keys/user_ca_a.crt</CACertFile>
+    <clientVerify>2</clientVerify>
+    {%- endif %}
+  </vhssl>
+</virtualHostConfig>
+
