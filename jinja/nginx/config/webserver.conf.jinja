@@ -67,7 +67,7 @@ server { # Site B
         ssl_certificate_key /keys/siteC.key;
         {% if strict_sni == "HTTP" %}
         return 404;
-        {% elif strict_sni == "TLS" %}
+        {% elif strictType == "TLS" %}
         ssl_reject_handshake on;
         {% endif %}
     }
