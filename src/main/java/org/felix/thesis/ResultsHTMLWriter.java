@@ -151,11 +151,12 @@ document.addEventListener("DOMContentLoaded", function() {
   d.table = document.getElementById('table');
   d.rows = Array.from(table.querySelectorAll('tbody tr'));
   d.header = d.rows.shift()
-  d.getTR = getTR
-  d.getFirstTD = getFirstTD
+  d.body = d.table.querySelectorAll('tbody')[0]
+  sortTable()
   //highlightContent();
   highlightSubDomainSiblings();
   highlightBCSiblings();
+  highlightCertASiblings();
 });
 
 function getFirstTD(td) {
@@ -168,7 +169,7 @@ function getTH(td) {
   var index = Array.prototype.indexOf.call(td.parentNode.children, td)
   return table.querySelector('th:nth-child(' + (index+1) + ')')
 }
-function getTD(tr, th) { 
+function getTD(tr, th) {
   var index = Array.prototype.indexOf.call(th.parentNode.children, th)
   return tr.children[index]
 }
@@ -187,6 +188,15 @@ function domToSub(tr) { //get _subdomains row from _domains row
 function getDefBC(tr) { //get _defaultb and _defaultc rows from standard row
   var name = tr.children[0].textContent
   return [strGetTR(name+"_defaultb"), strGetTR(name+"_defaultc")]
+}
+function addCertA(tr) { //get _certa row from normal row
+  var certAName = tr.children[0].textContent.replace('domains', 'domains_certa')
+  return strGetTR(certAName)
+}
+
+function sortTable() {
+  function comparer(a, b) {return getFirstTD(a).innerText < getFirstTD(b).innerText}
+  d.rows.sort(comparer).forEach(tr => d.table.appendChild(tr) );
 }
 
 function highlightContent() { //highlight all cells where _domain != _subdomain
@@ -237,6 +247,23 @@ function highlightBCSiblings() { //highlight all cells where standard != _defB !
         addFlag(cell,"#0af", "different than in _defaultB or _defaultC")
         addFlag(siblingB, "#0af", "different than in _defaultA or _defaultC")
         addFlag(siblingC, "#0af", "different than in _defaultA or _defaultB")
+      }
+    }
+  }
+}
+function highlightCertASiblings() { //highlight all cells where _domain != _subdomain
+  for (let row of d.rows) {
+    if (row.children[0].textContent.includes("_certa")) {continue}
+
+    const certATR = addCertA(row)
+
+    for (let cell of row.children) {
+      if (cell==row.children[0]) continue //skip header
+      const th = getTH(cell)
+      const sibling = getTD(certATR, th)
+      if (cell.textContent != sibling.textContent) {
+        addFlag(cell, "#c0c", "different than in _certA")
+        addFlag(sibling, "#c0c", "different than in NON _certA")
       }
     }
   }
