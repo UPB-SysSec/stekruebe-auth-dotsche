@@ -39,6 +39,7 @@
       <address>*:443</address>
       <secure>1</secure>
       <vhostMapList>
+        {%- if not isSubdomain %}
         <vhostMap>
           <vhost>siteA</vhost>
           <domain>{% if defaultSite=="siteA" %}*{% else %}sitea.org{% endif %}</domain>
@@ -48,6 +49,17 @@
           <vhost>siteB</vhost>
           <domain>{% if defaultSite=="siteB" %}*{% else %}siteb.org{% endif %}</domain>
         </vhostMap>
+        {%- else %}
+        <vhostMap>
+          <vhost>siteA</vhost>
+          <domain>{% if defaultSite=="siteA" %}*{% else %}sitea.site.org{% endif %}</domain>
+        </vhostMap>
+
+        <vhostMap>
+          <vhost>siteB</vhost>
+          <domain>{% if defaultSite=="siteB" %}*{% else %}siteb.site.org{% endif %}</domain>
+        </vhostMap>
+        {%- endif %}
 
       </vhostMapList>
 

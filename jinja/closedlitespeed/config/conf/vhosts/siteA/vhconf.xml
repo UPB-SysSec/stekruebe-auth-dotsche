@@ -3,7 +3,7 @@
   <docRoot>/srv/siteA</docRoot>
   <vhssl>
     <keyFile>/keys/siteA.key</keyFile>
-    <certFile>/keys/{% if not isSubdomain %}siteA.crt{% else %}subdomainA.crt{% endif %}</certFile>
+    <certFile>/keys/{% if not isSubdomain %}siteA{% else %}subdomainA{% endif %}.crt</certFile>
     {%- if isCertA %}
     <CACertFile>/keys/user_ca_a.crt</CACertFile>
     <clientVerify>2</clientVerify>
