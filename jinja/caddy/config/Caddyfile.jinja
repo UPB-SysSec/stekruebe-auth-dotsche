@@ -5,23 +5,25 @@
 		output stdout
 		level DEBUG
 	}
-    {% if defaultSite %}
+    {% if defaultSite -%}
     default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
-    {% endif %}
-    strict_sni_host {{ "on" if isStrict else "insecure_off" }}
+    {% endif -%}
+    {% if not isStrict -%}
+    strict_sni_host insecure_off
+    {% endif -%}
 }
 
-siteA{{ ".site" if isSubdomain else "" }}.org{
+siteA{{ ".site" if isSubdomain else "" }}.org {
 	tls /keys/{{"subdomain" if isSubdomain else "site"}}A.crt /keys/siteA.key {
         {% if isCertA %}
-		client_auth {
-			mode require_and_verify
-			trust_pool file {
-				pem_file /keys/user_ca_a.pem
-			}
-		}
+        client_auth {
+            mode require_and_verify #this is super important!! (not default even if trust pool is given)
+            trust_pool file {
+                pem_file /keys/user_ca_a.pem
+            }
+        }
         {% endif %}
-	}
+    }
 
     handle {
 		root * /srv/siteA
