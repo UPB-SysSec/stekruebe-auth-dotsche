@@ -8,7 +8,7 @@
     {% if defaultSite -%}
     default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
     {% endif -%}
-    {% if not isStrict -%}
+    {% if strictType=="off" -%}
     strict_sni_host insecure_off
     {% endif -%}
 }

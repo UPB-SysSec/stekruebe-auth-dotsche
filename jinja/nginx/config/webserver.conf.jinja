@@ -57,7 +57,7 @@ server { # Site B
     access_log  /var/log/nginx/host.access.log  main;
 }
 
-{% if strict_sni %}
+{% if strictType!="off" %}
     # Catch SNIs which we do not host!
     # Simulates Strict-SNI validation as it declines every conn with unrecognized SNI
     server {
