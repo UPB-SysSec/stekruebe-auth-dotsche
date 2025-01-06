@@ -32,15 +32,15 @@ for d in os.listdir("."):
 
     for isSubdomain in [True,False]:
         for isCertA in [True,False]:
-            for isDefaultB in [True,False]:
+            for defaultSite in ["siteA", "siteB", None]:
                 for isStrict in [True,False]:
                     for strictType in (StrictVariants[dName] if isStrict else ["none"]):
                         # build folder name
                         folderName  = "subdomains" if isSubdomain else "domains"
                         folderName += ("_certA" if isCertA else "")
-                        folderName += ("_defaultB" if isDefaultB else "")
+                        folderName += (f"_default{defaultSite[4:]}" if defaultSite else "")
                         folderName += (f"_strict_{strictType}" if isStrict else "")
-                        
+
                         # build config
                         for fileName, template in templates:
                             fullName = f"{dName}/{folderName}/{fileName}"
@@ -49,7 +49,7 @@ for d in os.listdir("."):
                                 folderName =    folderName,
                                 isSubdomain =   isSubdomain,
                                 isCertA =       isCertA,
-                                isDefaultB =    isDefaultB,
+                                defaultSite =   defaultSite,
                                 isStrict =      isStrict,
                                 strictType =    strictType
                             )
