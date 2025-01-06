@@ -23,8 +23,9 @@ siteA{{ ".site" if isSubdomain else "" }}.org{
         {% endif %}
 	}
 
-	handle {
-		respond "You have been served siteA."
+    handle {
+		root * /srv/siteA
+		file_server
 	}
 }
 
@@ -38,8 +39,9 @@ siteB{{ ".site" if isSubdomain else "" }}.org {
 		}
 	}
 
-	handle {
-		respond "You have been served siteB."
+    handle {
+		root * /srv/siteB
+		file_server
 	}
 }
 
