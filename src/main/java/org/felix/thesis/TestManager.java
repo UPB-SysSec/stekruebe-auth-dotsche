@@ -76,76 +76,30 @@ public class TestManager {
                             continue setups_loop;
                         }
                     }
-                    switch (name.toLowerCase()) {
-                        case "domains", "domains_defaultb", "domains_defaultc":
-                            setups.add(new TestSetupInstance(
-                                    port,
-                                    (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.getCanonicalFile().toPath(),
-                                    "sitea.org",
-                                    "siteb.org",
-                                    false,
-                                    true
-                                )
-                            );
-                            port++; //next test should get next port
-                            break;
-                        case "domains_certa", "domains_certa_defaultb", "domains_certa_defaultc":
-                            setups.add(new TestSetupInstance(
-                                    port,
-                                    (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.getCanonicalFile().toPath(),
-                                    "sitea.org",
-                                    "siteb.org",
-                                    true,
-                                    true
-                                )
-                            );
-                            port++; //next test should get next port
-                            break;
-                        case "subdomains", "subdomains_defaultb", "subdomains_defaultc":
-                            setups.add(new TestSetupInstance(
-                                    port,
-                                    (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.getCanonicalFile().toPath(),
-                                    "sitea.site.org",
-                                    "siteb.site.org",
-                                    false,
-                                    true
-                                )
-                            );
-                            port++; //next test should get next port
-                            break;
-                        case "subdomains_certa", "subdomains_certa_defaultb", "subdomains_certa_defaultc":
-                            setups.add(new TestSetupInstance(
-                                    port,
-                                    (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.getCanonicalFile().toPath(),
-                                    "sitea.site.org",
-                                    "siteb.site.org",
-                                    true,
-                                    true
-                                )
-                            );
-                            port++; //next test should get next port
-                            break;
-                        case "open":
-                            setups.add(new TestSetupInstance(
-                                    port,
-                                    (List<RefTestCase>) this.testsCreator.call(),
-                                    setup.getCanonicalFile().toPath(),
-                                    "sitea.org",
-                                    "siteb.org",
-                                    false,
-                                    false
-                                )
-                            );
-                            port++; //next test should get next port
-                            break;
-                        default:
-                            LOGGER.warn("unknown configuration in {}: {}", elem, setup.getName());
-                            break;
+                    String siteAdomain = "sitea.org";
+                    String siteBdomain = "siteb.org";
+                    boolean siteAUsesClientCert = false;
+                    boolean siteBUsesClientCert = true;
+
+                    if (name.toLowerCase().contains("_certa")) {
+                        siteAUsesClientCert = true;
                     }
+                    if (name.toLowerCase().contains("subdomains")) {
+                        siteAdomain = "sitea.site.org";
+                        siteBdomain = "siteb.site.org";
+                    }
+
+                    setups.add(new TestSetupInstance(
+                                    port,
+                                    (List<RefTestCase>) this.testsCreator.call(),
+                                    setup.getCanonicalFile().toPath(),
+                                    siteAdomain,
+                                    siteBdomain,
+                                    siteAUsesClientCert,
+                                    siteBUsesClientCert
+                            )
+                    );
+                    port++;
                 }
 
             }

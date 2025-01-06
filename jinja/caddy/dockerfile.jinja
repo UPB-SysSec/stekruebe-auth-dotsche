@@ -1,7 +1,7 @@
 FROM caddy:2.8.4
 
 # ------ COPY CADDY CONFIG ------
-COPY caddy/{{ folderName }}/Caddyfile /etc/caddy/Caddyfile
+COPY caddy/{{ folderName }}/config/Caddyfile /etc/caddy/Caddyfile
 COPY site-content /srv
 
 # ------ COPY KEYS ------
