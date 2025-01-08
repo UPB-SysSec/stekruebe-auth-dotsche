@@ -3,6 +3,7 @@ package org.felix.thesis;
 public enum TestOutcome {
      firstRequest_tlsAlert_unexpectedMessage,
     secondRequest_tlsAlert_unexpectedMessage,
+    secondRequest_noResumption_TLS13,
      firstRequest_tlsAlert_internalError,
     secondRequest_tlsAlert_internalError,
      firstRequest_tlsAlert_unknownCA,

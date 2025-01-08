@@ -1,10 +1,12 @@
 package org.felix.thesis;
 
 import de.rub.nds.tlsattacker.core.constants.AlertDescription;
+import de.rub.nds.tlsattacker.core.constants.HandshakeMessageType;
 import de.rub.nds.tlsattacker.core.exceptions.TransportHandlerConnectException;
 import de.rub.nds.tlsattacker.core.protocol.ProtocolMessage;
 import de.rub.nds.tlsattacker.core.protocol.message.AlertMessage;
 import de.rub.nds.tlsattacker.core.protocol.message.ApplicationMessage;
+import de.rub.nds.tlsattacker.core.protocol.message.HandshakeMessage;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTrace;
 import de.rub.nds.tlsattacker.core.workflow.WorkflowTraceUtil;
 import org.apache.logging.log4j.LogManager;
@@ -107,6 +109,9 @@ public class TestCaseResult {
 
             ApplicationMessage appMessage = requestBTrace.getFirstReceivedMessage(ApplicationMessage.class);
             if (appMessage!=null) {
+                if(!wasWorkflowResumed(requestBTrace)) {
+                    return TestOutcome.secondRequest_noResumption_TLS13;
+                }
                 siteContentB = getFullContent(requestBTrace);
                 int httpCode = getHTTPCode(siteContentB);
                 if (httpCode != -1) {
@@ -344,4 +349,18 @@ public class TestCaseResult {
             return -1;
         }
     }
+    protected boolean wasWorkflowResumed(WorkflowTrace trace) {
+        HandshakeMessage serverHello =
+                WorkflowTraceUtil.getFirstReceivedMessage(HandshakeMessageType.SERVER_HELLO, trace);
+        if (serverHello == null) {
+            return false;
+        }
+
+        // if server authenticated again (using cert), they rejected the ticket
+        // if FIN was not received, either the server behaved wrong or we had the wrong secret
+        return !WorkflowTraceUtil.didReceiveMessage(HandshakeMessageType.CERTIFICATE, trace)
+                && WorkflowTraceUtil.didReceiveMessage(HandshakeMessageType.FINISHED, trace);
+    }
+
+
 }
