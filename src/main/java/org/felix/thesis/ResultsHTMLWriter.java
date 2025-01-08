@@ -295,6 +295,29 @@ function addFlag(td, color, title) { //adds a colored flag to the element
 
     private static String getPostText() {
         return """
+
+<div id="searchbarContainer">
+  <script>
+    function onSearch(e) {
+      const query = document.getElementById("searchbar").value.trim()
+      console.log("search:",query)
+      for (let r of d.rows) {
+        if (r.children[0].innerText.includes(query) || query=="") {
+          r.style.display = "revert"
+        } else {
+          r.style.display = "none"
+        }
+      }
+    }
+  </script>
+  <style>
+  #searchbarContainer, #searchbar {
+    font-size: x-large;
+  }
+  </style>
+  Search: 
+  <input type="text" id="searchbar" placeholder="type to search" oninput="onSearch()"/>
+</div>
 </body>
 """;
     }
