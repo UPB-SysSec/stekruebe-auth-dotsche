@@ -115,8 +115,8 @@ tr:nth-child(2n) > td {
   background: #e8e8e8;
 }
 /* to have a line after x, x_defaultB, x_defaultC */
-tr:nth-child(3n+1) > td {
-  border-bottom: 4px solid black;
+tr.newsoftware > td{
+  border-top: 4px solid black;
 }
 .open>td:not(:first-child) {
     color: gray;
@@ -199,8 +199,30 @@ function addCertA(tr) { //get _certa row from normal row
 }
 
 function sortTable() {
-  function comparer(a, b) {return getFirstTD(a).innerText < getFirstTD(b).innerText}
-  d.rows.sort(comparer).forEach(tr => d.table.appendChild(tr) );
+  function comparer(a, b) {
+    const keyA = getKey(a.children[0].innerText);
+    const keyB = getKey(b.children[0].innerText);
+
+    return keyA.localeCompare(keyB);
+  }
+
+  function getKey(text) {
+    text = text.includes("certa") + "_" + text; // "certa" entries first
+    text = text.includes("strict") + "_" + text; // "strict" entries after
+    return text
+  }
+
+  // appendChild for each, add class "newsoftware" as soon as the software changes
+  d.rows.sort(comparer).forEach(tr => {
+    if (!tr.children[0].innerText.startsWith(d.currentSoftware)) {
+      tr.classList.add("newsoftware");
+      a = tr.children[0].innerText
+      // capture start of domains/subdomains wihtout relying on second _
+      d.currentSoftware = a.substring(0, a.indexOf("_")+2)
+      console.log("current software has changed", d.currentSoftware)
+    }
+    d.table.appendChild(tr);
+  });
 }
 
 function highlightContent() { //highlight all cells where _domain != _subdomain
