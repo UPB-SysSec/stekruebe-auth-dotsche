@@ -324,7 +324,7 @@ function addFlag(td, color, title) { //adds a colored flag to the element
       const query = document.getElementById("searchbar").value.trim()
       console.log("search:",query)
       for (let r of d.rows) {
-        if (r.children[0].innerText.includes(query) || query=="") {
+        if (query=="" || RegExp(query).test(r.children[0].textContent)) {
           r.style.display = "revert"
         } else {
           r.style.display = "none"
