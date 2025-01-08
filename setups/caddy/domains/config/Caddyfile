@@ -5,20 +5,18 @@
 		output stdout
 		level DEBUG
 	}
-	default_sni siteA.org
+    
+	servers {
+    	strict_sni_host insecure_off
+	}
 }
 
 siteA.org {
 	tls /keys/siteA.crt /keys/siteA.key {
-		load /keys
-	}
-	#tls {
-	#	client_auth {
-	#		mode: require_and_verify
-	#		trusted_leaf_cert_file: /keys/user_ca_a.crt
-	#	}
-	#}
-	handle {
+        
+    }
+
+    handle {
 		root * /srv/siteA
 		file_server
 	}
@@ -27,14 +25,14 @@ siteA.org {
 siteB.org {
 	tls /keys/siteB.crt /keys/siteB.key {
 		client_auth {
-			mode require_and_verify #this is super important!! (not default even if trust pool is given)
+			mode require_and_verify
 			trust_pool file {
 				pem_file /keys/user_ca_b.pem
 			}
 		}
 	}
 
-	handle {
+    handle {
 		root * /srv/siteB
 		file_server
 	}

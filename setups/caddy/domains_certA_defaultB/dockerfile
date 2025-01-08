@@ -1,7 +1,6 @@
-FROM caddy:2.8.4-alpine
+FROM caddy:2.8.4
 
-
-# ------ COPY NGINX CONFIG ------
+# ------ COPY CADDY CONFIG ------
 COPY caddy/domains_certA_defaultB/config/Caddyfile /etc/caddy/Caddyfile
 COPY site-content /srv
 

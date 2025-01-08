@@ -1,4 +1,4 @@
-FROM litespeedtech/litespeed
+FROM litespeedtech/litespeed:6.3.1-lsphp81
 
 
 # ------ COPY CONFIG ------

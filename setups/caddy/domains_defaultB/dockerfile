@@ -1,5 +1,4 @@
-FROM caddy:2.8.4-alpine
-
+FROM caddy:2.8.4
 
 # ------ COPY CADDY CONFIG ------
 COPY caddy/domains_defaultB/config/Caddyfile /etc/caddy/Caddyfile
@@ -8,23 +7,3 @@ COPY site-content /srv
 # ------ COPY KEYS ------
 RUN mkdir /keys
 COPY shared/cert/keys /keys
-
-
-
-
-
-# ------ EDIT HOSTS FILE -----
-#RUN echo "127.0.0.1        siteA.org" >> /etc/hosts
-#RUN echo "127.0.0.1        siteB.org" >> /etc/hosts
-
-# ------ OR GENERATE NEW KEYS ------
-# NOTE: you will have to first copy the new client keys out of the container to use them
-
-# # Install OpenSSL
-# RUN apk update && \
-#    apk add --no-cache openssl && \
-#    rm -rf "/var/cache/apk/*"
-# # generate keys
-# COPY ./DockerFiles/keyGen.sh /etc/nginx/keyGen.sh
-# RUN /etc/nginx/keyGen.sh
-# RUN rm -f /usr/share/nginx/conf.d/*

@@ -5,15 +5,19 @@
 		output stdout
 		level DEBUG
 	}
-	default_sni siteB.site.org
+    default_sni siteB.site.org
+    
+	servers {
+    	strict_sni_host insecure_off
+	}
 }
 
 siteA.site.org {
 	tls /keys/subdomainA.crt /keys/siteA.key {
-		load /keys
-	}
+        
+    }
 
-	handle {
+    handle {
 		root * /srv/siteA
 		file_server
 	}
@@ -22,20 +26,21 @@ siteA.site.org {
 siteB.site.org {
 	tls /keys/subdomainB.crt /keys/siteB.key {
 		client_auth {
-			mode require_and_verify #this is super important!! (not default even if trust pool is given)
+			mode require_and_verify
 			trust_pool file {
 				pem_file /keys/user_ca_b.pem
 			}
 		}
 	}
 
-	handle {
+    handle {
 		root * /srv/siteB
 		file_server
 	}
 }
 
 :80 :443 {
+	# everything else
 	handle {
 		respond 404
 	}

@@ -41,7 +41,7 @@
       <vhostMapList>
         <vhostMap>
           <vhost>siteA</vhost>
-          <domain>*</domain>
+          <domain>sitea.org</domain>
         </vhostMap>
 
         <vhostMap>

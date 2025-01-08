@@ -1,4 +1,4 @@
-FROM httpd:2.4
+FROM httpd:2.4.62
 
 # ------ COPY SITE CONTENT ------
 COPY site-content /srv

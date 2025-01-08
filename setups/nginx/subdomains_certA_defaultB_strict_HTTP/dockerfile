@@ -1,0 +1,13 @@
+FROM nginx:1.27.2
+
+# ------ COPY NGINX CONFIG ------
+
+RUN rm -rf /usr/share/nginx/html/*
+COPY site-content /data/www
+
+RUN rm -f /etc/nginx/nginx.conf
+COPY nginx/subdomains_certA_defaultB_strict_HTTP/config/*.conf /etc/nginx/
+
+# ------ COPY KEYS ------
+RUN mkdir /keys
+COPY shared/cert/keys /keys
