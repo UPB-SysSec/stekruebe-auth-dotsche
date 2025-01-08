@@ -5,7 +5,7 @@ os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
 StrictVariants = {
     "apache" : ["off", "default"],
-    "caddy" : ["off", "default"],
+    "caddy" : ["default"],
     "closedlitespeed" : ["off"],
     "nginx" : ["off", "HTTP", "TLS"]
 }
