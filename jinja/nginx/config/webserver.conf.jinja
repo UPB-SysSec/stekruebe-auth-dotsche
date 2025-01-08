@@ -1,6 +1,6 @@
 server { # Site A
-    listen       443 ssl{{ " default_server" if defaultSite == "siteA" else "" }};
-    listen  [::]:443 ssl{{ " default_server" if defaultSite == "siteA" else "" }};
+    listen       443 ssl{{ " default_server" if (defaultSite == "siteA" and strictType=="off") else "" }};
+    listen  [::]:443 ssl{{ " default_server" if (defaultSite == "siteA" and strictType=="off") else "" }};
 
     server_name  siteA{{".site" if isSubdomain else ""}}.org;
 
@@ -32,8 +32,8 @@ server { # Site A
 }
 
 server { # Site B
-    listen       443 ssl{{ " default_server" if defaultSite == "siteB" else "" }};
-    listen  [::]:443 ssl{{ " default_server" if defaultSite == "siteB" else "" }};
+    listen       443 ssl{{ " default_server" if (defaultSite == "siteB" and strictType=="off") else "" }};
+    listen  [::]:443 ssl{{ " default_server" if (defaultSite == "siteB" and strictType=="off") else "" }};
 
     server_name  siteB{{".site" if isSubdomain else ""}}.org;
 
@@ -61,7 +61,8 @@ server { # Site B
     # Catch SNIs which we do not host!
     # Simulates Strict-SNI validation as it declines every conn with unrecognized SNI
     server {
-        # listen 443 ssl default_server;
+        listen 443 ssl default_server;
+        listen [::]:443 ssl default_server;
         server_name _; # some invalid name that won't match anything
         ssl_certificate /keys/siteC.crt;
         ssl_certificate_key /keys/siteC.key;
