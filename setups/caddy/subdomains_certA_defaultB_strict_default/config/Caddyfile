@@ -6,6 +6,7 @@
 		level DEBUG
 	}
     default_sni siteB.site.org
+    fallback_sni siteB.site.org
     
 }
 

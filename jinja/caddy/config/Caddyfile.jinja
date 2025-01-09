@@ -7,6 +7,7 @@
 	}
     {% if defaultSite -%}
     default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
+    fallback_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
     {% endif -%}
     {%- if strictType=="off" %}
 	servers {
