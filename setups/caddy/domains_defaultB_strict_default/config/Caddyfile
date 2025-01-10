@@ -7,8 +7,7 @@
 	}
     default_sni siteB.org
     fallback_sni siteB.org
-    
-}
+    }
 
 siteA.org {
 	tls /keys/siteA.crt /keys/siteA.key {
@@ -34,12 +33,5 @@ siteB.org {
     handle {
 		root * /srv/siteB
 		file_server
-	}
-}
-
-:80 :443 {
-	# everything else
-	handle {
-		respond 404
 	}
 }

@@ -9,11 +9,6 @@
     default_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
     fallback_sni {{defaultSite}}{{ ".site" if isSubdomain else "" }}.org
     {% endif -%}
-    {%- if strictType=="off" %}
-	servers {
-    	strict_sni_host insecure_off
-	}
-	{%- endif %}
 }
 
 siteA{{ ".site" if isSubdomain else "" }}.org {
@@ -47,12 +42,5 @@ siteB{{ ".site" if isSubdomain else "" }}.org {
     handle {
 		root * /srv/siteB
 		file_server
-	}
-}
-
-:80 :443 {
-	# everything else
-	handle {
-		respond 404
 	}
 }
