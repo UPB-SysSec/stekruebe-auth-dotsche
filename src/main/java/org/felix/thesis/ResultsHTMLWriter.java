@@ -66,6 +66,9 @@ public class ResultsHTMLWriter {
 <!DOCTYPE html>
 <head>
 <style>
+body {
+  margin: 0;
+}
 table {
   font-family: arial, sans-serif;
   border-spacing: 0;

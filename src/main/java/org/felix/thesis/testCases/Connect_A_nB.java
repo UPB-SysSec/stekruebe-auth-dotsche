@@ -13,7 +13,7 @@ public class Connect_A_nB extends Connect_A_BB {
     public Connect_A_nB(String name, ProtocolVersion version) {
         super(name, version);
         this.expectedTestOutcome = new TestOutcome[] {
-                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_noResumption,
                 TestOutcome.secondRequest_http421_misdirectedRequest
         };
     }

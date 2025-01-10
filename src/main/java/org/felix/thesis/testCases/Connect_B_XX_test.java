@@ -18,7 +18,7 @@ public class Connect_B_XX_test extends Connect_B_BB_test {
         expectedTestOutcome =  new TestOutcome[]{
                 TestOutcome.secondRequest_tlsAlert_internalError,
                 TestOutcome.secondRequest_http421_misdirectedRequest,
-                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_noResumption,
                 TestOutcome.secondRequest_http404_notFound,
                 TestOutcome.secondRequest_http200_contentB
         };

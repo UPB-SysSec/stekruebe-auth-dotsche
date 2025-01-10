@@ -108,10 +108,10 @@ public class TestCaseResult {
             }
 
             ApplicationMessage appMessage = requestBTrace.getFirstReceivedMessage(ApplicationMessage.class);
+            if(!wasWorkflowResumed(requestBTrace)) {
+                return TestOutcome.secondRequest_noResumption;
+            }
             if (appMessage!=null) {
-                if(!wasWorkflowResumed(requestBTrace)) {
-                    return TestOutcome.secondRequest_noResumption_TLS13;
-                }
                 siteContentB = getFullContent(requestBTrace);
                 int httpCode = getHTTPCode(siteContentB);
                 if (httpCode != -1) {

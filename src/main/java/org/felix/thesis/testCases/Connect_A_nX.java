@@ -9,8 +9,8 @@ import org.felix.thesis.BaseWorkflowCreator;
 import org.felix.thesis.TestOutcome;
 import org.felix.thesis.sessionTickets.Ticket;
 
-public class Connect_A_nA extends Connect_A_BB {
-    public Connect_A_nA(String name, ProtocolVersion version) {
+public class Connect_A_nX extends Connect_A_BB {
+    public Connect_A_nX(String name, ProtocolVersion version) {
         super(name, version);
         this.expectedTestOutcome = new TestOutcome[] {
                 TestOutcome.secondRequest_noResumption,
@@ -21,7 +21,7 @@ public class Connect_A_nA extends Connect_A_BB {
     //getStateA is the same as for the base case
 
     public State getStateB(Ticket ticket) {
-        Config config = BaseConfigCreator.buildConfig(port, siteBDomain, false, version); //no SNI
+        Config config = BaseConfigCreator.buildConfig(port, "unknownDomain.invalid", false, version); //no SNI
         ticket.applyTo(config);
         WorkflowTrace trace = BaseWorkflowCreator.getResumptionWorkflowTrace(config, siteADomain);
         return new State(config, trace);

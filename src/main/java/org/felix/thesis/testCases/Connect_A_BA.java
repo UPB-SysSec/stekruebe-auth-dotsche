@@ -13,7 +13,7 @@ public class Connect_A_BA extends RefTestCase {
     public Connect_A_BA(String name, ProtocolVersion version) {
         super(name, version);
         expectedTestOutcome = new TestOutcome[]{
-                TestOutcome.secondRequest_tlsAlert_unexpectedMessage,
+                TestOutcome.secondRequest_noResumption,
                 TestOutcome.secondRequest_http421_misdirectedRequest
         };
     }
