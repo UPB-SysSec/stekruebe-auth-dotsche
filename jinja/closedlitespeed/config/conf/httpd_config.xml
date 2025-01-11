@@ -14,7 +14,11 @@
   <indexFiles>index.html, index.php</indexFiles>
   <htAccess></htAccess>
   <expires></expires>
-  <tuning></tuning>
+  <tuning>
+  {% if strictType=="default" %}
+    <sslStrictSni>1</sslStrictSni>
+  {% endif %}
+  </tuning>
   <security><CGIRLimit></CGIRLimit><accessControl></accessControl></security>
   <phpConfig></phpConfig>
   <railsDefaults></railsDefaults>

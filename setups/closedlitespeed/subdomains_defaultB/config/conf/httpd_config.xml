@@ -14,7 +14,9 @@
   <indexFiles>index.html, index.php</indexFiles>
   <htAccess></htAccess>
   <expires></expires>
-  <tuning></tuning>
+  <tuning>
+  
+  </tuning>
   <security><CGIRLimit></CGIRLimit><accessControl></accessControl></security>
   <phpConfig></phpConfig>
   <railsDefaults></railsDefaults>

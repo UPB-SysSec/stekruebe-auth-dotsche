@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<virtualHostConfig>
+  <docRoot>/srv/siteA</docRoot>
+  <vhssl>
+    <keyFile>/keys/siteA.key</keyFile>
+    <certFile>/keys/subdomainA.crt</certFile>
+  </vhssl>
+</virtualHostConfig>
