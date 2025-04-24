@@ -70,13 +70,13 @@ public class TestCaseResult {
                 int httpCode = getHTTPCode(siteContentA);
                 if (httpCode != -1) {
                     httpCodeA = httpCode;
-                    return switch (httpCode) {
-                        case 400 -> TestOutcome.firstRequest_http400_badRequest;
-                        case 403 -> TestOutcome.firstRequest_http403_forbidden;
-                        case 404 -> TestOutcome.firstRequest_http404_notFound;
-                        case 421 -> TestOutcome.firstRequest_http421_misdirectedRequest;
-                        default  -> TestOutcome.firstRequest_httpOther;
-                    };
+                    switch (httpCode) {
+                        case 400: return TestOutcome.firstRequest_http400_badRequest;
+                        case 403: return TestOutcome.firstRequest_http403_forbidden;
+                        case 404: return TestOutcome.firstRequest_http404_notFound;
+                        case 421: return TestOutcome.firstRequest_http421_misdirectedRequest;
+                        default : return TestOutcome.firstRequest_httpOther;
+                    }
                 } else {
                     return TestOutcome.firstRequest_applicationDataButNoHTTPStatusCode;
                 }
@@ -85,14 +85,14 @@ public class TestCaseResult {
             AlertMessage alertMessage = requestATrace.getFirstReceivedMessage(AlertMessage.class);
             if (alertMessage!=null) {
                 AlertDescription alert = AlertDescription.getAlertDescription((Byte) alertMessage.getDescription().getValue());
-                return switch (alert) {
-                    case UNEXPECTED_MESSAGE -> TestOutcome.firstRequest_tlsAlert_unexpectedMessage;
-                    case INTERNAL_ERROR     -> TestOutcome.firstRequest_tlsAlert_internalError;
-                    case UNKNOWN_CA         -> TestOutcome.firstRequest_tlsAlert_unknownCA;
-                    case UNRECOGNIZED_NAME  -> TestOutcome.firstRequest_tlsAlert_unknownName;
-                    case ACCESS_DENIED      -> TestOutcome.firstRequest_tlsAlert_accessDenied;
-                    default                 -> TestOutcome.firstRequest_tlsAlert_other;
-                };
+                switch (alert) {
+                    case UNEXPECTED_MESSAGE : return TestOutcome.firstRequest_tlsAlert_unexpectedMessage;
+                    case INTERNAL_ERROR     : return TestOutcome.firstRequest_tlsAlert_internalError;
+                    case UNKNOWN_CA         : return TestOutcome.firstRequest_tlsAlert_unknownCA;
+                    case UNRECOGNIZED_NAME  : return TestOutcome.firstRequest_tlsAlert_unknownName;
+                    case ACCESS_DENIED      : return TestOutcome.firstRequest_tlsAlert_accessDenied;
+                    default                 : return TestOutcome.firstRequest_tlsAlert_other;
+                }
             }
 
             return TestOutcome.firstRequest_noApplicationData;
@@ -128,13 +128,13 @@ public class TestCaseResult {
                             return TestOutcome.secondRequest_http200_unknownContent;
                         }
                     }
-                    return switch (httpCode) {
-                        case 400 -> TestOutcome.secondRequest_http400_badRequest;
-                        case 403 -> TestOutcome.secondRequest_http403_forbidden;
-                        case 404 -> TestOutcome.secondRequest_http404_notFound;
-                        case 421 -> TestOutcome.secondRequest_http421_misdirectedRequest;
-                        default  -> TestOutcome.secondRequest_httpOther;
-                    };
+                    switch (httpCode) {
+                        case 400 : return TestOutcome.secondRequest_http400_badRequest;
+                        case 403 : return TestOutcome.secondRequest_http403_forbidden;
+                        case 404 : return TestOutcome.secondRequest_http404_notFound;
+                        case 421 : return TestOutcome.secondRequest_http421_misdirectedRequest;
+                        default  : return TestOutcome.secondRequest_httpOther;
+                    }
                 } else {
                     return TestOutcome.secondRequest_applicationDataButNoHTTPStatusCode;
                 }
@@ -143,14 +143,14 @@ public class TestCaseResult {
             AlertMessage alertMessage = requestBTrace.getFirstReceivedMessage(AlertMessage.class);
             if (alertMessage!=null) {
                 AlertDescription alert =  AlertDescription.getAlertDescription((Byte) alertMessage.getDescription().getValue());
-                return switch (alert) {
-                    case UNEXPECTED_MESSAGE -> TestOutcome.secondRequest_tlsAlert_unexpectedMessage;
-                    case INTERNAL_ERROR     -> TestOutcome.secondRequest_tlsAlert_internalError;
-                    case UNKNOWN_CA         -> TestOutcome.secondRequest_tlsAlert_unknownCA;
-                    case UNRECOGNIZED_NAME  -> TestOutcome.secondRequest_tlsAlert_unknownName;
-                    case ACCESS_DENIED      -> TestOutcome.secondRequest_tlsAlert_accessDenied;
-                    default                 -> TestOutcome.secondRequest_tlsAlert_other;
-                };
+                switch (alert) {
+                    case UNEXPECTED_MESSAGE : return TestOutcome.secondRequest_tlsAlert_unexpectedMessage;
+                    case INTERNAL_ERROR     : return TestOutcome.secondRequest_tlsAlert_internalError;
+                    case UNKNOWN_CA         : return TestOutcome.secondRequest_tlsAlert_unknownCA;
+                    case UNRECOGNIZED_NAME  : return TestOutcome.secondRequest_tlsAlert_unknownName;
+                    case ACCESS_DENIED      : return TestOutcome.secondRequest_tlsAlert_accessDenied;
+                    default                 : return TestOutcome.secondRequest_tlsAlert_other;
+                }
             }
 
             return TestOutcome.secondRequest_noApplicationData;
@@ -316,10 +316,10 @@ public class TestCaseResult {
             content = content.split("<body>")[1].split("</body>")[0];
         }
         //body = body.replaceAll("<[^>]*>", "");
-        content = content.replaceAll("\r", "");
-        content = content.replaceAll("\n", " ");
-        content = content.replaceAll("\t", " ");
-        content = content.replaceAll("\s+", " ");
+        content = content.replaceAll("\\r", "");
+        content = content.replaceAll("\\n", " ");
+        content = content.replaceAll("\\t", " ");
+        content = content.replaceAll("\\s+", " ");
         return content;
     }
 
