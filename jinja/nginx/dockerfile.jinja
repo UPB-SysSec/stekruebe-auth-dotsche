@@ -10,4 +10,4 @@ COPY nginx/{{ folderName }}/config/*.conf /etc/nginx/
 
 # ------ COPY KEYS ------
 RUN mkdir /keys
-COPY shared/cert/keys /keys
+COPY ./shared/cert/keys /keys

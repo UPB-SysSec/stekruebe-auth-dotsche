@@ -45,6 +45,6 @@ public class Main {
         });
 
         //write results to file
-        ResultsHTMLWriter.writeToFile(results, Path.of("./result.html"));
+        ResultsHTMLWriter.writeToFile(results, Path.of("./out/result.html"));
     }
 }

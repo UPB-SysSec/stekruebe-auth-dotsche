@@ -1,3 +1,5 @@
+cd "$(dirname "$0")"
+
 # recreate certificates folder
 mkdir keys
 cp ./client_cert_ext.cfg keys/

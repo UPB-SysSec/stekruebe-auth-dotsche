@@ -1,9 +1,0 @@
-FROM caddy:2.8.4
-
-# ------ COPY CADDY CONFIG ------
-COPY caddy/subdomains_strict_default/config/Caddyfile /etc/caddy/Caddyfile
-COPY site-content /srv
-
-# ------ COPY KEYS ------
-RUN mkdir /keys
-COPY shared/cert/keys /keys

@@ -54,8 +54,8 @@ public class TestSetupInstance {
         this.dockerFilePath = Paths.get(dockerFileFolder.toString(), "dockerfile");
         this.siteADomain = siteADomain;
         this.siteBDomain = siteBDomain;
-        this.siteACert = Path.of("./setups/shared/cert/keys/clientA.pem");
-        this.siteBCert = Path.of("./setups/shared/cert/keys/clientB.pem");
+        this.siteACert = Path.of("/code/setups/shared/cert/keys/clientA.pem");
+        this.siteBCert = Path.of("/code/setups/shared/cert/keys/clientB.pem");
 
         this.siteAUsesClientCert = siteAUsesClientCert;
         this.siteBUsesClientCert = siteBUsesClientCert;
